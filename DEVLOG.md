@@ -41,6 +41,61 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 
 ---
 
+## 2026-10-09 — Diseño de fase 0 y preparación de verificación en producción
+
+- Leída y ejecutada la guía `docs/FASE_0_DISENO_Y_CIERRE_CODEX.md`. Conservados los cambios previos del paso 4; no se repitió ninguna migración.
+- Implementada vista de ejemplo Mi Día: navegación responsive, agenda ficticia, registro rápido explicativo, hábitos en memoria y progreso calculado, estados vacíos y tarjetas de cierre/estudio/entrenamiento. Sin acceso a datos personales ni persistencia.
+- Componentes reutilizables, iconos SVG, paleta clara, diálogos nativos, foco, etiquetas y fecha de Buenos Aires generada en servidor.
+- Diagnóstico GET mínimo sin caché ni datos sensibles: verifica Auth y rechazo anónimo esperado de PostgREST usando solo clave pública. Timeout de seis segundos, sin cookies ni paso por proxy; retirada documentada.
+- Lint, typecheck y build correctos. Pruebas del diagnóstico cubren variables ausentes, red, clave inválida, tabla ausente, permisos y salida sin detalles internos.
+- Playwright/Edge contra producción local: 360, 390, 768 y 1280 px; sin overflow, hábitos/progreso, navegación, teclado, diálogos/foco y consola correctos. Revisadas capturas móvil/escritorio y contrastes principales (>4.5:1). Playwright y Prettier se instalaron fuera del proyecto, sin nuevas dependencias de la app.
+- Corregidos un Link interno detectado por lint y un icono ausente que causaba 404. Las capturas finales usan `next start` para evitar la superposición del indicador de desarrollo.
+- Diagnóstico local: HTTP 200, Auth reachable, Data API restricted. No equivale a una prueba con usuario autenticado.
+- Pendiente: commit/push autorizado y verificación de producción. Fase 0 aún no declarada completa en esta entrada.
+
+## 2026-10-09 — Cierre del paso 4: catálogo remoto confirmado
+
+- El usuario compartió el resultado restante de `supabase/verify_schema.sql`: las seis tablas existen, tienen RLS habilitado, cuatro políticas cada una y ningún permiso CRUD para `anon`.
+- Junto con las 24 políticas compartidas previamente y las pruebas locales del esquema, esta evidencia permite cerrar el paso 4. No se ejecutó una nueva consulta remota desde el agente ni se repitió la migración.
+- Actualizados PROJECT_STATUS, README y ESQUEMA_INICIAL para reflejar el cierre. Las pruebas funcionales con sesiones Auth/JWT reales quedan para la implementación del login.
+- Verificación documental con `git diff --check`. Sin cambios de código, nuevos tests, commit, push o despliegue.
+- Siguiente paso: 5, diseño básico mobile-first, únicamente cuando el usuario lo indique. El paso 6 permanece verificado y el paso 7 pendiente.
+
+## 2026-10-09 — Verificación parcial del esquema remoto por resultado del usuario
+
+- El usuario compartió el segundo resultado de `supabase/verify_schema.sql`: 24 políticas en las seis tablas, cuatro operaciones por tabla, rol `authenticated` y comparación de `auth.uid()` con `user_id` en las cláusulas esperadas.
+- El resultado confirma la existencia de tablas y políticas en el proyecto consultado; no muestra `relrowsecurity` ni los privilegios de `anon`. Pendiente el primer resultado de seis filas para cerrar la verificación del paso 4.
+- Actualizados PROJECT_STATUS, README y guía del esquema para reflejar esta evidencia. No se repitió ni se modificó la migración y no se avanzó al paso 5.
+- Revisión documental y `git diff --check`; no se ejecutaron nuevas pruebas de base ni de aplicación.
+
+## 2026-10-09 — Paso 4: esquema SQL y verificación de publicación en Vercel
+
+### Cambios realizados
+- Creada `supabase/migrations/202610090001_initial_schema.sql`: seis tablas, PK/FK, índices, restricciones, timestamps y triggers de actualización/perfil automático; migración transaccional.
+- Confirmada la zona `America/Argentina/Buenos_Aires` por el usuario y aplicada a fechas diarias y perfil.
+- Definidos 24 permisos por fila mediante RLS (CRUD propio en cada tabla), sin acceso anónimo ni transferencia de dueño.
+- Garantizada la relación entre propietario de hábito y registro con FK compuesta. Un check-in por usuario/día y una entrada por hábito/día.
+- Documentado el diseño, decisiones, aplicación manual y límites en `docs/ESQUEMA_INICIAL.md`; agregado `supabase/verify_schema.sql` de solo lectura.
+- Agregadas pruebas SQL reproducibles con bootstrap de Auth simulado, exclusivamente para PostgreSQL local desechable.
+- Actualizados README y PROJECT_STATUS con el estado real del esquema y Vercel.
+
+### Verificaciones realizadas
+- Migración ejecutada correctamente en PostgreSQL 17 dentro del contenedor local `personal-ia-step4-test`, sin publicar puertos.
+- Pruebas de dos usuarios: CRUD propio, aislamiento de lectura/actualización/borrado, rechazo de inserción ajena y cambio de dueño en seis tablas; rechazo de acceso anónimo en las cuatro operaciones.
+- Verificadas FK entre propietarios, unicidad diaria, validaciones de escalas/progreso/sueño/días, timestamps y cambio de día UTC frente a Buenos Aires.
+- Un caso inicial de prueba de inserción usaba un SELECT filtrado por RLS y no intentaba insertar filas; corregido el caso. Suite final: PASS.
+- Catálogo: seis tablas con RLS, cuatro políticas por tabla, sin privilegios CRUD para `anon`.
+- Contenedor de pruebas detenido al terminar; conservado para reproducibilidad. No se modificó la base remota.
+- Vercel: `https://personal-ia-two.vercel.app/` devolvió HTTP 200, título esperado, cabecera Server Vercel y CSS HTTP 200 por HTTPS.
+- `git diff --check`: correcto. Sin cambios en el código Next.js o dependencias; no se repitió build.
+
+### Estado y pendientes
+- Paso 4: diseño/migración completados y probados localmente; falta aplicar el SQL y verificarlo en Supabase. La clave pública disponible no autoriza DDL; no hay una conexión administrativa SQL disponible.
+- Paso 6: publicación inicial verificada. No se inspeccionó el panel, la conexión GitHub, el commit desplegado ni variables de Vercel.
+- Paso 7 sigue pendiente: la página pública no prueba acceso a la base desde producción.
+- Siguiente acción: ejecutar la migración y luego `supabase/verify_schema.sql` en SQL Editor, usando la guía. No ejecutar el bootstrap de tests en Supabase.
+- Sin commit, push ni nuevo despliegue en esta sesión.
+
 ## 2026-10-09 — Validación y preparación del commit de los pasos 1 a 3
 
 ### Cambios y verificaciones

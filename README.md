@@ -2,7 +2,7 @@
 
 Aplicación personal para organizar rutina, hábitos, estudio, entrenamiento y objetivos. El núcleo funcionará manualmente antes de integrar IA.
 
-Estado actual: fase 0, pasos 1 a 3 completados. Página inicial y clientes Supabase configurados; Data API y Auth verificados. Tablas, login, módulos de seguimiento, PWA e IA pendientes.
+Estado actual: fase 0, pasos 1 a 5 completados. Mi Día es una demostración sin guardado. Esquema probado localmente y catálogo remoto confirmado por los resultados del usuario: seis tablas con RLS, 24 políticas y sin permisos CRUD para anon. [Publicación inicial en Vercel](https://personal-ia-two.vercel.app/) verificada; nueva interfaz y diagnóstico pendientes de verificar online. Login, módulos de seguimiento, PWA e IA pendientes.
 
 ## Entorno local
 
@@ -65,6 +65,9 @@ En una copia nueva, ejecutar `npm run build` antes del primer `npm run typecheck
 - [PROJECT_STATUS.md](PROJECT_STATUS.md): estado actual, pendientes y limitaciones conocidas.
 - [DEVLOG.md](DEVLOG.md): historial de cambios y verificaciones.
 - [docs/PLAN_MAESTRO.md](docs/PLAN_MAESTRO.md): alcance y roadmap completo.
+- [docs/ESQUEMA_INICIAL.md](docs/ESQUEMA_INICIAL.md): seis tablas, reglas RLS, zona horaria y guía para aplicar/verificar la migración.
+- `supabase/migrations/`: migraciones versionadas; la primera está aplicada; tablas, RLS y políticas confirmados por los resultados remotos compartidos por el usuario.
+- `supabase/tests/`: pruebas SQL para una base PostgreSQL desechable, nunca el bootstrap en producción.
 
 Actualizar `PROJECT_STATUS.md` y agregar una entrada a `DEVLOG.md` al terminar cada paso. Avanzar al siguiente paso solo cuando el usuario lo indique.
 
@@ -76,4 +79,4 @@ En el paso 1, la auditoría registró 5 alertas altas en dependencias de desarro
 
 El archivo local `promt_supabe_connect.md` se excluye de Git porque contiene los datos del proyecto utilizados para configurar `.env.local`. La integración utiliza solo la clave pública; no requiere una clave administrativa.
 
-Próximo paso: definir el esquema inicial y las reglas de acceso. El despliegue en Vercel se realizará en el paso 6.
+El diseño mobile-first (paso 5) está implementado como demostración: los cambios de hábitos no se guardan y los módulos siguen pendientes. Ver [el informe de cierre](docs/CIERRE_FASE_0.md) para pruebas, diagnóstico y su retirada. Pendiente verificar la nueva versión y el diagnóstico en producción. No repetir la migración ni iniciar fase 1.

@@ -9,7 +9,7 @@ export default async function ProfilePage() {
   const { user, profile, profileError } = await getAccount();
   const displayName = profile?.display_name ?? "";
 
-  return <>
+  return <div className="profile-page">
     <LogoutForm />
     <main className="auth-shell profile-shell">
       <section className="auth-card" aria-labelledby="profile-title">
@@ -17,7 +17,7 @@ export default async function ProfilePage() {
         <p className="auth-brand">Día a Día</p>
         <p className="auth-tagline">Un paso más</p>
         <h1 id="profile-title">Tu perfil</h1>
-        <p>Los datos de esta cuenta se cargan de Supabase con tu sesión y respetan las reglas de acceso del perfil.</p>
+        <p>Consultá los datos de tu cuenta y elegí cómo querés que te llamemos.</p>
         <dl className="profile-details">
           <div><dt>Correo</dt><dd>{user.email}</dd></div>
           <div><dt>Zona horaria</dt><dd>{profile?.timezone ?? "America/Argentina/Buenos_Aires"}</dd></div>
@@ -28,5 +28,5 @@ export default async function ProfilePage() {
         ) : <ProfileForm displayName={displayName} />}
       </section>
     </main>
-  </>;
+  </div>;
 }

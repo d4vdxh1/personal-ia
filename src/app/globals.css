@@ -207,6 +207,9 @@ h1:focus {
   margin-top: 8px;
 }
 .avatar {
+  display: grid;
+  place-items: center;
+  text-decoration: none;
   width: 46px;
   height: 46px;
   border-radius: 50%;
@@ -829,6 +832,9 @@ progress::-moz-progress-bar {
 .auth-card .auth-tagline { font-size: 13px; margin-bottom: 24px; }
 .auth-card .auth-welcome { font-size: 14px; line-height: 1.6; margin-top: 18px; }
 .profile-back { display: inline-block; margin-bottom: 20px; color: var(--green); }
+.profile-page { min-height: 100dvh; display: grid; grid-template-rows: auto 1fr; }
+.profile-shell { min-height: 0; padding: 32px 20px; }
+.profile-shell .auth-card { max-width: 520px; padding: clamp(20px, 4vw, 32px); }
 .profile-details { display: grid; gap: 12px; margin: 24px 0; }
 .profile-details div { padding: 12px; background: #f5f7fa; border-radius: 8px; }
 .profile-details dt { color: var(--muted); font-size: 12px; }
@@ -837,11 +843,42 @@ progress::-moz-progress-bar {
 .auth-card .form-error { color: #9f1239; }
 .auth-card .form-success { color: var(--green); }
 .profile-form { margin-top: 12px; }
+.habit-manager { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); align-items: start; gap: 20px; }
+.habit-manager > .card h2 { margin: 4px 0 18px; }
+.habit-manager-list { display: grid; gap: 18px; }
+.habit-editor { border-top: 1px solid var(--border); padding-top: 16px; }
+.habit-form { display: grid; gap: 10px; margin: 14px 0; }
+.habit-form > input { width: 100%; min-height: 46px; border: 1px solid #64748b; border-radius: 8px; padding: 10px; }
+.habit-form fieldset { border: 0; padding: 0; margin: 6px 0; }
+.habit-form legend { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+.weekday-options { display: flex; flex-wrap: wrap; gap: 7px; }
+.weekday-options label { position: relative; cursor: pointer; }
+.weekday-options input { position: absolute; opacity: 0; inset: 0; }
+.weekday-options span { display: grid; place-items: center; min-width: 42px; min-height: 40px; border: 1px solid var(--border); border-radius: 9px; color: var(--muted); font-size: 12px; }
+.weekday-options input:checked + span { color: #12603d; background: #eaf4ee; border-color: #8eb9a0; }
+.weekday-options input:focus-visible + span { outline: 3px solid #2563eb; outline-offset: 2px; }
+.secondary-button, .archive-button { min-height: 42px; border-radius: 8px; padding: 8px 12px; }
+.secondary-button { border: 1px solid #8eb9a0; color: #12603d; background: white; }
+.archive-button { border: 1px solid #f1c8ce; color: #9f1239; background: #fffafb; }
+.habit-editor > form:last-child { margin-top: 10px; }
+.habit-editor .form-error, .habit-editor .form-success { margin: 8px 0; font-size: 13px; }
+.habit-empty { margin-top: 14px; color: var(--muted); font-size: 13px; }
+.habits-manage { display: inline-block; margin-top: 4px; color: var(--green); font-size: 12px; }
+.habit-row { display: flex; position: relative; }
+.habit-toggle { min-height: 44px; width: 32px; padding: 0; display: grid; place-items: center; border: 0; background: transparent; }
+.habit-check { display: grid; place-items: center; width: 21px; height: 21px; border: 1px solid #64748b; border-radius: 3px; color: white; font-size: 16px; }
+.habit-check.checked { background: var(--green); border-color: var(--green); }
+.habit-label { display: flex; align-items: center; }
+.habit-feedback { margin-left: auto; align-self: center; font-size: 11px; color: var(--green); }
+.habit-feedback.error { color: #9f1239; }
+@media (max-width: 900px) { .habit-manager { grid-template-columns: 1fr; } }
 .auth-form { display: grid; gap: 10px; margin: 24px 0; }
 .auth-form input { width: 100%; min-height: 48px; border: 1px solid #64748b; border-radius: 8px; padding: 10px; }
 .auth-form [role=alert] { color: #9f1239; margin: 0; }
 .auth-submit { background: var(--green); color: white; border: 0; border-radius: 8px; padding: 12px; }
 button:disabled { cursor: wait; opacity: .65; }
-.session-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 8px 24px; margin-left: 232px; background: white; border-bottom: 1px solid var(--border); }
+.session-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 8px 24px; background: white; border-bottom: 1px solid var(--border); }
+.session-bar-with-sidebar { margin-left: 232px; }
 .session-bar button { border: 1px solid var(--border); border-radius: 8px; background: white; padding: 8px 12px; }
+@media (min-width: 801px) and (max-width: 1100px) { .session-bar-with-sidebar { margin-left: 200px; } }
 @media (max-width: 800px) { .session-bar { margin-left: 0; padding: 8px 16px; } }

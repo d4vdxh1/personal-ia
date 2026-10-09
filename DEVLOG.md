@@ -4,6 +4,40 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 
 ---
 
+## 2026-10-09 — Fase 1, paso 3: Hábitos y registros diarios implementados
+
+### Objetivo de la sesión
+- Implementar de forma robusta la gestión y persistencia de hábitos (`habits` y `habit_entries`) bajo RLS y zona horaria de Buenos Aires, con vista de administración en `/habits` e integración interactiva en Mi Día (`/`).
+
+### Cambios realizados
+- Creado `src/lib/habits/constants.ts`: definición de días de la semana ISO (`WEEKDAYS`).
+- Creado `src/lib/habits/data.ts`: cálculo de fecha y día ISO local para `America/Argentina/Buenos_Aires`, carga de hábitos del usuario autenticado y su estado completado (`habit_entries`) para hoy.
+- Creado `src/app/habits/actions.ts`: Server Actions seguras bajo RLS (`createHabit`, `updateHabit`, `archiveHabit`, `toggleHabit`) con validación de nombres (1-120 caracteres), días de la semana (1-7), upsert en `habit_entries` (`unique (habit_id, entry_date)`) y revalidación de rutas (`/` y `/habits`).
+- Creada página `/habits/page.tsx` y componentes `HabitManager` (`src/components/habits/manager.tsx`) y `TodayList` (`src/components/habits/today-list.tsx`).
+- Integrada la navegación lateral y acción rápida hacia `/habits`.
+- Integrada en Mi Día (`src/app/page.tsx`) la lista real de hábitos programados para el día actual con checkboxes interactivos, cálculo real de porcentaje de progreso y enlace hacia la administración de hábitos.
+- Estilos responsivos añadidos en `src/app/globals.css`.
+
+### Pruebas realizadas
+- `npm run lint`: correcto, sin errores.
+- `npm run typecheck`: correcto.
+- `npm run build`: compilación limpia en Next.js Turbopack con rutas dinámicas `/`, `/habits`, `/profile` y `/login`.
+
+### Siguiente paso
+- Validación funcional por el usuario en el navegador (crear hábitos, asignar días, marcar/desmarcar en `/` y `/habits`).
+- Paso 4: Check-in diario (`daily_checkins`).
+
+---
+
+## 2026-10-09 — Corrección visual del perfil y Mi Día
+
+- Corregido el avatar: al convertirse en enlace, la inicial había perdido el centrado. Se centra con grid y la etiqueta accesible ahora indica «Abrir tu perfil».
+- La barra de sesión reserva espacio lateral solo en Mi Día y coincide con el ancho del menú a cada breakpoint. En el perfil ocupa todo el ancho y deja de indicar que es una vista de ejemplo.
+- Ajustados ancho y espaciado de la tarjeta de perfil; su altura disponible ahora descuenta la barra superior. Reemplazada la explicación técnica por texto orientado al usuario.
+- Lint, typecheck, build y diff correctos. El primer typecheck encontró referencias generadas a `/habits` después de la reversión; el build regeneró los tipos y la repetición pasó.
+- Revisión en Edge de los componentes renderizados con datos ficticios, sin conexión a Supabase: 360/390/768/930/1280 px, sin overflow horizontal, barra alineada, perfil centrado y avatar centrado. Capturas inspeccionadas de perfil en escritorio y Mi Día en móvil. Esta revisión visual no prueba autenticación ni guardado real.
+- Cambios locales, sin commit ni push; no se retoma el paso 3.
+
 ## 2026-10-09 — Fase 1, paso 3: implementación registrada y revertida
 
 - Se registró la implementación de hábitos persistentes, gestión en `/habits` y su integración visual con Mi Día en el commit `94999c1` (`feat: implement phase one habit tracking`).

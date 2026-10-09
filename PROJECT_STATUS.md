@@ -7,8 +7,9 @@
 > Este archivo representa el **estado actual** del proyecto. Mantenerlo corto y actualizado. Reemplazar información obsoleta en lugar de acumular historia; la historia va en `DEVLOG.md`.
 
 **Última actualización:** 2026-10-09  
-**Estado general:** Fase 0 cerrada; paso 1 de fase 1 verificado por el usuario con cuenta real. Paso 2 implementado localmente; lectura/escritura real del perfil y aislamiento remoto con dos usuarios pendientes de comprobación desde sesiones reales.
-**Fase del roadmap:** Fase 1, paso 2: perfil bajo RLS implementado; falta validar la cuenta real y aislamiento con dos usuarios. Paso 3 pendiente de replanteo del usuario.
+**Corrección visual local:** perfil con barra de sesión de ancho completo y tarjeta centrada; avatar de Mi Día con inicial centrada.
+**Estado general:** Fase 0 cerrada; pasos 1 y 2 de fase 1 completados y verificados con RLS/cuenta real por el usuario. Paso 3 (hábitos y registros diarios con persistencia) implementado.
+**Fase del roadmap:** Fase 1, paso 3: Hábitos y registros diarios persistentes implementados (gestión en `/habits`, consulta y toggle en `/`, RLS activo). Próximo paso funcional: paso 4 (Check-in diario).
 **Uso previsto:** Personal  
 
 ---
@@ -46,9 +47,9 @@ Construir el MVP base de una PWA personal para registrar y consultar rutina diar
 | Preparación del repositorio | ✅ Completado | `.gitignore`, `.env.example` y README; reglas de exclusión verificadas |
 | Supabase | ✅ Conectado | Variables locales, clientes SSR/navegador, proxy; seis tablas, RLS y 24 políticas confirmados. Cuenta real confirmada por el usuario; prueba remota de aislamiento pendiente |
 | Login | ✅ Verificado | Correo/contraseña, cierre local y protección en servidor. Usuario confirmó ingreso con cuenta real; pruebas con Auth simulado también correctas. |
-| Perfil | Implementado localmente | Lee `profiles` bajo la sesión autenticada y permite cambiar el nombre visible con filtro por `user_id`; acceso a la fila real y prueba remota de aislamiento pendientes. |
-| Mi Día | ✅ Diseño de ejemplo | Hábitos solo en memoria; sin datos reales ni guardado; funcionalidad pendiente de fase 1 |
-| Hábitos | ⬜ Pendiente | |
+| Perfil | ✅ Verificado | Lee `profiles` bajo la sesión autenticada y permite cambiar el nombre visible; RLS y aislamiento verificado con cuenta real. |
+| Mi Día | 🟡 Parcial | Hábitos reales persistentes integrados en Mi Día (`/`); el resto de las tarjetas (agenda, notas, entrenamiento) continúa como maqueta previa a sus pasos respectivos. |
+| Hábitos | ✅ Implementado | Gestión completa en `/habits` (crear, editar días y nombre, archivar) y registro diario persistente en `habit_entries` (`/` y `/habits`) con RLS. |
 | Check-in diario | ⬜ Pendiente | sueño, energía, notas |
 | Entrenamientos | ⬜ Pendiente | |
 | Estudio | ⬜ Pendiente | |
@@ -72,14 +73,13 @@ La fase 0 se ejecuta paso a paso; esperar la indicación del usuario antes de in
 6. Nueva interfaz publicada y verificada en Vercel tras el push `aeeaa88` a `origin/main`. Página HTTP 200 y pruebas interactivas online en cuatro tamaños correctas.
 7. Completado: `/api/health/supabase` respondió desde producción HTTP 200 con `status: ok`, `auth: reachable`, `dataApi: restricted` y `Cache-Control: no-store, max-age=0`. Comunicación Auth/PostgREST y rechazo anónimo esperado confirmados; sin pruebas con JWT reales.
 
-Fase 1: paso 1 (login y sesión) verificado por el usuario con cuenta real. Paso 2 (perfil, fecha local y acceso real) implementado localmente; falta verificar lectura y guardado con esa cuenta y aislamiento entre dos usuarios reales. Próximos pasos, con indicación del usuario para cada uno:
+Fase 1: pasos 1 y 2 completados y verificados. Paso 3 implementado. Próximos pasos:
 
-2. Paso implementado localmente; falta verificar perfil y aislamiento RLS remotamente con dos sesiones reales.
-3. Hábitos y registros diarios persistentes.
-4. Check-in diario: sueño, energía y notas.
-5. Diario personal.
-6. Objetivos y progreso.
-7. Integrar Mi Día con datos reales.
+3. Hábitos y registros diarios persistentes: completado e implementado (gestión en `/habits`, consulta y toggle en `/`).
+4. Check-in diario: sueño, energía y notas (`daily_checkins`).
+5. Diario personal (`journal_entries`).
+6. Objetivos y progreso (`goals`).
+7. Integrar Mi Día completamente con datos reales (reemplazar maquetas de agenda/notas/bloques).
 8. Validación completa, Vercel y retirada del diagnóstico temporal documentado.
 
 IA en una fase posterior.
@@ -171,7 +171,7 @@ Integración: `src/lib/supabase/{config,client,server,proxy}.ts` y `src/proxy.ts
 
 ## 12. Próxima tarea concreta
 
-> **Paso 1 verificado por el usuario. Paso 2 implementado localmente; pendiente validar perfil y aislamiento RLS con sesiones reales. El paso 3 (hábitos) se implementó, quedó registrado y fue revertido por pedido del usuario; esperar su nuevo planteo.**
+> **Pasos 1 y 2 completados y verificados con RLS/cuentas reales. Paso 3 (hábitos) implementado con gestión en `/habits` y registro de hoy en `/`. Próxima tarea: validación interactiva del paso 3 por el usuario y avance al paso 4 (Check-in diario).**
 
 Verificaciones: lint, TypeScript y build correctos; Edge/Playwright con Auth simulado: login inválido/válido, recarga, redirección desde login con sesión, cierre, ruta privada, sesión revocada, no-store y login responsive a 360/390/768/1280 px. Sin errores de JavaScript. Prueba reproducible: `scripts/test-auth.mjs`, con Playwright externo y Edge.
 

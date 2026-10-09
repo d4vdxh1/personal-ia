@@ -1,14 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { demoAgenda, demoHabits } from "@/lib/demo/day";
 import { Card } from "./ui/card";
 import { Icon, type IconName } from "./ui/icon";
 
-const navigation: { label: string; icon: IconName }[] = [
+const navigation: { label: string; icon: IconName; href?: string }[] = [
   { label: "Hoy", icon: "sun" },
-  { label: "Seguimiento", icon: "grid" },
+  { label: "Seguimiento", icon: "grid", href: "/habits" },
   { label: "Progreso", icon: "chart" },
   { label: "Más", icon: "more" },
 ];
@@ -35,7 +35,15 @@ const upcoming: Record<string, { title: string; copy: string }[]> = {
   ],
 };
 
-export function DayDemo({ dateLabel, displayName }: { dateLabel: string; displayName: string }) {
+export function DayDemo({
+  dateLabel,
+  displayName,
+  habitsSlot,
+}: {
+  dateLabel: string;
+  displayName: string;
+  habitsSlot?: ReactNode;
+}) {
   const [section, setSection] = useState("Hoy");
   const [habits, setHabits] = useState(demoHabits);
   const [dialogTitle, setDialogTitle] = useState("");
@@ -70,19 +78,33 @@ export function DayDemo({ dateLabel, displayName }: { dateLabel: string; display
         </Link>
         <p className="nav-caption">TU ESPACIO</p>
         <nav aria-label="Navegación principal">
-          {navigation.map((item) => (
-            <button
-              key={item.label}
-              className={
-                section === item.label ? "nav-item selected" : "nav-item"
-              }
-              aria-current={section === item.label ? "page" : undefined}
-              onClick={() => navigate(item.label)}
-            >
-              <Icon name={item.icon} />
-              <span>{item.label}</span>
-            </button>
-          ))}
+          {navigation.map((item) =>
+            item.href ? (
+              <Link
+                key={item.label}
+                className={
+                  section === item.label ? "nav-item selected" : "nav-item"
+                }
+                aria-current={section === item.label ? "page" : undefined}
+                href={item.href}
+              >
+                <Icon name={item.icon} />
+                <span>{item.label}</span>
+              </Link>
+            ) : (
+              <button
+                key={item.label}
+                className={
+                  section === item.label ? "nav-item selected" : "nav-item"
+                }
+                aria-current={section === item.label ? "page" : undefined}
+                onClick={() => navigate(item.label)}
+              >
+                <Icon name={item.icon} />
+                <span>{item.label}</span>
+              </button>
+            )
+          )}
         </nav>
         <div className="sidebar-note">
           <span className="small-leaf">✧</span>
@@ -117,7 +139,7 @@ export function DayDemo({ dateLabel, displayName }: { dateLabel: string; display
           </div>
           <Link
             className="avatar"
-            aria-label="Abrir perfil de ejemplo"
+            aria-label="Abrir tu perfil"
             href="/profile"
           >
             {displayName.slice(0, 1).toUpperCase()}
@@ -152,83 +174,107 @@ export function DayDemo({ dateLabel, displayName }: { dateLabel: string; display
               <div className="quick-actions">
                 {(
                   [
-                    { title: "Check-in", sub: "¿Cómo estás hoy?", icon: "sun" },
+                    { title: "Check-in", sub: "¿Cómo estás hoy?", icon: "sun", href: undefined },
                     {
                       title: "Hábito",
-                      sub: "Un pequeño avance",
+                      sub: "Gestionar hábitos",
                       icon: "check",
+                      href: "/habits",
                     },
-                    { title: "Nota", sub: "Algo para recordar", icon: "note" },
+                    { title: "Nota", sub: "Algo para recordar", icon: "note", href: undefined },
                   ] as const
-                ).map((item) => (
-                  <button
-                    className="quick-action"
-                    key={item.title}
-                    onClick={() => explain(item.title)}
-                  >
-                    <span className={"action-icon " + item.icon}>
-                      <Icon name={item.icon} />
-                    </span>
-                    <span>
-                      <strong>{item.title}</strong>
-                      <small>{item.sub}</small>
-                    </span>
-                    <span className="quick-arrow">
-                      <Icon name="arrow" />
-                    </span>
-                  </button>
-                ))}
+                ).map((item) =>
+                  item.href ? (
+                    <Link
+                      className="quick-action"
+                      key={item.title}
+                      href={item.href}
+                    >
+                      <span className={"action-icon " + item.icon}>
+                        <Icon name={item.icon} />
+                      </span>
+                      <span>
+                        <strong>{item.title}</strong>
+                        <small>{item.sub}</small>
+                      </span>
+                      <span className="quick-arrow">
+                        <Icon name="arrow" />
+                      </span>
+                    </Link>
+                  ) : (
+                    <button
+                      className="quick-action"
+                      key={item.title}
+                      onClick={() => explain(item.title)}
+                    >
+                      <span className={"action-icon " + item.icon}>
+                        <Icon name={item.icon} />
+                      </span>
+                      <span>
+                        <strong>{item.title}</strong>
+                        <small>{item.sub}</small>
+                      </span>
+                      <span className="quick-arrow">
+                        <Icon name="arrow" />
+                      </span>
+                    </button>
+                  )
+                )}
               </div>
             </section>
             <div className="dashboard-grid">
-              <Card
-                title="Hábitos de hoy"
-                eyebrow="LA CONSTANCIA EMPIEZA EN PEQUEÑO"
-                className="habits-card"
-              >
-                <div className="habit-summary">
-                  <span aria-live="polite">
-                    {completed} de {habits.length} completados
-                  </span>
-                  <strong>
-                    {Math.round((completed / habits.length) * 100)}%
-                  </strong>
-                </div>
-                <progress
-                  aria-label="Progreso de hábitos de ejemplo"
-                  value={completed}
-                  max={habits.length}
-                />
-                <div className="habit-list">
-                  {habits.map((habit) => (
-                    <label
-                      className={habit.done ? "habit-row is-done" : "habit-row"}
-                      key={habit.id}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={habit.done}
-                        onChange={() =>
-                          setHabits((current) =>
-                            current.map((entry) =>
-                              entry.id === habit.id
-                                ? { ...entry, done: !entry.done }
-                                : entry,
-                            ),
-                          )
-                        }
-                      />
-                      <span>
-                        <strong>{habit.name}</strong>
-                        <small>{habit.detail}</small>
-                      </span>
-                    </label>
-                  ))}
-                </div>
-                <p className="card-footnote">
-                  Probá las casillas. Al recargar, vuelve el ejemplo.
-                </p>
-              </Card>
+              {habitsSlot ? (
+                habitsSlot
+              ) : (
+                <Card
+                  title="Hábitos de hoy"
+                  eyebrow="LA CONSTANCIA EMPIEZA EN PEQUEÑO"
+                  className="habits-card"
+                >
+                  <div className="habit-summary">
+                    <span aria-live="polite">
+                      {completed} de {habits.length} completados
+                    </span>
+                    <strong>
+                      {Math.round((completed / habits.length) * 100)}%
+                    </strong>
+                  </div>
+                  <progress
+                    aria-label="Progreso de hábitos de ejemplo"
+                    value={completed}
+                    max={habits.length}
+                  />
+                  <div className="habit-list">
+                    {habits.map((habit) => (
+                      <label
+                        className={habit.done ? "habit-row is-done" : "habit-row"}
+                        key={habit.id}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={habit.done}
+                          onChange={() =>
+                            setHabits((current) =>
+                              current.map((entry) =>
+                                entry.id === habit.id
+                                  ? { ...entry, done: !entry.done }
+                                  : entry,
+                              ),
+                            )
+                          }
+                        />
+                        <span>
+                          <strong>{habit.name}</strong>
+                          <small>{habit.detail}</small>
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                  <p className="card-footnote">
+                    Probá las casillas. Al recargar, vuelve el ejemplo.
+                  </p>
+                </Card>
+              )}
               <Card
                 title="Tu agenda"
                 eyebrow="LO QUE VIENE"

@@ -27,6 +27,7 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - `npm run lint`, `npm run typecheck`, `npm run build` y `git diff --check` correctos. Build ejecutado fuera del sandbox porque el worker de Next fallaba con `spawn EPERM` dentro.
 - Pendiente validación funcional de lectura/guardado con la sesión real y aislamiento remoto con dos usuarios autenticados. El entorno de trabajo no tiene una sesión real de usuario ni una segunda cuenta. Las pruebas SQL locales del aislamiento del esquema ya estaban documentadas; no sustituyen la prueba remota.
 - Próximo: completar esas comprobaciones cuando haya dos sesiones reales disponibles; luego paso 3, hábitos. No se cambió Supabase remoto.
+- Commit `5fbcbb3` creado y enviado a `origin/main` (incluye el login, la identidad Día a Día y el perfil). No se inspeccionó el resultado de Vercel tras el push.
 
 ## 2026-10-09 — Fase 1, paso 1: login y sesión
 

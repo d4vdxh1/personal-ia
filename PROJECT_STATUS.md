@@ -1,6 +1,6 @@
 # PROJECT_STATUS — Día a Día
 
-**Identidad vigente:** Día a Día · Un paso más. `personal-ia` sigue siendo el identificador técnico; repositorio, carpeta, URL de Vercel y proyecto Supabase se conservan. Bienvenida del login: “Cada día se vuelve más fácil. Lo difícil es hacerlo cada día.” Cambio implementado localmente, sin publicar.
+**Identidad vigente:** Día a Día · Un paso más. `personal-ia` sigue siendo el identificador técnico; repositorio, carpeta, URL de Vercel y proyecto Supabase se conservan. Bienvenida del login: “Cada día se vuelve más fácil. Lo difícil es hacerlo cada día.” Cambios enviados a `origin/main`; el estado del despliegue automático de Vercel no se verificó.
 
 **Verificación del cambio de identidad:** lint, typecheck y build correctos; login y encabezados revisados en móvil/escritorio, sin overflow a 360/390/768/1280 px, con Auth simulado en copia temporal. Capturas: `%TEMP%/dia-a-dia-visual/`. Login de fase 1 conservado; próximo paso funcional sigue siendo el 2.
 

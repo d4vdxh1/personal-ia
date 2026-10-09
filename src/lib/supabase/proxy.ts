@@ -23,7 +23,16 @@ export async function updateSession(request: NextRequest) {
   });
 
   // Verifica el token y renueva las cookies si corresponde.
-  // La protección de rutas y el login se implementarán en la fase 1.
-  await supabase.auth.getClaims();
+  const { data, error } = await supabase.auth.getClaims();
+  response.headers.set("Cache-Control", "private, no-store");
+  if (request.nextUrl.pathname !== "/login" && (error || !data?.claims)) {
+    const destination = request.nextUrl.clone();
+    destination.pathname = "/login";
+    destination.search = "?reason=session";
+    const redirectResponse = NextResponse.redirect(destination);
+    response.cookies.getAll().forEach((cookie) => redirectResponse.cookies.set(cookie));
+    redirectResponse.headers.set("Cache-Control", "private, no-store");
+    return redirectResponse;
+  }
   return response;
 }

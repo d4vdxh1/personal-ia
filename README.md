@@ -1,8 +1,22 @@
-# Asistente Personal IA
+# Día a Día
+
+**Un paso más**. Nombre del producto: **Día a Día**. Identificador técnico: `personal-ia`; repositorio, carpeta, URL de Vercel y proyecto Supabase conservan sus nombres actuales.
 
 Aplicación personal para organizar rutina, hábitos, estudio, entrenamiento y objetivos. El núcleo funcionará manualmente antes de integrar IA.
 
-Estado actual: **fase 0 completada**. [Mi Día en Vercel](https://personal-ia-two.vercel.app/) es una demostración sin guardado. Esquema probado localmente y catálogo remoto confirmado por los resultados del usuario: seis tablas con RLS, 24 políticas y sin permisos CRUD para anon. Interfaz y diagnóstico de comunicación a Supabase verificados en producción. Login, módulos de seguimiento, PWA e IA pendientes; fase 1 no iniciada.
+Estado actual: **fase 0 completada; pasos 1 y 2 de fase 1 implementados**. El usuario confirmó el login con cuenta real. `/profile` lee y actualiza el perfil asociado a la sesión, bajo RLS; falta comprobar la lectura y escritura con la cuenta real y aislamiento remoto con dos usuarios. Mi Día sigue usando datos de ejemplo. Los cambios se publican en este push y Vercel puede desplegarlos automáticamente.
+
+## Login local
+
+Abrir `/login` con una cuenta existente de Supabase Auth, correo confirmado y contraseña. Alta y recuperación de contraseña fuera de este paso. Los formularios validan en servidor y muestran errores y estado de envío. `Cerrar sesión` termina la sesión de este dispositivo; una sesión inválida vuelve al login. No se necesitan claves administrativas.
+
+Prueba aislada con Auth simulado, Playwright externo y Microsoft Edge instalado, sin nuevas dependencias:
+
+```powershell
+node scripts/test-auth.mjs "RUTA/AL/PLAYWRIGHT/index.mjs"
+```
+
+Ejecutar sin otro `next dev` activo y con puerto 3107 libre. No reemplaza la validación con Supabase real.
 
 ## Entorno local
 
@@ -60,7 +74,7 @@ En una copia nueva, ejecutar `npm run build` antes del primer `npm run typecheck
 
 - `src/app/`: página inicial, layout y estilos Tailwind.
 - `src/lib/supabase/`: configuración y clientes de navegador/servidor, más renovación de sesión.
-- `src/proxy.ts`: ejecuta la renovación de sesión antes de las rutas; no implementa aún autorización ni login.
+- `src/proxy.ts`: renueva la sesión y redirige sin sesión; la página privada también verifica al usuario en servidor mediante `src/lib/auth/session.ts`.
 - `scripts/check-supabase.mjs`: verifica Auth y consulta una tabla de diagnóstico inexistente con límite cero. El error esperado `PGRST205` confirma acceso a PostgREST; no verifica tablas de negocio, políticas RLS ni login.
 - [PROJECT_STATUS.md](PROJECT_STATUS.md): estado actual, pendientes y limitaciones conocidas.
 - [DEVLOG.md](DEVLOG.md): historial de cambios y verificaciones.
@@ -75,8 +89,10 @@ Versionar `package-lock.json` junto con los cambios de dependencias. Las depende
 
 ## Pendientes conocidos
 
+Antes del cierre de fase 9: activar Vercel Web Analytics en Hobby e integrar `@vercel/analytics`. Pendiente; no se implementa ni se agregan dependencias en este cambio de identidad.
+
 En el paso 1, la auditoría registró 5 alertas altas en dependencias de desarrollo de ESLint y 0 en producción. ESLint 9 se mantuvo por compatibilidad de plugins, aunque npm lo marca fuera de soporte. El detalle está en `PROJECT_STATUS.md`; estos resultados corresponden a esa verificación y no reemplazan una auditoría futura.
 
 El archivo local `promt_supabe_connect.md` se excluye de Git porque contiene los datos del proyecto utilizados para configurar `.env.local`. La integración utiliza solo la clave pública; no requiere una clave administrativa.
 
-El diseño mobile-first (paso 5) está implementado como demostración: los cambios de hábitos no se guardan y los módulos siguen pendientes. Ver [el informe de cierre](docs/CIERRE_FASE_0.md) para pruebas, evidencia de producción, diagnóstico y su retirada. Pasos 6 y 7 verificados online. No repetir la migración; esperar autorización antes de iniciar fase 1.
+El diseño mobile-first sigue como demostración: los cambios de hábitos no se guardan y los módulos siguen pendientes. Ver [el informe de cierre](docs/CIERRE_FASE_0.md) para la evidencia de fase 0 y retirada del diagnóstico. El paso 2 incluye la pantalla de perfil y acceso SSR; la comprobación remota de dos usuarios queda pendiente antes de cerrar ese paso.

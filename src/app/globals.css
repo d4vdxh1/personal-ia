@@ -76,7 +76,7 @@ svg {
   align-items: center;
   text-decoration: none;
   color: var(--ink);
-  font-size: 27px;
+  font-size: 25px;
   font-weight: 700;
   letter-spacing: -1px;
 }
@@ -89,15 +89,15 @@ svg {
   background: var(--green);
   color: white;
 }
-.brand-dot {
-  color: var(--green);
+.brand > span:last-child {
+  white-space: nowrap;
 }
 .brand small {
   display: block;
-  font-size: 8px;
-  letter-spacing: 2px;
+  font-size: 11px;
+  letter-spacing: 0.5px;
   color: var(--muted);
-  margin-top: -4px;
+  margin-top: 0;
 }
 .nav-caption {
   color: var(--muted);
@@ -819,3 +819,29 @@ progress::-moz-progress-bar {
     transition: none !important;
   }
 }
+
+.auth-shell { min-height: 100dvh; display: grid; place-items: center; padding: 24px; }
+.auth-card { width: 100%; max-width: 420px; padding: 28px; background: white; border: 1px solid var(--border); border-radius: 20px; }
+.auth-card h1 { font-size: 28px; margin: 16px 0 8px; }
+.auth-card p { margin-bottom: 16px; color: var(--muted); }
+.auth-card .auth-brand { color: var(--green); font-size: 28px; font-weight: bold; }
+.auth-card .auth-brand { margin-bottom: 0; }
+.auth-card .auth-tagline { font-size: 13px; margin-bottom: 24px; }
+.auth-card .auth-welcome { font-size: 14px; line-height: 1.6; margin-top: 18px; }
+.profile-back { display: inline-block; margin-bottom: 20px; color: var(--green); }
+.profile-details { display: grid; gap: 12px; margin: 24px 0; }
+.profile-details div { padding: 12px; background: #f5f7fa; border-radius: 8px; }
+.profile-details dt { color: var(--muted); font-size: 12px; }
+.profile-details dd { margin: 2px 0 0; overflow-wrap: anywhere; }
+.auth-card .form-hint { margin: 0; font-size: 12px; }
+.auth-card .form-error { color: #9f1239; }
+.auth-card .form-success { color: var(--green); }
+.profile-form { margin-top: 12px; }
+.auth-form { display: grid; gap: 10px; margin: 24px 0; }
+.auth-form input { width: 100%; min-height: 48px; border: 1px solid #64748b; border-radius: 8px; padding: 10px; }
+.auth-form [role=alert] { color: #9f1239; margin: 0; }
+.auth-submit { background: var(--green); color: white; border: 0; border-radius: 8px; padding: 12px; }
+button:disabled { cursor: wait; opacity: .65; }
+.session-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 8px 24px; margin-left: 232px; background: white; border-bottom: 1px solid var(--border); }
+.session-bar button { border: 1px solid var(--border); border-radius: 8px; background: white; padding: 8px 12px; }
+@media (max-width: 800px) { .session-bar { margin-left: 0; padding: 8px 16px; } }

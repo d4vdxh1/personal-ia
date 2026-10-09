@@ -35,7 +35,7 @@ const upcoming: Record<string, { title: string; copy: string }[]> = {
   ],
 };
 
-export function DayDemo({ dateLabel }: { dateLabel: string }) {
+export function DayDemo({ dateLabel, displayName }: { dateLabel: string; displayName: string }) {
   const [section, setSection] = useState("Hoy");
   const [habits, setHabits] = useState(demoHabits);
   const [dialogTitle, setDialogTitle] = useState("");
@@ -59,13 +59,13 @@ export function DayDemo({ dateLabel }: { dateLabel: string }) {
         Saltar al contenido
       </a>
       <aside className="sidebar">
-        <Link className="brand" href="/" aria-label="Personal IA, inicio">
+        <Link className="brand" href="/" aria-label="Día a Día, inicio">
           <span className="brand-mark">
             <Icon name="activity" />
           </span>
           <span>
-            personal<span className="brand-dot">.</span>
-            <small>UN DÍA A LA VEZ</small>
+            Día a Día
+            <small>Un paso más</small>
           </span>
         </Link>
         <p className="nav-caption">TU ESPACIO</p>
@@ -94,19 +94,19 @@ export function DayDemo({ dateLabel }: { dateLabel: string }) {
           <small>Tu espacio está tomando forma.</small>
         </div>
         <div className="sidebar-foot">
-          PERSONAL IA <span>VISTA PREVIA</span>
+          DÍA A DÍA <span>VISTA PREVIA</span>
         </div>
       </aside>
       <main id="contenido" className="main-content">
         <div className="topline">
-          <span>MI ESPACIO PERSONAL</span>
-          <span className="status-dot">Un día a la vez</span>
+          <span>DÍA A DÍA</span>
+          <span className="status-dot">Un paso más</span>
         </div>
         <header className="page-header">
           <div>
             <p className="date-label">{dateLabel}</p>
             <h1 ref={heading} tabIndex={-1}>
-              {section === "Hoy" ? "Buen día, David" : section}
+              {section === "Hoy" ? `Buen día, ${displayName}` : section}
               <span className="greeting-dot">.</span>
             </h1>
             <p className="header-copy">
@@ -115,13 +115,13 @@ export function DayDemo({ dateLabel }: { dateLabel: string }) {
                 : "Todo en su lugar, a tu ritmo."}
             </p>
           </div>
-          <button
+          <Link
             className="avatar"
             aria-label="Abrir perfil de ejemplo"
-            onClick={() => explain("Perfil")}
+            href="/profile"
           >
-            D
-          </button>
+            {displayName.slice(0, 1).toUpperCase()}
+          </Link>
         </header>
         <div className="demo-banner">
           <span className="demo-badge">DEMO</span>

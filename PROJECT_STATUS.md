@@ -1,10 +1,14 @@
-# PROJECT_STATUS — Asistente Personal IA
+# PROJECT_STATUS — Día a Día
+
+**Identidad vigente:** Día a Día · Un paso más. `personal-ia` sigue siendo el identificador técnico; repositorio, carpeta, URL de Vercel y proyecto Supabase se conservan. Bienvenida del login: “Cada día se vuelve más fácil. Lo difícil es hacerlo cada día.” Cambio implementado localmente, sin publicar.
+
+**Verificación del cambio de identidad:** lint, typecheck y build correctos; login y encabezados revisados en móvil/escritorio, sin overflow a 360/390/768/1280 px, con Auth simulado en copia temporal. Capturas: `%TEMP%/dia-a-dia-visual/`. Login de fase 1 conservado; próximo paso funcional sigue siendo el 2.
 
 > Este archivo representa el **estado actual** del proyecto. Mantenerlo corto y actualizado. Reemplazar información obsoleta en lugar de acumular historia; la historia va en `DEVLOG.md`.
 
 **Última actualización:** 2026-10-09  
-**Estado general:** Fase 0 completada — pasos 1 a 7 verificados dentro del alcance acordado
-**Fase del roadmap:** Fase 0 cerrada; fase 1 no iniciada
+**Estado general:** Fase 0 cerrada; paso 1 de fase 1 verificado por el usuario con cuenta real. Paso 2 implementado localmente; lectura/escritura real del perfil y aislamiento remoto con dos usuarios pendientes de comprobación desde sesiones reales.
+**Fase del roadmap:** Fase 1, paso 2: perfil bajo RLS implementado; falta validar la cuenta real y aislamiento con dos usuarios.
 **Uso previsto:** Personal  
 
 ---
@@ -40,8 +44,9 @@ Construir el MVP base de una PWA personal para registrar y consultar rutina diar
 | Next.js + TypeScript | ✅ Inicializado | App Router, página inicial en `/` |
 | Tailwind | ✅ Configurado | Integración mediante PostCSS |
 | Preparación del repositorio | ✅ Completado | `.gitignore`, `.env.example` y README; reglas de exclusión verificadas |
-| Supabase | ✅ Conectado | Variables locales, clientes SSR/navegador, proxy y prueba Data API/Auth; seis tablas, RLS y 24 políticas confirmados por resultados del usuario; login pendiente |
-| Login | ⬜ Pendiente | |
+| Supabase | ✅ Conectado | Variables locales, clientes SSR/navegador, proxy; seis tablas, RLS y 24 políticas confirmados. Cuenta real confirmada por el usuario; prueba remota de aislamiento pendiente |
+| Login | ✅ Verificado | Correo/contraseña, cierre local y protección en servidor. Usuario confirmó ingreso con cuenta real; pruebas con Auth simulado también correctas. |
+| Perfil | Implementado localmente | Lee `profiles` bajo la sesión autenticada y permite cambiar el nombre visible con filtro por `user_id`; acceso a la fila real y prueba remota de aislamiento pendientes. |
 | Mi Día | ✅ Diseño de ejemplo | Hábitos solo en memoria; sin datos reales ni guardado; funcionalidad pendiente de fase 1 |
 | Hábitos | ⬜ Pendiente | |
 | Check-in diario | ⬜ Pendiente | sueño, energía, notas |
@@ -67,7 +72,17 @@ La fase 0 se ejecuta paso a paso; esperar la indicación del usuario antes de in
 6. Nueva interfaz publicada y verificada en Vercel tras el push `aeeaa88` a `origin/main`. Página HTTP 200 y pruebas interactivas online en cuatro tamaños correctas.
 7. Completado: `/api/health/supabase` respondió desde producción HTTP 200 con `status: ok`, `auth: reachable`, `dataApi: restricted` y `Cache-Control: no-store, max-age=0`. Comunicación Auth/PostgREST y rechazo anónimo esperado confirmados; sin pruebas con JWT reales.
 
-Luego, fase 1: login, Mi Día, hábitos, check-in, diario y objetivos. IA en una fase posterior.
+Fase 1: paso 1 (login y sesión) verificado por el usuario con cuenta real. Paso 2 (perfil, fecha local y acceso real) implementado localmente; falta verificar lectura y guardado con esa cuenta y aislamiento entre dos usuarios reales. Próximos pasos, con indicación del usuario para cada uno:
+
+2. Paso implementado localmente; falta verificar perfil y aislamiento RLS remotamente con dos sesiones reales.
+3. Hábitos y registros diarios persistentes.
+4. Check-in diario: sueño, energía y notas.
+5. Diario personal.
+6. Objetivos y progreso.
+7. Integrar Mi Día con datos reales.
+8. Validación completa, Vercel y retirada del diagnóstico temporal documentado.
+
+IA en una fase posterior.
 
 ## 6. Modelo de datos existente
 
@@ -84,7 +99,7 @@ Tablas incluidas en la migración:
 
 Zona horaria: `America/Argentina/Buenos_Aires`. Fechas diarias locales explícitas; timestamps `timestamptz`. Un check-in por usuario/día y una entrada por hábito/día. RLS habilitado, 24 políticas por dueño, sin acceso anónimo. FK compuesta impide vincular un registro al hábito de otro usuario. Perfiles automáticos al alta; backfill de usuarios existentes.
 
-Pruebas locales: CRUD propio y aislamiento entre dos usuarios en las seis tablas, acceso anónimo, FK, duplicados, rangos y cruce de fecha UTC. Simulación local de `auth.uid()`. Catálogo RLS remoto confirmado por resultados del usuario; pruebas funcionales con Auth/JWT reales pendientes al implementar login.
+Pruebas locales: CRUD propio y aislamiento entre dos usuarios en las seis tablas, acceso anónimo, FK, duplicados, rangos y cruce de fecha UTC. Simulación local de `auth.uid()`. Catálogo RLS remoto confirmado por resultados del usuario; prueba funcional remota con dos JWT reales pendiente.
 
 Después:
 
@@ -139,6 +154,8 @@ Integración: `src/lib/supabase/{config,client,server,proxy}.ts` y `src/proxy.ts
 
 ## 10. Bugs / bloqueos actuales
 
+- Antes del cierre de fase 9: activar Vercel Web Analytics en Hobby e integrar `@vercel/analytics`. Pendiente, sin implementación ni dependencias nuevas en esta tarea.
+
 - Sin bloqueos para ejecutar la aplicación localmente. Paso 4 cerrado con ambos resultados de `supabase/verify_schema.sql` compartidos por el usuario. No repetir la migración.
 - `npm audit`: 5 alertas altas en la cadena de dependencias de desarrollo de ESLint (`braces` → `micromatch` → `fast-glob`). La corrección automática propuesta baja la configuración de Next a otra versión mayor; no se aplicó. Auditoría de producción: 0 vulnerabilidades.
 - ESLint 9 se conserva por compatibilidad con los plugins de Next; npm lo marca fuera de soporte. Revisar actualización conjunta de plugins/ESLint cuando sea compatible.
@@ -154,4 +171,8 @@ Integración: `src/lib/supabase/{config,client,server,proxy}.ts` y `src/proxy.ts
 
 ## 12. Próxima tarea concreta
 
-> **Fase 0 cerrada. Esperar autorización expresa antes de iniciar fase 1 (login y funcionalidades con datos reales).**
+> **Paso 1 verificado por el usuario. Paso 2 implementado localmente; pendiente validar perfil y aislamiento RLS con sesiones reales. Luego sigue el paso 3: hábitos.**
+
+Verificaciones: lint, TypeScript y build correctos; Edge/Playwright con Auth simulado: login inválido/válido, recarga, redirección desde login con sesión, cierre, ruta privada, sesión revocada, no-store y login responsive a 360/390/768/1280 px. Sin errores de JavaScript. Prueba reproducible: `scripts/test-auth.mjs`, con Playwright externo y Edge.
+
+Limitaciones: no se dispone de credenciales para validar login exitoso con Supabase real. Pruebas RLS con JWT reales pendientes. Sin cambios en esquema, usuarios o RLS; sin commit, push o despliegue. Producción sigue en fase 0.

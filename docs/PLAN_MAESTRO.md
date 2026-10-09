@@ -1,4 +1,8 @@
-# Plan Maestro de Desarrollo — Asistente Personal IA
+# Plan Maestro de Desarrollo — Día a Día
+
+**Identidad del producto:** Día a Día. **Lema:** Un paso más.
+**Bienvenida del login:** “Cada día se vuelve más fácil. Lo difícil es hacerlo cada día.”
+**Identificador técnico:** `personal-ia`. Se conservan repositorio, carpeta, URL de Vercel y proyecto Supabase actuales.
 
 **Estado:** Documento base del proyecto — v1.1   
 **Objetivo:** construir una aplicación web/PWA personal, inteligente y progresiva para organizar rutina, entrenamiento, estudio, hábitos, sueño, objetivos, recordatorios y, más adelante, finanzas personales.
@@ -1146,6 +1150,8 @@ Comenzar con carga manual/conversacional.
 ---
 
 ## Fase 9 — Producción estable
+
+- Pendiente antes del cierre: activar Vercel Web Analytics en Hobby e integrar `@vercel/analytics`. No implementado en el cambio de identidad.
 
 - monitoring;
 - captura de errores;

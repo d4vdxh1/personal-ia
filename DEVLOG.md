@@ -4,6 +4,42 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 
 ---
 
+## 2026-10-09 — Identidad del producto: Día a Día
+
+- Ejecutado `docs/promt-cambio-nombre.md`, tras leer AGENTS, PROJECT_STATUS y últimas entradas de este registro y revisar Git. Conservado el trabajo local del login de fase 1.
+- Nombre visible actualizado a **Día a Día** en login, marca lateral, encabezado, pie y etiqueta accesible de inicio. Lema secundario **Un paso más**; bienvenida completa solo en login: “Cada día se vuelve más fácil. Lo difícil es hacerlo cada día.”
+- Actualizados título, applicationName y descripción del navegador. Ajustados tamaño y espacios de marca/lema para conservar el diseño claro y evitar cortes.
+- README, PROJECT_STATUS y PLAN_MAESTRO reflejan la identidad vigente: producto **Día a Día**, identificador técnico `personal-ia`. Repositorio, carpeta, URL de Vercel y proyecto Supabase conservados.
+- Registrado pendiente antes del cierre de fase 9: activar Vercel Web Analytics en Hobby e integrar `@vercel/analytics`. No implementado; sin nuevas dependencias.
+- Verificaciones: lint, typecheck y build correctos. Build requirió ejecución fuera del sandbox por `spawn EPERM`.
+- Revisión de login y pantalla principal a 360/390/768/1280 px con Edge/Playwright y Auth simulado local: sin overflow. Inspeccionadas capturas móvil/escritorio: nombre completo, lema y bienvenida legibles. Capturas en `%TEMP%/dia-a-dia-visual/`.
+- La revisión visual se ejecutó en una copia temporal para conservar el servidor activo del usuario. Turbopack rechazó el enlace de dependencias; se usó Webpack solo en esa copia. Un aviso inicial de hidratación provenía de las capturas al ocultar el cursor antes de hidratar; se repitió la revisión sin modificar el cursor.
+- Repetición final: título del navegador `Día a Día` verificado; ingreso válido/inválido, recarga, cierre, redirecciones y sesión revocada correctos, sin errores de consola ni de JavaScript con Auth simulado. Indicador de desarrollo desactivado solo en la copia temporal para las capturas.
+- Sin cambios en autenticación, sesiones, rutas, esquema ni RLS. Paso 2 de fase 1 no iniciado; validación con cuenta real pendiente. Cambios locales, sin commit, push ni despliegue.
+
+## 2026-10-09 — Fase 1, paso 2: perfil y acceso autenticado
+
+- El usuario confirmó el login con cuenta real; se cierra el paso 1.
+- Agregada `/profile`, protegida por la sesión existente. Lee `display_name`, `timezone` y `preferred_sleep_hours` de `profiles` usando el cliente SSR y la sesión del usuario; muestra también su correo autenticado.
+- El formulario actualiza solo `display_name`, con validación de longitud y filtro explícito por `user_id` del usuario validado. Confirma éxito únicamente cuando PostgREST devuelve la fila actualizada y revalida perfil y Mi Día.
+- Mi Día ahora saluda con el nombre del perfil; si está vacío usa el segmento del correo. El avatar abre `/profile`. Se conserva la zona horaria de Buenos Aires para la fecha mostrada.
+- No se modificó el esquema ni las políticas; se usa el RLS y el perfil automático existentes. Documentación del estado actualizada.
+- `npm run lint`, `npm run typecheck`, `npm run build` y `git diff --check` correctos. Build ejecutado fuera del sandbox porque el worker de Next fallaba con `spawn EPERM` dentro.
+- Pendiente validación funcional de lectura/guardado con la sesión real y aislamiento remoto con dos usuarios autenticados. El entorno de trabajo no tiene una sesión real de usuario ni una segunda cuenta. Las pruebas SQL locales del aislamiento del esquema ya estaban documentadas; no sustituyen la prueba remota.
+- Próximo: completar esas comprobaciones cuando haya dos sesiones reales disponibles; luego paso 3, hábitos. No se cambió Supabase remoto.
+
+## 2026-10-09 — Fase 1, paso 1: login y sesión
+
+- Implementado `/login` con correo/contraseña para una cuenta existente, validación en servidor, errores y estados de envío. Server Actions de ingreso y cierre local; redirecciones fijas e invalidación de interfaz.
+- `/` requiere usuario verificado con `getUser()` en servidor. Proxy renueva cookies con `getClaims()`, redirige sin sesión, conserva cookies al redirigir y evita caché de respuestas de sesión.
+- Agregado cierre de sesión en la pantalla principal; contenido demo conservado hasta integrar los módulos reales. Sin alta ni recuperación de contraseña en este paso.
+- Leídos AGENTS.md y guías locales de Next.js sobre autenticación, proxy y formularios; consultada documentación oficial SSR de Supabase.
+- Lint, TypeScript y build correctos. Build requirió ejecución fuera del sandbox tras `spawn EPERM`.
+- Prueba reproducible `scripts/test-auth.mjs`: Edge/Playwright con Auth simulado local, login válido/inválido, ruta privada/no-store, persistencia al recargar, redirección desde login con sesión, cierre y sesión revocada: PASS. Login sin overflow a 360/390/768/1280 px, sin errores de JavaScript. Sin nuevas dependencias.
+- Primer intento de prueba contra build no completó ingreso: NEXT_PUBLIC queda fijado al compilar. La prueba final usa `next dev` con variables del Auth simulado. Edge requirió permiso fuera del sandbox.
+- Actualizados PROJECT_STATUS y README. Sin cambios en esquema, migraciones, RLS o usuarios; sin commit, push ni despliegue. Producción conserva fase 0.
+- Pendiente login exitoso con Supabase real: no se dispone de credenciales de usuario. Próximo: paso 2, perfil, fecha local y aislamiento RLS con dos JWT reales, cuando el usuario lo indique.
+
 ## Plantilla de entrada
 
 ```md

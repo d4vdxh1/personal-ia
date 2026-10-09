@@ -1,6 +1,6 @@
 # Plan Maestro de Desarrollo — Asistente Personal IA
 
-**Estado:** Documento base del proyecto — v1.1  
+**Estado:** Documento base del proyecto — v1.1   
 **Objetivo:** construir una aplicación web/PWA personal, inteligente y progresiva para organizar rutina, entrenamiento, estudio, hábitos, sueño, objetivos, recordatorios y, más adelante, finanzas personales.
 
 ---

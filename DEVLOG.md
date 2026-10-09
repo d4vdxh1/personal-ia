@@ -4,6 +4,17 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 
 ---
 
+## 2026-10-09 — Fase 1, paso 3: hábitos persistentes
+
+- Mi Día carga desde Supabase los hábitos activos programados para la fecha local de Buenos Aires y sus entradas del día; el progreso ya no usa datos ficticios ni estado en memoria.
+- Marcar/desmarcar usa Server Action, valida sesión, propietario, estado activo, día programado y fecha local vigente; `upsert` respeta la unicidad `(habit_id, entry_date)` y evita duplicar el registro diario.
+- Creada `/habits`, con alta (nombre y días de semana), edición y archivo lógico (`active=false`) para preservar el historial. Las consultas y cambios filtran por el usuario autenticado y se apoyan en las políticas RLS existentes.
+- “Seguimiento”, la acción rápida de hábito, el enlace de gestión y el avatar de perfil permiten navegar a los módulos correspondientes. Incluidos estados sin hábitos, carga fallida y feedback de formularios.
+- Fecha y día de la semana se calculan en `America/Argentina/Buenos_Aires`. No se modificó el esquema, RLS, usuarios ni dependencias.
+- Verificación: lint, TypeScript, build y `git diff --check` correctos. Build fuera del sandbox porque `spawn EPERM` impide iniciar el worker de Next dentro.
+- No se ejecutaron escrituras ni pruebas de navegador contra Supabase; este entorno no tiene sesión autenticada real. Queda pendiente comprobar alta/edición/archivo/check-in con la cuenta del usuario y aislamiento con dos usuarios. Las pruebas SQL locales previas cubren el aislamiento del esquema, no estas acciones nuevas.
+- Cambios locales, sin commit ni push. Próximo módulo: paso 4, check-in diario, después de validar el flujo real de hábitos.
+
 ## 2026-10-09 — Identidad del producto: Día a Día
 
 - Ejecutado `docs/promt-cambio-nombre.md`, tras leer AGENTS, PROJECT_STATUS y últimas entradas de este registro y revisar Git. Conservado el trabajo local del login de fase 1.

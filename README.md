@@ -4,7 +4,7 @@
 
 Aplicación personal para organizar rutina, hábitos, estudio, entrenamiento y objetivos. El núcleo funcionará manualmente antes de integrar IA.
 
-Estado actual: **fase 0 completada; pasos 1, 2 y 3 de fase 1 implementados localmente**. El usuario confirmó el login real. `/profile` lee y actualiza el perfil propio. `/habits` permite crear, editar días y archivar hábitos; Mi Día registra el cumplimiento diario en Supabase bajo RLS. Pendiente verificar los flujos con la cuenta real y el aislamiento remoto entre usuarios. La agenda y otros módulos continúan como ejemplo. Este paso no se ha publicado.
+Estado actual: **fase 0 completada; pasos 1 y 2 de fase 1 implementados**. El usuario confirmó el login con cuenta real. `/profile` lee y actualiza el perfil asociado a la sesión, bajo RLS; falta comprobar la lectura y escritura con la cuenta real y aislamiento remoto con dos usuarios. Mi Día sigue usando datos de ejemplo. Los cambios se publican en este push y Vercel puede desplegarlos automáticamente.
 
 ## Login local
 
@@ -94,9 +94,5 @@ Antes del cierre de fase 9: activar Vercel Web Analytics en Hobby e integrar `@v
 En el paso 1, la auditoría registró 5 alertas altas en dependencias de desarrollo de ESLint y 0 en producción. ESLint 9 se mantuvo por compatibilidad de plugins, aunque npm lo marca fuera de soporte. El detalle está en `PROJECT_STATUS.md`; estos resultados corresponden a esa verificación y no reemplazan una auditoría futura.
 
 El archivo local `promt_supabe_connect.md` se excluye de Git porque contiene los datos del proyecto utilizados para configurar `.env.local`. La integración utiliza solo la clave pública; no requiere una clave administrativa.
-
-## Hábitos
-
-Desde “Seguimiento” o “Gestionar hábitos” se pueden crear hábitos, elegir días (lunes a domingo), cambiar nombre y frecuencia, y archivar. El archivo conserva registros anteriores. Mi Día solo lista los hábitos activos programados para hoy en `America/Argentina/Buenos_Aires`; marcar o desmarcar guarda una entrada única por hábito y fecha. Todas las lecturas y escrituras usan la sesión Supabase del usuario y las políticas RLS existentes. La verificación con cuenta real y entre dos usuarios queda pendiente.
 
 El diseño mobile-first sigue como demostración: los cambios de hábitos no se guardan y los módulos siguen pendientes. Ver [el informe de cierre](docs/CIERRE_FASE_0.md) para la evidencia de fase 0 y retirada del diagnóstico. El paso 2 incluye la pantalla de perfil y acceso SSR; la comprobación remota de dos usuarios queda pendiente antes de cerrar ese paso.

@@ -7,8 +7,8 @@
 > Este archivo representa el **estado actual** del proyecto. Mantenerlo corto y actualizado. Reemplazar información obsoleta en lugar de acumular historia; la historia va en `DEVLOG.md`.
 
 **Última actualización:** 2026-10-09  
-**Estado general:** Fase 0 cerrada; login confirmado por el usuario. Perfil y hábitos conectados a Supabase mediante la sesión autenticada y RLS. Validación funcional en Supabase con la cuenta real y aislamiento entre dos usuarios pendiente.
-**Fase del roadmap:** Fase 1, pasos 2 y 3 implementados localmente; pendientes comprobaciones funcionales en Supabase real.
+**Estado general:** Fase 0 cerrada; paso 1 de fase 1 verificado por el usuario con cuenta real. Paso 2 implementado localmente; lectura/escritura real del perfil y aislamiento remoto con dos usuarios pendientes de comprobación desde sesiones reales.
+**Fase del roadmap:** Fase 1, paso 2: perfil bajo RLS implementado; falta validar la cuenta real y aislamiento con dos usuarios. Paso 3 pendiente de replanteo del usuario.
 **Uso previsto:** Personal  
 
 ---
@@ -47,8 +47,8 @@ Construir el MVP base de una PWA personal para registrar y consultar rutina diar
 | Supabase | ✅ Conectado | Variables locales, clientes SSR/navegador, proxy; seis tablas, RLS y 24 políticas confirmados. Cuenta real confirmada por el usuario; prueba remota de aislamiento pendiente |
 | Login | ✅ Verificado | Correo/contraseña, cierre local y protección en servidor. Usuario confirmó ingreso con cuenta real; pruebas con Auth simulado también correctas. |
 | Perfil | Implementado localmente | Lee `profiles` bajo la sesión autenticada y permite cambiar el nombre visible con filtro por `user_id`; acceso a la fila real y prueba remota de aislamiento pendientes. |
-| Mi Día | 🟡 Parcial | Hábitos reales del usuario y registro diario persistente. Agenda y otros módulos siguen siendo de ejemplo |
-| Hábitos | ✅ Implementado localmente | Crear, editar nombre/días, archivar conservando historial y registrar/desmarcar por fecha de Buenos Aires. Falta validar los flujos en Supabase real |
+| Mi Día | ✅ Diseño de ejemplo | Hábitos solo en memoria; sin datos reales ni guardado; funcionalidad pendiente de fase 1 |
+| Hábitos | ⬜ Pendiente | |
 | Check-in diario | ⬜ Pendiente | sueño, energía, notas |
 | Entrenamientos | ⬜ Pendiente | |
 | Estudio | ⬜ Pendiente | |
@@ -72,10 +72,10 @@ La fase 0 se ejecuta paso a paso; esperar la indicación del usuario antes de in
 6. Nueva interfaz publicada y verificada en Vercel tras el push `aeeaa88` a `origin/main`. Página HTTP 200 y pruebas interactivas online en cuatro tamaños correctas.
 7. Completado: `/api/health/supabase` respondió desde producción HTTP 200 con `status: ok`, `auth: reachable`, `dataApi: restricted` y `Cache-Control: no-store, max-age=0`. Comunicación Auth/PostgREST y rechazo anónimo esperado confirmados; sin pruebas con JWT reales.
 
-Fase 1: paso 1 (login y sesión) verificado por el usuario con cuenta real. Paso 2 (perfil) y paso 3 (hábitos) implementados localmente bajo RLS. Falta probar lectura/escritura del perfil, CRUD de hábitos y registros diarios con la cuenta real, y aislamiento entre dos usuarios. Próximos pasos, con indicación del usuario para cada uno:
+Fase 1: paso 1 (login y sesión) verificado por el usuario con cuenta real. Paso 2 (perfil, fecha local y acceso real) implementado localmente; falta verificar lectura y guardado con esa cuenta y aislamiento entre dos usuarios reales. Próximos pasos, con indicación del usuario para cada uno:
 
-2. Verificar lectura/guardado de perfil y aislamiento RLS con dos sesiones reales.
-3. Verificar creación, edición, archivo y registro diario de hábitos en Supabase real.
+2. Paso implementado localmente; falta verificar perfil y aislamiento RLS remotamente con dos sesiones reales.
+3. Hábitos y registros diarios persistentes.
 4. Check-in diario: sueño, energía y notas.
 5. Diario personal.
 6. Objetivos y progreso.
@@ -99,7 +99,7 @@ Tablas incluidas en la migración:
 
 Zona horaria: `America/Argentina/Buenos_Aires`. Fechas diarias locales explícitas; timestamps `timestamptz`. Un check-in por usuario/día y una entrada por hábito/día. RLS habilitado, 24 políticas por dueño, sin acceso anónimo. FK compuesta impide vincular un registro al hábito de otro usuario. Perfiles automáticos al alta; backfill de usuarios existentes.
 
-Pruebas locales del esquema: CRUD propio y aislamiento entre dos usuarios en las seis tablas, acceso anónimo, FK, duplicados, rangos y cruce de fecha UTC. Simulación local de `auth.uid()`. Catálogo RLS remoto confirmado por resultados del usuario; pruebas funcionales remotas de perfil y hábitos con JWT reales pendientes.
+Pruebas locales: CRUD propio y aislamiento entre dos usuarios en las seis tablas, acceso anónimo, FK, duplicados, rangos y cruce de fecha UTC. Simulación local de `auth.uid()`. Catálogo RLS remoto confirmado por resultados del usuario; prueba funcional remota con dos JWT reales pendiente.
 
 Después:
 
@@ -171,8 +171,8 @@ Integración: `src/lib/supabase/{config,client,server,proxy}.ts` y `src/proxy.ts
 
 ## 12. Próxima tarea concreta
 
-> **Pasos 1, 2 y 3 implementados localmente; login real confirmado por el usuario. Pendiente probar perfil y hábitos en Supabase con una sesión real y aislamiento con dos usuarios. Próximo módulo tras esa comprobación: paso 4, check-in diario.**
+> **Paso 1 verificado por el usuario. Paso 2 implementado localmente; pendiente validar perfil y aislamiento RLS con sesiones reales. El paso 3 (hábitos) se implementó, quedó registrado y fue revertido por pedido del usuario; esperar su nuevo planteo.**
 
-Verificaciones del paso 3: `npm run lint`, `npm run typecheck`, `npm run build` y `git diff --check` correctos. Build requirió permiso fuera del sandbox por `spawn EPERM` en el worker de TypeScript.
+Verificaciones: lint, TypeScript y build correctos; Edge/Playwright con Auth simulado: login inválido/válido, recarga, redirección desde login con sesión, cierre, ruta privada, sesión revocada, no-store y login responsive a 360/390/768/1280 px. Sin errores de JavaScript. Prueba reproducible: `scripts/test-auth.mjs`, con Playwright externo y Edge.
 
-Limitaciones: flujos compilados y validados estáticamente, pero todavía no probados con sesión autenticada en Supabase. Se conservan esquema, RLS, usuarios y dependencias existentes. Cambios locales; sin commit, push o despliegue en este paso.
+Limitaciones: no se dispone de credenciales para validar login exitoso con Supabase real. Pruebas RLS con JWT reales pendientes. Sin cambios en esquema, usuarios o RLS; sin commit, push o despliegue. Producción sigue en fase 0.

@@ -2,22 +2,15 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { demoAgenda } from "@/lib/demo/day";
+import { demoAgenda, demoHabits } from "@/lib/demo/day";
 import { Card } from "./ui/card";
 import { Icon, type IconName } from "./ui/icon";
-import { TodayList } from "@/components/habits/today-list";
-import type { HabitToday } from "@/lib/habits/data";
 
 const navigation: { label: string; icon: IconName }[] = [
   { label: "Hoy", icon: "sun" },
   { label: "Seguimiento", icon: "grid" },
   { label: "Progreso", icon: "chart" },
   { label: "Más", icon: "more" },
-];
-const quickActions: { title: string; sub: string; icon: IconName }[] = [
-  { title: "Check-in", sub: "¿Cómo estás hoy?", icon: "sun" },
-  { title: "Hábito", sub: "Un pequeño avance", icon: "check" },
-  { title: "Nota", sub: "Algo para recordar", icon: "note" },
 ];
 const upcoming: Record<string, { title: string; copy: string }[]> = {
   Seguimiento: [
@@ -42,8 +35,9 @@ const upcoming: Record<string, { title: string; copy: string }[]> = {
   ],
 };
 
-export function DayDemo({ dateLabel, displayName, habits, habitsError, date }: { dateLabel: string; displayName: string; habits: HabitToday[]; habitsError: boolean; date: string }) {
+export function DayDemo({ dateLabel, displayName }: { dateLabel: string; displayName: string }) {
   const [section, setSection] = useState("Hoy");
+  const [habits, setHabits] = useState(demoHabits);
   const [dialogTitle, setDialogTitle] = useState("");
   const dialog = useRef<HTMLDialogElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -76,14 +70,7 @@ export function DayDemo({ dateLabel, displayName, habits, habitsError, date }: {
         </Link>
         <p className="nav-caption">TU ESPACIO</p>
         <nav aria-label="Navegación principal">
-          {navigation.map((item) => item.label === "Seguimiento" ? <Link
-            key={item.label}
-            className="nav-item"
-            href="/habits"
-          >
-            <Icon name={item.icon} />
-            <span>{item.label}</span>
-          </Link> : (
+          {navigation.map((item) => (
             <button
               key={item.label}
               className={
@@ -163,10 +150,21 @@ export function DayDemo({ dateLabel, displayName, habits, habitsError, date }: {
                 <span>Un momento para vos</span>
               </div>
               <div className="quick-actions">
-                {quickActions.map((item) => item.title === "Hábito" ? <Link
+                {(
+                  [
+                    { title: "Check-in", sub: "¿Cómo estás hoy?", icon: "sun" },
+                    {
+                      title: "Hábito",
+                      sub: "Un pequeño avance",
+                      icon: "check",
+                    },
+                    { title: "Nota", sub: "Algo para recordar", icon: "note" },
+                  ] as const
+                ).map((item) => (
+                  <button
                     className="quick-action"
                     key={item.title}
-                    href="/habits"
+                    onClick={() => explain(item.title)}
                   >
                     <span className={"action-icon " + item.icon}>
                       <Icon name={item.icon} />
@@ -178,16 +176,8 @@ export function DayDemo({ dateLabel, displayName, habits, habitsError, date }: {
                     <span className="quick-arrow">
                       <Icon name="arrow" />
                     </span>
-                  </Link> : <button
-                    className="quick-action"
-                    key={item.title}
-                    onClick={() => explain(item.title)}
-                  >
-                    <span className={"action-icon " + item.icon}><Icon name={item.icon} /></span>
-                    <span><strong>{item.title}</strong><small>{item.sub}</small></span>
-                    <span className="quick-arrow"><Icon name="arrow" /></span>
                   </button>
-                )}
+                ))}
               </div>
             </section>
             <div className="dashboard-grid">
@@ -196,23 +186,47 @@ export function DayDemo({ dateLabel, displayName, habits, habitsError, date }: {
                 eyebrow="LA CONSTANCIA EMPIEZA EN PEQUEÑO"
                 className="habits-card"
               >
-                <Link className="habits-manage" href="/habits">Gestionar hábitos</Link>
                 <div className="habit-summary">
                   <span aria-live="polite">
                     {completed} de {habits.length} completados
                   </span>
                   <strong>
-                    {habits.length ? Math.round((completed / habits.length) * 100) : 0}%
+                    {Math.round((completed / habits.length) * 100)}%
                   </strong>
                 </div>
                 <progress
-                  aria-label="Progreso de hábitos de hoy"
+                  aria-label="Progreso de hábitos de ejemplo"
                   value={completed}
-                  max={Math.max(habits.length, 1)}
+                  max={habits.length}
                 />
-                {habitsError ? <p role="alert" className="habit-empty">No pudimos cargar tus hábitos. Actualizá la página o volvé a ingresar.</p> : <TodayList habits={habits} date={date} />}
+                <div className="habit-list">
+                  {habits.map((habit) => (
+                    <label
+                      className={habit.done ? "habit-row is-done" : "habit-row"}
+                      key={habit.id}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={habit.done}
+                        onChange={() =>
+                          setHabits((current) =>
+                            current.map((entry) =>
+                              entry.id === habit.id
+                                ? { ...entry, done: !entry.done }
+                                : entry,
+                            ),
+                          )
+                        }
+                      />
+                      <span>
+                        <strong>{habit.name}</strong>
+                        <small>{habit.detail}</small>
+                      </span>
+                    </label>
+                  ))}
+                </div>
                 <p className="card-footnote">
-                  {habits.length ? "Los cambios de hoy se guardan en tu cuenta." : "Tus hábitos programados aparecerán acá."}
+                  Probá las casillas. Al recargar, vuelve el ejemplo.
                 </p>
               </Card>
               <Card

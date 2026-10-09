@@ -1,9 +1,0 @@
-export const WEEKDAYS = [
-  { value: 1, label: "Lun" },
-  { value: 2, label: "Mar" },
-  { value: 3, label: "Mié" },
-  { value: 4, label: "Jue" },
-  { value: 5, label: "Vie" },
-  { value: 6, label: "Sáb" },
-  { value: 7, label: "Dom" },
-] as const;

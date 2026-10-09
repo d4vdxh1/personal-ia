@@ -1,0 +1,23 @@
+node_modules
+
+# Next.js y archivos generados
+.next/
+out/
+build/
+dist/
+next-env.d.ts
+*.tsbuildinfo
+coverage/
+
+# Variables locales: solo se versiona la plantilla sin valores
+.env*
+!.env.example
+/promt_supabe_connect.md
+
+# Configuración local de despliegue
+.vercel/
+
+# Logs y archivos del sistema
+*.log
+.DS_Store
+Thumbs.db

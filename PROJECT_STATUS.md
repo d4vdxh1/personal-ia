@@ -3,8 +3,8 @@
 > Este archivo representa el **estado actual** del proyecto. Mantenerlo corto y actualizado. Reemplazar información obsoleta en lugar de acumular historia; la historia va en `DEVLOG.md`.
 
 **Última actualización:** 2026-10-09  
-**Estado general:** Fase 0 — pasos 1 a 5 completos; nueva interfaz y diagnóstico pendientes de verificar en producción
-**Fase del roadmap:** Fase 0 — Fundación  
+**Estado general:** Fase 0 completada — pasos 1 a 7 verificados dentro del alcance acordado
+**Fase del roadmap:** Fase 0 cerrada; fase 1 no iniciada
 **Uso previsto:** Personal  
 
 ---
@@ -64,8 +64,8 @@ La fase 0 se ejecuta paso a paso; esperar la indicación del usuario antes de in
 3. Crear/conectar Supabase y configurar variables locales: completado con el proyecto existente indicado por el usuario; Data API y Auth accesibles.
 4. Esquema, relaciones y reglas de acceso preparados en SQL y probados en PostgreSQL 17 local. Completado: el usuario compartió ambos resultados de Supabase, confirmando seis tablas con RLS, 24 políticas y ausencia de permisos CRUD para anon.
 5. Diseño mobile-first completado; pruebas de navegador a 360/390/768/1280 px, capturas móvil/escritorio, interacciones demo y consola correctas. Ver `docs/CIERRE_FASE_0.md`.
-6. Publicación inicial verificada; pendiente verificar nueva interfaz tras el push autorizado en la guía de cierre.
-7. Diagnóstico mínimo implementado en `/api/health/supabase`, verificado localmente: Auth accesible y Data API deniega acceso anónimo. Pendiente repetir desde producción.
+6. Nueva interfaz publicada y verificada en Vercel tras el push `aeeaa88` a `origin/main`. Página HTTP 200 y pruebas interactivas online en cuatro tamaños correctas.
+7. Completado: `/api/health/supabase` respondió desde producción HTTP 200 con `status: ok`, `auth: reachable`, `dataApi: restricted` y `Cache-Control: no-store, max-age=0`. Comunicación Auth/PostgREST y rechazo anónimo esperado confirmados; sin pruebas con JWT reales.
 
 Luego, fase 1: login, Mi Día, hábitos, check-in, diario y objetivos. IA en una fase posterior.
 
@@ -146,12 +146,12 @@ Integración: `src/lib/supabase/{config,client,server,proxy}.ts` y `src/proxy.ts
 
 ## 11. Despliegue
 
-- Producción: publicación inicial disponible en Vercel, verificada el 2026-10-09.
+- Producción: diseño de fase 0 disponible en Vercel, verificado el 2026-10-09 después del push `aeeaa88`.
 - URL: https://personal-ia-two.vercel.app/
-- Verificación externa: página HTTP 200, título `Asistente Personal IA`, cabecera `Server: Vercel` y CSS HTTP 200 por HTTPS.
-- No se inspeccionó el panel de Vercel: vinculación con GitHub, commit exacto, despliegue automático y variables no confirmados.
-- Nueva interfaz y paso 7 pendientes de comprobar después del push. Una página disponible no demuestra una consulta a Supabase desde producción.
+- Verificación externa: demo HTTP 200 y diagnóstico de Supabase HTTP 200 sin caché. Edge/Playwright online: 360/390/768/1280 px, interacciones y consola correctas.
+- La actualización apareció tras el push al repositorio existente; no se creó otro proyecto ni se inspeccionó el panel privado. El diagnóstico confirmó variables utilizables y comunicación desde el servidor desplegado, sin exponer valores.
+- Diagnóstico temporal público y mínimo; retirada y límites documentados en `docs/CIERRE_FASE_0.md`. RLS y migración no modificados; ninguna escritura en Supabase.
 
 ## 12. Próxima tarea concreta
 
-> **Publicar el trabajo autorizado y verificar interfaz y diagnóstico en producción para cerrar la fase 0. No iniciar fase 1.**
+> **Fase 0 cerrada. Esperar autorización expresa antes de iniciar fase 1 (login y funcionalidades con datos reales).**

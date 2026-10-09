@@ -49,4 +49,11 @@ Si producción devuelve 503, comprobar en Vercel → Project Settings → Enviro
 
 ## Estado de publicación
 
-Validación local completa. Pendiente push y verificación de nueva interfaz y diagnóstico en `https://personal-ia-two.vercel.app/`. No declarar la fase cerrada hasta observar ambas respuestas en producción.
+Fase 0 cerrada el 2026-10-09. Commit de implementación `aeeaa88` enviado correctamente a `origin/main` (`53e3bc6..aeeaa88`). La versión nueva apareció en el proyecto existente: `https://personal-ia-two.vercel.app/`.
+
+- Página pública HTTP 200 con la vista de ejemplo nueva.
+- `https://personal-ia-two.vercel.app/api/health/supabase`: HTTP 200 con la respuesta mínima esperada y `Cache-Control: no-store, max-age=0`. Estas llamadas salieron del servidor de Vercel hacia Supabase.
+- Pruebas Playwright/Edge repetidas online a 360, 390, 768 y 1280 px: PASS en los cuatro tamaños, sin errores de consola ni desbordamiento; hábitos, progreso, navegación, diálogo y teclado correctos.
+- El diagnóstico demuestra disponibilidad de Auth/Data API y rechazo anónimo, no operaciones de un usuario autenticado. No se modificaron tablas, políticas o migraciones y no se creó ningún usuario.
+- La configuración privada del panel de Vercel no fue inspeccionada. Se observó el resultado publicado después del push; no se creó otro proyecto.
+- Documentación de cierre actualizada después de verificar producción y preparada para un segundo commit de documentación. Fase 1 no iniciada.

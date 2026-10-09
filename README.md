@@ -2,7 +2,7 @@
 
 Aplicación personal para organizar rutina, hábitos, estudio, entrenamiento y objetivos. El núcleo funcionará manualmente antes de integrar IA.
 
-Estado actual: fase 0, pasos 1 a 5 completados. Mi Día es una demostración sin guardado. Esquema probado localmente y catálogo remoto confirmado por los resultados del usuario: seis tablas con RLS, 24 políticas y sin permisos CRUD para anon. [Publicación inicial en Vercel](https://personal-ia-two.vercel.app/) verificada; nueva interfaz y diagnóstico pendientes de verificar online. Login, módulos de seguimiento, PWA e IA pendientes.
+Estado actual: **fase 0 completada**. [Mi Día en Vercel](https://personal-ia-two.vercel.app/) es una demostración sin guardado. Esquema probado localmente y catálogo remoto confirmado por los resultados del usuario: seis tablas con RLS, 24 políticas y sin permisos CRUD para anon. Interfaz y diagnóstico de comunicación a Supabase verificados en producción. Login, módulos de seguimiento, PWA e IA pendientes; fase 1 no iniciada.
 
 ## Entorno local
 
@@ -79,4 +79,4 @@ En el paso 1, la auditoría registró 5 alertas altas en dependencias de desarro
 
 El archivo local `promt_supabe_connect.md` se excluye de Git porque contiene los datos del proyecto utilizados para configurar `.env.local`. La integración utiliza solo la clave pública; no requiere una clave administrativa.
 
-El diseño mobile-first (paso 5) está implementado como demostración: los cambios de hábitos no se guardan y los módulos siguen pendientes. Ver [el informe de cierre](docs/CIERRE_FASE_0.md) para pruebas, diagnóstico y su retirada. Pendiente verificar la nueva versión y el diagnóstico en producción. No repetir la migración ni iniciar fase 1.
+El diseño mobile-first (paso 5) está implementado como demostración: los cambios de hábitos no se guardan y los módulos siguen pendientes. Ver [el informe de cierre](docs/CIERRE_FASE_0.md) para pruebas, evidencia de producción, diagnóstico y su retirada. Pasos 6 y 7 verificados online. No repetir la migración; esperar autorización antes de iniciar fase 1.

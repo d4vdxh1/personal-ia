@@ -41,6 +41,16 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 
 ---
 
+## 2026-10-09 — Fase 0 cerrada: diseño y comunicación verificados online
+
+- Commit `aeeaa88` (`feat: add phase zero day demo and production connectivity check`), push correcto a `origin/main`: `53e3bc6..aeeaa88`.
+- La nueva demo está publicada en `https://personal-ia-two.vercel.app/`: HTTP 200 y contenido esperado después del push.
+- Diagnóstico en Vercel `/api/health/supabase`: HTTP 200, `status: ok`, `auth: reachable`, `dataApi: restricted`, `Cache-Control: no-store, max-age=0`. Confirma comunicación desde producción usando variables configuradas, sin revelar valores ni devolver registros.
+- Playwright/Edge online: PASS a 360, 390, 768 y 1280 px; sin overflow ni errores de consola, hábitos/progreso, navegación, diálogo/Escape/foco, teclado y reset al recargar correctos.
+- Actualizados PROJECT_STATUS, README e informe de cierre. Pasos 1 a 7 completos dentro del alcance de fase 0. Estas actualizaciones documentales se publicarán en un segundo commit.
+- No se probó acceso autenticado ni aislamiento con JWT reales; corresponde al login de fase 1. No se repitió la migración ni se realizaron escrituras en Supabase, cambios de RLS, usuarios de prueba o creación de otro proyecto Vercel.
+- Esperar autorización del usuario para fase 1. Diagnóstico temporal mínimo y retirada documentados en `docs/CIERRE_FASE_0.md`.
+
 ## 2026-10-09 — Diseño de fase 0 y preparación de verificación en producción
 
 - Leída y ejecutada la guía `docs/FASE_0_DISENO_Y_CIERRE_CODEX.md`. Conservados los cambios previos del paso 4; no se repitió ninguna migración.

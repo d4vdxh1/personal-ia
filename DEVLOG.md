@@ -4,6 +4,72 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 
 ---
 
+## 2026-10-10 — Fase 1, paso 7 y verificación del paso 8
+
+- El usuario confirmó el paso 6 y autorizó Mi Día, la verificación final y un commit detallado para hacer push después.
+- Mi Día reutiliza `TrackingShell`, con Hoy activo y navegación permanente. Integra hábitos, check-in, tres notas de hoy y tres vencimientos de objetivos activos con conteos y progreso reales. Vacíos y fallos de lectura se distinguen por módulo; fecha consistente y consultas por dueño.
+- Retiradas maquetas, horarios inventados, componente/datos demo y pruebas obsoletas. Vencimientos reales sustituyen agenda ficticia; calendario de eventos independiente, entrenamiento y estudio quedan para alcance/esquema posterior. Sin migraciones ni cambios de RLS.
+- Retirados `/api/health/supabase` y su excepción del proxy. Evidencia de fase 0 conservada como historial. Agregados `test-today.mjs`, prueba de navegador reproducible y `docs/CIERRE_FASE_1.md`.
+- Pruebas de check-in/diario/objetivos/Mi Día, lint, build, typecheck independiente y `git diff --check` correctos. Edge con servicios simulados: inicio vacío/real/error, conteos/límites, hábito persistido tras recarga, sesión vencida, no-store y diagnóstico 404 correctos; sin errores JavaScript. Seis pantallas a 360/390/768/800/930/1280 px, sin overflow y con menú fijo/botones accesibles. Capturas móvil/escritorio de Mi Día inspeccionadas en `%TEMP%/personal-ia-phase1/`. Estas pruebas no demuestran RLS remoto.
+- Actualizados los cuatro documentos solicitados. Commit autorizado al finalizar; sin push ni despliegue. Cierre remoto del paso 8 pendiente: confirmación real de Mi Día, Vercel y aislamiento con dos cuentas.
+
+---
+
+## 2026-10-10 — Fase 1, paso 6: Objetivos y progreso
+
+- El usuario confirmó el funcionamiento del paso 5 (diario) y autorizó el paso 6.
+- Implementado `/goals`: creación y edición de objetivos semanales/mensuales, título (1–200 caracteres), fecha límite válida, avance entero (0–100) y estado activo/completado/cancelado. Completado fija 100% en el formulario y el servidor rechaza incoherencias; bajar el avance de un completado vuelve a activo. Cancelar conserva el registro.
+- Lista con aviso de vencimiento en objetivos activos, filtros por estado y 10 objetivos por página, ordenados por fecha límite e ID. La paginación conserva el filtro.
+- `TrackingShell` conserva menú fijo y marca Progreso; acceso desde Mi Día y pestaña Objetivos en pantallas compartidas. Formulario adaptable y mensajes accesibles; borradores conservados ante fallos.
+- Acción con autenticación propia, identidad desde Auth, filtro explícito por dueño en lectura/edición y confirmación de fila devuelta; revalidación de `/goals` y `/`. Se reutiliza `goals` y RLS; relación con hábitos/actividades pendiente de ampliación del esquema.
+- `node scripts/test-goals.mjs`, lint y build con TypeScript correctos. Pruebas con servicios simulados de fechas, textos, avance, estados, creación, edición propia/ajena/inexistente, sesión, identidad, errores, filtros y paginación; no prueban RLS remoto.
+- Edge con Auth/Supabase simulados en copia temporal: estado vacío, creación, recarga, avance, completar, reapertura del formulario al bajar avance, cancelación sin pérdida, vencimientos, filtros, paginación conservando filtro, errores de lectura/guardado y sesión vencida correctos. Borrador conservado ante error y sin errores JavaScript. Verificado a 360/390/768/800/930/1280 px, sin overflow horizontal y con botón accesible al desplazarse sobre el menú móvil; capturas móvil/escritorio inspeccionadas en `%TEMP%/personal-ia-browser/goals-*.png`.
+- Actualizados `DEVLOG.md`, `PROJECT_STATUS.md`, `docs/PLAN_MAESTRO.md` y `README.md`. Sin migraciones, cambios de RLS, commit, push ni despliegue. Pendiente validación real; siguiente paso tras confirmación: Mi Día completo (paso 7).
+
+---
+
+## 2026-10-10 — Fase 1, paso 5: Diario personal
+
+- El usuario confirmó el funcionamiento del paso 4 (check-in), que queda validado funcionalmente, y autorizó el paso 5.
+- Implementado `/journal` con `TrackingShell`: menú lateral fijo en escritorio e inferior fijo en celular, pestaña Diario, formulario e historial. Accesos desde Nota, cierre del día y sección Más de Mi Día.
+- Creación y edición en `journal_entries` con fecha de hoy o anterior, hecho relevante (hasta 2.000 caracteres) y notas (hasta 10.000); al menos uno debe contener texto. Se permiten varias entradas por día. Historial descendente de 10 entradas por página, lectura desplegable y edición de cada entrada.
+- Validación en servidor, sesión comprobada dentro de la acción y filtro explícito por usuario en lectura/edición, usando RLS existente. Se confirma guardado solo si vuelve la fila afectada. Se conservan borradores cuando falla el guardado; después de crear, se ofrece escribir otra entrada.
+- Pruebas `node scripts/test-journal.mjs` correctas: fechas inválidas/futuras/bisiestas, textos, archivos rechazados, sesión, identidad, creación múltiple, edición propia/ajena/inexistente, errores y paginación. Servicios simulados; no demuestran aislamiento remoto.
+- Build y TypeScript correctos. Se retiró la rama de botones demo de registro rápido porque los tres accesos ya tienen rutas reales.
+- Revisión completa en Edge con servicios simulados: diario vacío, validación, creación y recarga, edición, error de guardado con borrador conservado, texto HTML escapado, paginación, filtros por usuario, errores de carga y sesión vencida. Sin errores JavaScript. A 360/390/768/800/930/1280 px, sin overflow, menú fijo y botón de guardar accesible al desplazarse. Capturas de 360 y 1280 px inspeccionadas en `%TEMP%/personal-ia-browser/journal-*.png`. Se agregó reserva de desplazamiento inferior para el menú móvil. Lint y typecheck finales correctos.
+- Leídos y actualizados `DEVLOG.md`, `PROJECT_STATUS.md`, `docs/PLAN_MAESTRO.md` y `README.md`: avance vigente, uso del diario, reglas de interfaz y siguientes pasos.
+- Sin migraciones, cambios de RLS, commit, push ni despliegue. Pendiente prueba con cuenta real y comprobación de aislamiento remoto. Próximo paso tras validación: objetivos y progreso (paso 6).
+
+---
+
+## 2026-10-10 — Perfil integrado con la navegación compartida
+
+- `/profile` reutiliza `TrackingShell`, como Hábitos y Check-in: menú lateral fijo en escritorio, barra inferior fija en celular, encabezado y avatar comunes, y barra de sesión alineada con el contenido.
+- El menú indica «Más» en el perfil y permite volver a Hoy o Seguimiento. El enlace «Más» del shell compartido abre `/profile`; las pestañas de hábitos/check-in se muestran solo en esos módulos.
+- Los datos de la cuenta y el formulario existente se presentan en una tarjeta adaptable, con ancho máximo de 760 px y mensajes de ayuda/error/éxito conservados. El espacio inferior deja accesible el botón de guardar en celular.
+- Verificado en Edge con Auth/Supabase simulados en copia temporal: `/profile` a 360/390/768/800/930/1280 px, sin overflow horizontal y con botón de guardar por encima del menú móvil. Navegación desde el avatar, Hoy, Seguimiento y Más; edición y recarga del nombre; regresión de hábitos/check-in correctas. Sin errores JavaScript. Capturas de 360 y 1280 px inspeccionadas en `%TEMP%/personal-ia-browser/profile-*.png`. Esta prueba no realiza escrituras en Supabase real.
+- Lint y build correctos, incluida la comprobación de TypeScript. No se modifican acciones de perfil, esquema ni RLS; cambios locales sin commit ni push.
+
+---
+
+## 2026-10-10 — Fase 1, paso 4: Check-in diario
+
+- Registradas en `AGENTS.md` reglas permanentes para futuras pantallas: navegación siempre visible, reutilización del shell, adaptación móvil/escritorio, controles accesibles y comprobación de que el menú no tape el contenido. También se establece actualizar ambos documentos al cerrar cambios.
+- Ajuste solicitado: check-in y hábitos comparten `TrackingShell`, con menú lateral fijo en escritorio y barra inferior fija en celular. Pestañas para pasar entre ambos registros, encabezado y avatar comunes, y barra de sesión alineada con el contenido.
+- Formulario dentro de una tarjeta adaptable al ancho disponible, hasta 760 px; campos en dos columnas y una columna en celulares pequeños. Se conserva el espacio inferior para que el menú móvil no tape los controles.
+- Revisión en Edge con Auth y Supabase simulados en copia temporal: `/habits` y `/check-in` a 360/390/768/800/930/1280 px, sin overflow horizontal, menú fijo visible y botón de guardar sin quedar tapado. Navegación entre módulos, guardado, recarga y resumen correctos; sin errores JavaScript. Capturas móvil/escritorio inspeccionadas, disponibles en `%TEMP%/personal-ia-browser/checkin-*.png`.
+- El usuario confirmó que el paso 3 (hábitos) funciona correctamente; queda validado funcionalmente.
+- Implementados `/check-in`, formulario de creación/edición y carga del registro de hoy desde `daily_checkins`. Energía, ánimo y satisfacción obligatorios (1–5); sueño opcional (0–24 h, hasta dos decimales), estrés opcional (1–5) y notas opcionales (hasta 10.000 caracteres), según el esquema existente.
+- Server Action con autenticación propia, identidad del usuario tomada de la sesión, validación en servidor y upsert por `user_id,entry_date`. Fecha de Buenos Aires calculada en servidor; se rechazan formularios de un día anterior. Sin migraciones ni cambios en RLS.
+- Formulario con valores persistidos, controles deshabilitados durante guardado y mensajes accesibles de éxito/error. Los valores ingresados se conservan al enviar el formulario.
+- Acción rápida de Check-in conectada y resumen real en Mi Día; revalidación de `/` y `/check-in` tras guardar. Aclarado el aviso de ejemplos para distinguir los módulos que ya guardan datos.
+- `node scripts/test-checkin.mjs`: correcto; pruebas con Supabase simulado de validaciones, campos opcionales, cambio de fecha local, identidad, sesión, actualización sin duplicados y fallo de base de datos. No prueba RLS remoto ni guardado real.
+- Lint, TypeScript y build correctos; `/check-in` incluida como ruta dinámica protegida por la sesión existente.
+- Pendiente validación del usuario con cuenta real: crear, recargar, editar sin duplicados y comprobar el resumen de Mi Día; verificar aislamiento entre usuarios. La revisión visual y funcional con servicios simulados no sustituye esa comprobación.
+- Cambios locales, sin commit, push ni despliegue. Próximo paso tras validar: paso 5 (diario personal).
+
+---
+
 ## 2026-10-09 — Fase 1, paso 3: Hábitos y registros diarios implementados
 
 ### Objetivo de la sesión

@@ -4,7 +4,8 @@
 **Bienvenida del login:** “Cada día se vuelve más fácil. Lo difícil es hacerlo cada día.”
 **Identificador técnico:** `personal-ia`. Se conservan repositorio, carpeta, URL de Vercel y proyecto Supabase actuales.
 
-**Estado:** Documento base del proyecto — v1.1   
+**Estado:** Plan vigente — v1.2, actualizado el 2026-10-10.
+**Avance:** Fase 0 cerrada; pasos 1 a 6 de fase 1 confirmados por el usuario. Mi Día integrado (paso 7); paso 8 en verificación local, pendiente cierre remoto. Ver `docs/CIERRE_FASE_1.md`.
 **Objetivo:** construir una aplicación web/PWA personal, inteligente y progresiva para organizar rutina, entrenamiento, estudio, hábitos, sueño, objetivos, recordatorios y, más adelante, finanzas personales.
 
 ---
@@ -56,6 +57,7 @@ La IA nunca debe ser la única responsable de que ocurra una acción futura. Por
 8. Debe poder instalarse como PWA.
 9. API keys y credenciales nunca deben exponerse en el navegador.
 10. Salud y finanzas requieren reglas de seguridad adicionales.
+11. Las pantallas internas deben conservar el menú visible: lateral fijo en escritorio e inferior fijo en celular. Reutilizar el shell compartido y verificar que no tape contenido ni controles, siguiendo `AGENTS.md`.
 
 ---
 
@@ -251,6 +253,8 @@ Cada día se podrá registrar:
 - algo positivo;
 - algo que mejorar.
 
+**Implementación del paso 5:** `/journal` permite crear y editar varias entradas por día, con fecha de hoy o anterior, hecho relevante opcional (2.000 caracteres) y notas opcionales (10.000); al menos un texto debe estar completo. Aprendizajes, cosas positivas y mejoras se escriben en las notas. Historial paginado de 10 entradas, ordenado por fecha y creación descendentes. Se reutilizan `journal_entries`, la sesión y RLS existentes. Accesos desde Mi Día y las pestañas compartidas; menú fijo y diseño adaptable.
+
 ## 5.6 Check-in diario
 
 Registrar escalas de 1 a 5:
@@ -274,6 +278,10 @@ Opcionalmente:
 - fecha límite;
 - estado;
 - relación con hábitos y actividades.
+
+**Implementación del paso 6:** `/goals` permite crear y editar título, tipo semanal/mensual, fecha límite, avance entero (0–100) y estado activo/completado/cancelado. Completado requiere 100%; cancelar conserva el registro y su avance. Se muestran vencimientos de objetivos activos, filtros por estado e historial de 10 objetivos por página, con fecha límite ascendente. Usa la tabla `goals`, la sesión y RLS existentes; menú compartido y acceso desde Progreso. La relación con hábitos/actividades queda pendiente de una ampliación posterior del esquema.
+
+Verificación local: pruebas de validación/acciones, lint y build con TypeScript correctos; flujo de navegador con servicios simulados en seis anchos, incluidos creación, recarga, avance, estados, filtros, paginación, errores y sesión vencida. Falta validación funcional y de aislamiento con cuentas reales.
 
 ## 5.8 Estadísticas
 
@@ -1011,6 +1019,23 @@ Tareas:
 
 **Objetivo:** que la aplicación ya sea útil aunque no exista IA.
 
+Estado operativo al 2026-10-10:
+
+| Paso | Alcance | Estado |
+|---|---|---|
+| 1 | Login | Validado por el usuario |
+| 2 | Perfil | Validado por el usuario |
+| 3 | Hábitos y registros diarios | Validado por el usuario |
+| 4 | Check-in diario | Validado por el usuario |
+| 5 | Diario personal | Validado funcionalmente por el usuario |
+| 6 | Objetivos y progreso | Confirmado por el usuario |
+| 7 | Mi Día completo con datos reales | Implementado: hábitos/check-in/diario/objetivos; sin maquetas |
+| 8 | Validación completa, Vercel y retirada del diagnóstico | Pruebas locales y Edge correctos; diagnóstico retirado. Push, Vercel y aislamiento remoto pendientes |
+
+La confirmación funcional del usuario no equivale a una auditoría remota de aislamiento entre cuentas. El cierre incluye verificar permisos con sesiones reales. Detalles de pruebas y limitaciones en `PROJECT_STATUS.md` y `DEVLOG.md`.
+
+Verificación local del paso 5: validaciones y acciones con servicios simulados, lint/TypeScript/build y flujo de navegador en seis anchos correctos. Se comprobaron creación, edición, recarga, paginación, errores y sesión vencida; queda la prueba con cuenta real.
+
 Implementar:
 
 - login;
@@ -1389,9 +1414,9 @@ Ese es el núcleo del producto.
 
 # 26. Próximo paso recomendado
 
-Cuando comience el proyecto dedicado, iniciar por **Fase 0** y **Fase 1**.
+Pendiente: confirmar Mi Día con cuenta real y completar cierre remoto del paso 8 tras push: Vercel, sesiones/persistencia, aislamiento con dos cuentas y diagnóstico retirado en producción. Ver `docs/CIERRE_FASE_1.md`. Commit solicitado, sin push en esta sesión.
 
-Primer sprint sugerido:
+Sprint inicial de referencia (el avance vigente está en la sección 17):
 
 1. crear repositorio;
 2. iniciar Next.js + TypeScript;

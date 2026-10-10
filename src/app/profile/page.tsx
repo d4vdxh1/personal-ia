@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { getAccount } from "@/lib/auth/account";
-import { LogoutForm } from "@/components/auth/logout-form";
+import { TrackingShell } from "@/components/tracking-shell";
 import { ProfileForm } from "@/components/auth/profile-form";
 
 export const dynamic = "force-dynamic";
@@ -9,15 +8,11 @@ export default async function ProfilePage() {
   const { user, profile, profileError } = await getAccount();
   const displayName = profile?.display_name ?? "";
 
-  return <div className="profile-page">
-    <LogoutForm />
-    <main className="auth-shell profile-shell">
-      <section className="auth-card" aria-labelledby="profile-title">
-        <Link className="profile-back" href="/">← Volver a Mi Día</Link>
-        <p className="auth-brand">Día a Día</p>
-        <p className="auth-tagline">Un paso más</p>
-        <h1 id="profile-title">Tu perfil</h1>
-        <p>Consultá los datos de tu cuenta y elegí cómo querés que te llamemos.</p>
+  return <TrackingShell title="Tu perfil" dateLabel="TU CUENTA" active="profile"
+    displayName={displayName.trim() || user.email || "?"}
+    copy="Consultá los datos de tu cuenta y elegí cómo querés que te llamemos.">
+      <section className="card profile-card" aria-labelledby="profile-details-title">
+        <h2 id="profile-details-title">Datos de tu cuenta</h2>
         <dl className="profile-details">
           <div><dt>Correo</dt><dd>{user.email}</dd></div>
           <div><dt>Zona horaria</dt><dd>{profile?.timezone ?? "America/Argentina/Buenos_Aires"}</dd></div>
@@ -27,6 +22,5 @@ export default async function ProfilePage() {
           <p role="alert" className="form-error">No pudimos cargar el perfil asociado a tu cuenta. Actualizá la página o volvé a ingresar.</p>
         ) : <ProfileForm displayName={displayName} />}
       </section>
-    </main>
-  </div>;
+  </TrackingShell>;
 }

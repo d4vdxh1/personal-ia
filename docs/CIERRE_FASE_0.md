@@ -1,5 +1,7 @@
 # Diseño y verificación de cierre de fase 0
 
+> Informe histórico. El 2026-10-10 se retiraron la demo, sus datos/pruebas y `/api/health/supabase` junto con la excepción del proxy. La retirada en producción depende del próximo push/despliegue. Estado vigente: [verificación de fase 1](CIERRE_FASE_1.md).
+
 ## Interfaz de demostración
 
 `/` presenta Mi Día en español: fecha de Buenos Aires renderizada en servidor, próximo compromiso ficticio, registro rápido, hábitos, agenda, entrenamiento/estudio y cierre del día. Los datos viven en `src/lib/demo/day.ts`; no se consultan ni guardan datos personales para esta vista. Las casillas solo actualizan memoria y vuelven al ejemplo al recargar.

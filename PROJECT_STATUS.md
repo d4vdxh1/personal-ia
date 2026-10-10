@@ -2,14 +2,16 @@
 
 **Identidad vigente:** Día a Día · Un paso más. `personal-ia` sigue siendo el identificador técnico; repositorio, carpeta, URL de Vercel y proyecto Supabase se conservan. Bienvenida del login: “Cada día se vuelve más fácil. Lo difícil es hacerlo cada día.” Cambios enviados a `origin/main`; el estado del despliegue automático de Vercel no se verificó.
 
-**Verificación del cambio de identidad:** lint, typecheck y build correctos; login y encabezados revisados en móvil/escritorio, sin overflow a 360/390/768/1280 px, con Auth simulado en copia temporal. Capturas: `%TEMP%/dia-a-dia-visual/`. Login de fase 1 conservado; próximo paso funcional sigue siendo el 2.
+**Verificación del cambio de identidad:** lint, typecheck y build correctos; login y encabezados revisados en móvil/escritorio, sin overflow a 360/390/768/1280 px, con Auth simulado en copia temporal. Capturas: `%TEMP%/dia-a-dia-visual/`.
 
 > Este archivo representa el **estado actual** del proyecto. Mantenerlo corto y actualizado. Reemplazar información obsoleta en lugar de acumular historia; la historia va en `DEVLOG.md`.
 
-**Última actualización:** 2026-10-09  
-**Corrección visual local:** perfil con barra de sesión de ancho completo y tarjeta centrada; avatar de Mi Día con inicial centrada.
-**Estado general:** Fase 0 cerrada; pasos 1 y 2 de fase 1 completados y verificados con RLS/cuenta real por el usuario. Paso 3 (hábitos y registros diarios con persistencia) implementado.
-**Fase del roadmap:** Fase 1, paso 3: Hábitos y registros diarios persistentes implementados (gestión en `/habits`, consulta y toggle en `/`, RLS activo). Próximo paso funcional: paso 4 (Check-in diario).
+**Última actualización:** 2026-10-10
+**Corrección visual local:** perfil, hábitos, check-in, diario y objetivos comparten menú, encabezado y barra de sesión alineada; menú lateral fijo en escritorio e inferior fijo en celular. Perfil accesible desde «Más» y objetivos desde «Progreso». Avatar de Mi Día con inicial centrada.
+**Verificación del perfil con menú:** lint y build correctos; Edge a 360/390/768/800/930/1280 px con servicios simulados, sin overflow ni controles tapados. Navegación, edición y recarga del nombre correctas; capturas móvil/escritorio revisadas. No se hicieron escrituras en Supabase real.
+**Estado general:** Fase 0 cerrada; pasos 1 a 6 de fase 1 confirmados por el usuario. Mi Día integrado (paso 7); paso 8 en verificación local, pendiente cierre remoto. Ver `docs/CIERRE_FASE_1.md`.
+**Fase del roadmap:** Paso 7 implementado; verificación local del paso 8 correcta. Pendiente confirmar Mi Día con cuenta real, push, Vercel y aislamiento con dos cuentas.
+**Verificación final local:** cuatro suites de acciones/datos, lint, build, typecheck y diff correctos. Edge con servicios simulados: inicio vacío/real/error, persistencia de hábito, sesión vencida, no-store y diagnóstico 404 correctos. Seis pantallas a 360/390/768/800/930/1280 px sin overflow ni botones tapados; capturas inspeccionadas. Evidencia completa en `docs/CIERRE_FASE_1.md`.
 **Uso previsto:** Personal  
 
 ---
@@ -47,13 +49,14 @@ Construir el MVP base de una PWA personal para registrar y consultar rutina diar
 | Preparación del repositorio | ✅ Completado | `.gitignore`, `.env.example` y README; reglas de exclusión verificadas |
 | Supabase | ✅ Conectado | Variables locales, clientes SSR/navegador, proxy; seis tablas, RLS y 24 políticas confirmados. Cuenta real confirmada por el usuario; prueba remota de aislamiento pendiente |
 | Login | ✅ Verificado | Correo/contraseña, cierre local y protección en servidor. Usuario confirmó ingreso con cuenta real; pruebas con Auth simulado también correctas. |
-| Perfil | ✅ Verificado | Lee `profiles` bajo la sesión autenticada y permite cambiar el nombre visible; RLS y aislamiento verificado con cuenta real. |
-| Mi Día | 🟡 Parcial | Hábitos reales persistentes integrados en Mi Día (`/`); el resto de las tarjetas (agenda, notas, entrenamiento) continúa como maqueta previa a sus pasos respectivos. |
-| Hábitos | ✅ Implementado | Gestión completa en `/habits` (crear, editar días y nombre, archivar) y registro diario persistente en `habit_entries` (`/` y `/habits`) con RLS. |
-| Check-in diario | ⬜ Pendiente | sueño, energía, notas |
+| Perfil | ✅ Verificado | Lee `profiles` bajo la sesión autenticada y permite cambiar el nombre visible; RLS y aislamiento verificado con cuenta real. `/profile` usa el shell compartido y mantiene el menú visible en celular/escritorio. |
+| Mi Día | ✅ Implementado localmente | Cuatro módulos reales; conteos, vacíos/errores y menú compartido, sin maquetas. |
+| Hábitos | ✅ Verificado por el usuario | Gestión en `/habits` y registro diario persistente en `habit_entries` (`/` y `/habits`) con RLS. Paso 3 confirmado el 2026-10-10. |
+| Check-in diario | ✅ Verificado por el usuario | Funcionamiento confirmado el 2026-10-10. `/check-in`, un registro por día y resumen en Mi Día; menú compartido. |
+| Diario personal | ✅ Verificado por el usuario | Funcionamiento confirmado el 2026-10-10. `/journal`: creación, lectura, edición e historial paginado con menú compartido. |
 | Entrenamientos | ⬜ Pendiente | |
 | Estudio | ⬜ Pendiente | |
-| Objetivos | ⬜ Pendiente | |
+| Objetivos | ✅ Confirmado por el usuario | `/goals`: semanales/mensuales, avance, estados, vencimientos, filtros e historial paginado. |
 | Estadísticas | ⬜ Pendiente | |
 | Gemini | ⬜ Pendiente | No implementar antes del núcleo |
 | Recordatorios | ⬜ Pendiente | |
@@ -73,14 +76,14 @@ La fase 0 se ejecuta paso a paso; esperar la indicación del usuario antes de in
 6. Nueva interfaz publicada y verificada en Vercel tras el push `aeeaa88` a `origin/main`. Página HTTP 200 y pruebas interactivas online en cuatro tamaños correctas.
 7. Completado: `/api/health/supabase` respondió desde producción HTTP 200 con `status: ok`, `auth: reachable`, `dataApi: restricted` y `Cache-Control: no-store, max-age=0`. Comunicación Auth/PostgREST y rechazo anónimo esperado confirmados; sin pruebas con JWT reales.
 
-Fase 1: pasos 1 y 2 completados y verificados. Paso 3 implementado. Próximos pasos:
+Fase 1: pasos 1 a 6 confirmados por el usuario. Estado de cierre:
 
-3. Hábitos y registros diarios persistentes: completado e implementado (gestión en `/habits`, consulta y toggle en `/`).
-4. Check-in diario: sueño, energía y notas (`daily_checkins`).
-5. Diario personal (`journal_entries`).
-6. Objetivos y progreso (`goals`).
-7. Integrar Mi Día completamente con datos reales (reemplazar maquetas de agenda/notas/bloques).
-8. Validación completa, Vercel y retirada del diagnóstico temporal documentado.
+3. Hábitos y registros diarios persistentes: completado y validado por el usuario.
+4. Check-in diario (`daily_checkins`): funcionamiento confirmado por el usuario.
+5. Diario personal (`journal_entries`): funcionamiento confirmado por el usuario.
+6. Objetivos y progreso confirmado por el usuario; aislamiento remoto pendiente.
+7. Mi Día implementado con datos reales. Agenda ficticia reemplazada por vencimientos reales; calendario de eventos independiente, entrenamiento y estudio quedan para fases posteriores.
+8. Verificación local y diagnóstico temporal retirado; pendiente push, Vercel y aislamiento real.
 
 IA en una fase posterior.
 
@@ -145,6 +148,7 @@ Integración: `src/lib/supabase/{config,client,server,proxy}.ts` y `src/proxy.ts
 
 ## 9. Restricciones conocidas del producto
 
+- Interfaz: conservar el menú visible en pantallas internas (lateral en escritorio, inferior en celular), reutilizar el shell de seguimiento y verificar adaptación sin desbordamientos ni controles tapados. Reglas permanentes en `AGENTS.md`.
 - Priorizar aproximadamente 7 h de sueño en la planificación personal.
 - La ventana 17:30–18:00 de lunes a viernes no debe asumirse como sesión normal de entrenamiento.
 - Existe antecedente de lesión meniscal con bloqueo ocasional; evitar automatizar recomendaciones de saltos altos, vallas, pivotes/cambios bruscos y sprints intensos mientras persista.
@@ -167,12 +171,28 @@ Integración: `src/lib/supabase/{config,client,server,proxy}.ts` y `src/proxy.ts
 - URL: https://personal-ia-two.vercel.app/
 - Verificación externa: demo HTTP 200 y diagnóstico de Supabase HTTP 200 sin caché. Edge/Playwright online: 360/390/768/1280 px, interacciones y consola correctas.
 - La actualización apareció tras el push al repositorio existente; no se creó otro proyecto ni se inspeccionó el panel privado. El diagnóstico confirmó variables utilizables y comunicación desde el servidor desplegado, sin exponer valores.
-- Diagnóstico temporal público y mínimo; retirada y límites documentados en `docs/CIERRE_FASE_0.md`. RLS y migración no modificados; ninguna escritura en Supabase.
+- Diagnóstico temporal retirado del código y su excepción del proxy el 2026-10-10; se hará efectivo en producción tras push/despliegue. Evidencia de fase 0 histórica.
 
 ## 12. Próxima tarea concreta
 
-> **Pasos 1 y 2 completados y verificados con RLS/cuentas reales. Paso 3 (hábitos) implementado con gestión en `/habits` y registro de hoy en `/`. Próxima tarea: validación interactiva del paso 3 por el usuario y avance al paso 4 (Check-in diario).**
+Pendiente: confirmar Mi Día con cuenta real y completar cierre remoto del paso 8 tras push: Vercel, sesiones/persistencia, aislamiento con dos cuentas y diagnóstico retirado en producción. Ver `docs/CIERRE_FASE_1.md`. Commit solicitado, sin push en esta sesión.
 
 Verificaciones: lint, TypeScript y build correctos; Edge/Playwright con Auth simulado: login inválido/válido, recarga, redirección desde login con sesión, cierre, ruta privada, sesión revocada, no-store y login responsive a 360/390/768/1280 px. Sin errores de JavaScript. Prueba reproducible: `scripts/test-auth.mjs`, con Playwright externo y Edge.
 
-Limitaciones: no se dispone de credenciales para validar login exitoso con Supabase real. Pruebas RLS con JWT reales pendientes. Sin cambios en esquema, usuarios o RLS; sin commit, push o despliegue. Producción sigue en fase 0.
+Verificación del paso 4: lint, TypeScript y build correctos. `node scripts/test-checkin.mjs` comprueba rangos, campos opcionales, fecha local al cruzar medianoche, sesión ausente, identidad tomada del usuario autenticado, upsert sin duplicados y errores de guardado con Supabase simulado. Estas pruebas no verifican RLS remoto ni persistencia real.
+
+Revisión visual del paso 4: Edge con servicios simulados en copia temporal, a 360/390/768/800/930/1280 px. Hábitos y check-in sin overflow horizontal, menú fijo visible y botón de guardar accesible. Navegación, guardado, recarga y resumen correctos; sin errores JavaScript. Capturas móvil/escritorio inspeccionadas.
+
+Paso 4: validación funcional real confirmada por el usuario el 2026-10-10.
+
+Verificación del paso 5: `node scripts/test-journal.mjs` correcto; fechas reales/no futuras, límites de texto, campos vacíos, sesión, identidad desde Auth, creación múltiple, edición propia/ajena/inexistente, fallos de guardado/carga y paginación con servicios simulados. Build con TypeScript correcto; `/journal` dinámica.
+
+Revisión del paso 5 en Edge, con Auth/Supabase simulados en copia temporal: estado vacío, creación, recarga, edición, borrador conservado ante fallos, texto HTML mostrado como texto, historial paginado, errores de lectura y sesión vencida correctos. Sin errores JavaScript. A 360/390/768/800/930/1280 px, sin overflow horizontal, menú fijo y botón de guardar accesible al desplazarse; capturas móvil/escritorio inspeccionadas. Lint y typecheck finales correctos.
+
+Paso 5: validación funcional real confirmada por el usuario el 2026-10-10; aislamiento remoto entre dos cuentas aún pendiente.
+
+Verificación del paso 6: `node scripts/test-goals.mjs`, lint y build con TypeScript correctos. Pruebas de fechas, título, avance, estados, identidad, sesión, permisos de edición, errores, filtros y paginación con servicios simulados. `/goals` dinámica.
+
+Revisión del paso 6 en Edge con servicios simulados: creación, recarga, actualización de avance, completar/cancelar, vencimientos, filtros, paginación, errores con borrador conservado y sesión vencida correctos; sin errores JavaScript. A 360/390/768/800/930/1280 px, sin overflow horizontal y con controles accesibles al desplazarse. Capturas móvil/escritorio inspeccionadas.
+
+Paso 6 confirmado por el usuario. Pendiente aislamiento remoto entre dos cuentas; relación con hábitos/actividades requiere ampliación del esquema. No repetir migraciones; los servicios simulados no prueban RLS remoto.

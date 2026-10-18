@@ -4,6 +4,31 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 
 ---
 
+## 2026-10-18 — Commit documental del cierre de fase 1
+
+- Revisado el cierre de fase 1 por confirmación del usuario y la planificación de fase 2; commit local solicitado por el usuario.
+- Revisados los cinco archivos documentales y git diff --check correcto. Sin cambios de código o interfaz: no se repiten pruebas de aplicación ni responsive. Sin push.
+
+---
+
+## 2026-10-11 — Cierre de fase 1 y planificación de fase 2
+
+- El usuario confirmó «funciona todo» y solicitó cerrar fase 1 y su paso 8. Se registra el cierre funcional sobre esa confirmación y las evidencias previas de pruebas locales, push y estado Vercel success; sin atribuir nuevas pruebas autenticadas al agente.
+- Fase 2 — Entrenamiento en planificación: cuadro de diez pasos en PLAN_MAESTRO, desde esquema/RLS hasta validación y publicación; implementación pendiente. Se mantienen navegación compartida, controles accesibles y comprobaciones responsive a seis anchos.
+- Actualizados PROJECT_STATUS, DEVLOG, PLAN_MAESTRO, README y CIERRE_FASE_1. Solo documentación; sin cambios de interfaz, migraciones, nuevas pruebas de aplicación, commit ni push. Verificación: git diff --check.
+
+---
+
+## 2026-10-11 — Revisión del push y cierre de fase 1
+
+- Retomado el commit del 10 de octubre `ae65292`; árbol de trabajo limpio al comenzar. `git ls-remote` confirmó que GitHub `main` apunta a `ae652929df37c921998aa4c560276d302166754c`, coincidente con `HEAD` y `origin/main`. El push ya estaba realizado.
+- Consultado el estado de ese commit en GitHub: `Vercel: success`, con enlace al despliegue existente `EDYUU9M4bdgz9drcPFx4QUuuGayP`. Sin inspección del panel privado ni de la asignación del alias.
+- HTTP en producción sin sesión: login 200 con título Día a Día; las seis rutas internas redirigen 307 al login con `private, no-store`. El diagnóstico temporal también redirige al login y no devuelve datos públicos; 404 con sesión real pendiente.
+- Corregidos los pendientes obsoletos de push en PROJECT_STATUS y CIERRE_FASE_1. La fase 1 sigue abierta: confirmar Mi Día, sesiones/cierre, persistencia, navegación responsive en producción y aislamiento de seis tablas con dos cuentas reales.
+- Solo documentación; sin modificaciones de interfaz, migraciones, escrituras en Supabase, nuevo commit ni push. No se repitieron build ni pruebas visuales locales; se conserva la evidencia del 10 de octubre a 360/390/768/800/930/1280 px. Verificación documental con `git diff --check`.
+
+---
+
 ## 2026-10-10 — Fase 1, paso 7 y verificación del paso 8
 
 - El usuario confirmó el paso 6 y autorizó Mi Día, la verificación final y un commit detallado para hacer push después.

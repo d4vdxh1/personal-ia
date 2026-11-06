@@ -142,6 +142,6 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 
 - Rama `feat/assistant-phase4a`, PR #5 en borrador. Chat `/assistant`, menú modular, API autenticada, consulta de datos de usuario mediante cinco tools de solo lectura y adaptador REST Gemini.
 - Gemini configurado para modelo estable `gemini-3.5-flash-lite`; clave `GEMINI_API_KEY` solo en servidor. Hasta que se configure en Vercel el chat muestra un estado informativo y no produce respuestas ficticias.
-- Contador 20 solicitudes/día y espera de cinco segundos por usuario con migración `20261106150000_ai_usage.sql`, pendiente de aplicación al servidor remoto tras CI.
+- Contador 20 solicitudes/día y espera de cinco segundos por usuario con migración `20261106152923_ai_usage.sql`, aplicada a Supabase con RLS y permisos de ejecución verificados.
 - Sin historial persistente, sin escrituras, con consentimiento explícito antes de enviar consultas o datos al proveedor. Fase 4B pendiente.
 - Próximos controles: CI, catálogo y permisos de Supabase, activar clave propia en Vercel y realizar prueba real autenticada con Gemini. No afirmar que la IA ya responde en producción hasta comprobarlo.

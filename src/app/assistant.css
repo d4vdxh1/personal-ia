@@ -29,3 +29,6 @@
 .assistant-disclaimer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:#637a69}
 @media(max-width:600px){.assistant-chat{min-height:calc(100dvh - 305px);border-radius:12px}.assistant-conversation{padding:15px;min-height:290px}.assistant-welcome{padding:25px 0}.assistant-message{max-width:94%;padding:12px}.assistant-disclaimer{font-size:10px}.assistant-bottom{padding:12px}.assistant-suggestions{flex-direction:column}}
 @media(prefers-reduced-motion:reduce){.assistant-spinner{animation:none}.assistant-suggestions button{transition:none}}
+
+.assistant-privacy{display:flex;align-items:flex-start;gap:10px;margin:0 0 13px;color:#3b6049;font-size:12px;line-height:1.6;cursor:pointer}
+.assistant-privacy input{width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:#16734a}

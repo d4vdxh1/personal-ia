@@ -1,189 +1,169 @@
+<div align="center">
+
+<img src="src/app/icon.svg" width="76" height="76" alt="Ícono de Día a Día: pulso blanco sobre fondo verde" />
+
 # Día a Día
 
-**Un paso más**. Nombre del producto: **Día a Día**. Identificador técnico: `personal-ia`; repositorio, carpeta, URL de Vercel y proyecto Supabase conservan sus nombres actuales.
+### Tu rutina, tus objetivos y tu progreso. Un paso más.
 
-Aplicación personal para organizar rutina, hábitos, estudio, entrenamiento y objetivos, con módulos manuales y un asistente Gemini de consultas de solo lectura.
+Un espacio personal para organizar tus hábitos, entrenamiento, universidad y objetivos, con un asistente de IA que te ayuda a consultar lo importante de cada día.
 
-Estado actual (2026-11-06): **fases 0–3 y Fase 4A publicadas y aceptadas funcionalmente por el usuario**. Gemini fue configurado en Vercel y probado por el usuario. **Siguiente fase: 4B**, herramientas de escritura con confirmación y auditoría (aún no implementadas). La aceptación no equivale a una prueba independiente de dos cuentas reales. Ver [PROJECT_STATUS.md](PROJECT_STATUS.md).
+**[Abrir la aplicación](https://personal-ia-two.vercel.app/)** · **[Ver asistente IA](https://personal-ia-two.vercel.app/assistant)** · **[Documentación técnica](docs/GUIA_TECNICA.md)**
 
-Entrenamiento agrega ejercicios propios, rutinas ordenadas, programación por fecha, sesiones con borrador y series, historial/evolución por ejercicio, medidas corporales y molestias. Abrir `/training` desde Mi Día o el menú lateral. Ver [alcance y datos](docs/ENTRENAMIENTO.md).
+<p>
+  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-16-202b25?style=flat-square&logo=next.js&logoColor=white" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-3077c6?style=flat-square&logo=typescript&logoColor=white" />
+  <img alt="Supabase" src="https://img.shields.io/badge/Supabase-16734a?style=flat-square&logo=supabase&logoColor=white" />
+  <img alt="Google Gemini" src="https://img.shields.io/badge/Gemini-IA%20de%20consulta-16734a?style=flat-square&logo=googlegemini&logoColor=white" />
+  <img alt="Vercel" src="https://img.shields.io/badge/Vercel-202b25?style=flat-square&logo=vercel&logoColor=white" />
+</p>
 
-## Módulos disponibles
+</div>
 
-### Mi Día y cierre de fase 1
+---
 
-Mi Día muestra únicamente registros propios. Diario: últimas tres entradas de la fecha local, con conteo total. Objetivos: hasta tres activos por fecha límite, incluidos vencidos, con avance real. Los cambios de los módulos revalidan el inicio. Se retiran horarios inventados y maquetas: vencimientos reemplazan la agenda de ejemplo; el calendario de eventos independiente sigue pendiente; Entrenamiento y Estudio ya están integrados con sus propias migraciones posteriores. Esta sección conserva el contexto del cierre de la Fase 1.
+## ¿Qué es Día a Día?
 
-Se retiraron `/api/health/supabase`, su excepción del proxy, la demo y sus pruebas obsoletas. `npm run check:supabase` sigue disponible como diagnóstico local. Ver [cierre de fase 1](docs/CIERRE_FASE_1.md).
+**Día a Día** es una aplicación web personal desarrollada para reunir en un mismo lugar las actividades cotidianas. En vez de mantener separados los hábitos, las rutinas de ejercicio, las entregas de la universidad y los objetivos, ofrece un panel organizado que utiliza los registros reales de cada cuenta.
 
-Pruebas locales: `node scripts/test-checkin.mjs`, `node scripts/test-journal.mjs`, `node scripts/test-goals.mjs`, `node scripts/test-today.mjs`, `npm.cmd run lint`, `npm.cmd run build` y `npm.cmd run typecheck`.
+El enfoque es simple: **menos fricción para planificar y más claridad para avanzar**, con una interfaz adaptable a computadora y celular, navegación por módulos y una identidad visual clara en blanco y verde.
 
-Navegador reproducible con Playwright externo y Edge: `node scripts/test-phase1-browser.mjs "RUTA/AL/PLAYWRIGHT/index.mjs" "RUTA/A/COPIA/TEMPORAL"`. Usar puerto 3108 libre y una copia sin `.env.local`, con `src`, `package.json`, configuración de Next/TypeScript/PostCSS y acceso a `node_modules`. Comprueba estados del inicio y las seis pantallas a 360/390/768/800/930/1280 px. Servicios simulados: no demuestra RLS remoto ni escribe datos reales.
+## Funcionalidades
 
-| Ruta | Función |
+| Módulo | Qué podés hacer |
 |---|---|
-| `/` | Mi Día: hábitos, check-in, tres notas de hoy y tres vencimientos de objetivos activos; conteos reales y estados vacíos/error. |
-| `/profile` | Consultar la cuenta y editar el nombre visible. |
-| `/habits` | Crear, editar y archivar hábitos; registrar cumplimiento diario. |
-| `/check-in` | Guardar y actualizar el check-in del día. |
-| `/journal` | Crear, consultar y editar entradas del diario; historial de 10 entradas por página. |
-| `/goals` | Crear y editar objetivos semanales/mensuales, registrar avance y filtrar por estado; 10 objetivos por página. |
-| `/training` | Ejercicios, rutinas, programación, sesiones, historial y medidas. |
-| `/study` | Resumen académico, materias, tareas, exámenes y sesiones de estudio. |
-| `/menu` | Directorio de módulos y subapartados en dispositivos móviles. |
+| **Mi Día** | Consultar hábitos, registros diarios, entrenamiento y compromisos académicos desde un panel central. |
+| **Hábitos** | Crear hábitos, organizar su frecuencia semanal y registrar el cumplimiento diario. |
+| **Check-in diario** | Registrar cómo fue tu día y consultar tu seguimiento. |
+| **Diario personal** | Escribir, consultar y editar entradas, con historial por fecha. |
+| **Objetivos** | Organizar metas semanales o mensuales y seguir sus avances y vencimientos. |
+| **Entrenamiento** | Gestionar ejercicios, rutinas, sesiones, historial, medidas y molestias. |
+| **Universidad y Estudio** | Administrar materias, tareas, exámenes y sesiones de estudio. |
+| **Asistente IA** | Preguntar por tus registros mediante Google Gemini, con herramientas de **solo lectura**. |
 
-Todas las pantallas internas, incluido Mi Día, comparten el menú lateral fijo en escritorio y la barra inferior fija en celular. Las reglas de interfaz están en `AGENTS.md`.
+### Asistente personal con Gemini
 
-### Diario personal
+El asistente puede responder preguntas como:
 
-Abrir **Mi diario** desde el menú lateral, o el directorio **Más** en celular. Elegir hoy o una fecha anterior y completar un hecho relevante (hasta 2.000 caracteres), una nota (hasta 10.000), o ambos. Aprendizajes, momentos positivos y cosas a mejorar se pueden escribir en las notas.
+> ¿Qué tengo pendiente hoy?
 
-Se permiten varias entradas por día. Después de guardar, **Escribir otra entrada** abre un formulario nuevo. En **Tus entradas**, desplegar una entrada para leerla y usar **Editar entrada** para corregirla. El historial muestra las más recientes primero, con navegación entre páginas. Las fechas usan `America/Argentina/Buenos_Aires`; no se admiten fechas futuras. No hace falta repetir la migración existente.
+> ¿Qué entrenamiento me corresponde?
 
-El usuario confirmó el funcionamiento del diario. Cierre funcional aceptado el 2026-10-11 por confirmación del usuario: «funciona todo». Se conservan las evidencias previas con su alcance original; el agente no realizó nuevas pruebas autenticadas ni una auditoría remota independiente en esta sesión.
+> ¿Cuáles son mis próximas tareas o exámenes?
 
-Verificación local del diario: lint, TypeScript, build y pruebas de acciones correctos. Revisión en Edge con servicios simulados a 360/390/768/800/930/1280 px; creación, edición, recarga, paginación, fallos y sesión vencida comprobados. Menú fijo y controles accesibles al desplazarse, sin desbordamiento horizontal.
+Sus respuestas se apoyan en consultas autorizadas a los módulos existentes. **La Fase 4A no permite crear, editar ni eliminar registros mediante IA.** Antes de enviar preguntas y datos necesarios a Gemini, la aplicación solicita consentimiento. El historial del chat no se almacena de forma persistente.
 
-### Objetivos y progreso
+## Interfaz
 
-Abrir **Objetivos** desde el menú principal. Completar título (hasta 200 caracteres), tipo semanal/mensual, fecha límite, avance entero de 0 a 100 y estado. Se admiten fechas anteriores para conservar y actualizar objetivos históricos; los activos con fecha anterior a hoy muestran el aviso de vencimiento.
+- **Escritorio:** navegación lateral organizada por áreas y submódulos.
+- **Móvil:** navegación inferior y directorio de secciones.
+- **Diseño:** fondos claros, verde como color principal, contraste y estados de interacción.
+- **Datos:** estados vacíos y mensajes de error cuando todavía no existen registros o una consulta falla.
 
-Elegir **Completado** fija el avance en 100%; bajarlo vuelve el estado a **Activo**. **Cancelado** conserva el objetivo y su avance. Usar **Editar objetivo** para cambiar cualquier campo. Los filtros Todos, Activos, Completados y Cancelados y la paginación permiten consultar el historial; no se eliminan registros. Vincular objetivos con hábitos/actividades queda para una ampliación posterior del esquema.
+**Capturas de pantalla:** el repositorio todavía no incluye capturas públicas preparadas para esta sección. Se incorporarán imágenes reales de la interfaz, revisadas para no revelar datos personales ni sesiones privadas.
 
-Paso 6 confirmado por el usuario. Fase 1 cerrada por confirmación del usuario; relación con hábitos/actividades requiere ampliación del esquema. No repetir migraciones; los servicios simulados no prueban RLS remoto.
+## Arquitectura
 
-Verificación local: pruebas de acciones, lint y build con TypeScript correctos. Edge con servicios simulados a 360/390/768/800/930/1280 px: creación, edición, avance, estados, vencimientos, filtros, paginación, errores y sesión vencida correctos, sin desbordamientos horizontales ni errores JavaScript.
+```text
+Next.js + React + TypeScript
+          │
+          ├── Interfaz responsive y rutas protegidas
+          │
+          ├── Acciones y API del servidor
+          │     └── Asistente Gemini (consultas de solo lectura)
+          │
+          └── Supabase
+                ├── Authentication
+                └── PostgreSQL + Row Level Security (RLS)
 
-## Login local
-
-Abrir `/login` con una cuenta existente de Supabase Auth, correo confirmado y contraseña. Alta y recuperación de contraseña fuera de este paso. Los formularios validan en servidor y muestran errores y estado de envío. `Cerrar sesión` termina la sesión de este dispositivo; una sesión inválida vuelve al login. No se necesitan claves administrativas.
-
-Prueba aislada con Auth simulado, Playwright externo y Microsoft Edge instalado, sin nuevas dependencias:
-
-```powershell
-node scripts/test-auth.mjs "RUTA/AL/PLAYWRIGHT/index.mjs"
+Despliegue: Vercel
 ```
 
-Ejecutar sin otro `next dev` activo y con puerto 3107 libre. No reemplaza la validación con Supabase real.
+| Capa | Tecnologías |
+|---|---|
+| Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS 4 |
+| Backend | Next.js Server Actions y Route Handlers |
+| Datos y autenticación | Supabase, PostgreSQL, Auth y políticas RLS |
+| IA | Google Gemini, proveedor del lado servidor y herramientas de consulta autorizadas |
+| Despliegue y validación | Vercel, GitHub Actions y Playwright |
 
-## Entorno local
+### Seguridad y privacidad
 
-El proyecto se verificó con Node.js 24 y npm 11. Las versiones de dependencias están fijadas en `package.json` y `package-lock.json`.
+El acceso a los módulos personales requiere una sesión autenticada. La base de datos utiliza políticas de aislamiento por usuario y el asistente consulta los datos mediante el cliente asociado a esa sesión.
 
-Desde la raíz del repositorio:
+La API de Gemini se configura **solo en el servidor**. El asistente dispone de un límite interno de **20 consultas por cuenta al día**, con un intervalo mínimo de cinco segundos. Las notas privadas del diario y los registros de molestias no forman parte de las herramientas de consulta de la Fase 4A.
 
-```powershell
+Estas medidas no sustituyen auditorías de seguridad externas ni garantizan que los servicios de terceros sean gratuitos.
+
+## Ejecutar el proyecto
+
+Se recomienda Node.js 24. Necesitás acceso a un proyecto Supabase configurado con el esquema correspondiente.
+
+```bash
+git clone https://github.com/d4vdxh1/personal-ia.git
+cd personal-ia
 npm ci
-# Configurar .env.local como se indica debajo antes de iniciar.
+cp .env.example .env.local
 npm run dev
 ```
 
-Abrir [http://localhost:3000](http://localhost:3000). Si ese puerto está ocupado, usar la URL que indique la terminal. Para detener el servidor, presionar `Ctrl+C`.
+En Windows PowerShell, podés reemplazar el comando de copia por `Copy-Item .env.example .env.local`.
 
-El proxy de Supabase requiere las dos variables públicas de conexión en `.env.local`.
+Completá en `.env.local` las variables necesarias para tu entorno:
 
-## Variables de entorno
+| Variable | Finalidad |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | URL pública de Supabase |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Clave publicable de Supabase |
+| `GEMINI_API_KEY` | Clave privada para activar el asistente de IA; **solo servidor** |
 
-`.env.example` contiene los nombres sin valores reales. En esta máquina `.env.local` ya está configurado. En una copia nueva, crear el archivo en la raíz y completar la URL y clave pública del proyecto Supabase. En PowerShell, este comando conserva cualquier archivo local existente:
+Luego abrí **http://localhost:3000**. El acceso a las pantallas privadas requiere una cuenta de Supabase Auth.
 
-```powershell
-if (-not (Test-Path .env.local)) {
-    Copy-Item .env.example .env.local
-}
+**No incluyas credenciales en GitHub, capturas ni archivos versionados.** Las migraciones existentes ya se aplicaron al proyecto original; no las ejecutes nuevamente sin revisar el historial de tu base de datos.
+
+Para requisitos detallados, rutas, variables opcionales, migraciones y procedimientos de prueba, consultá la **[guía técnica](docs/GUIA_TECNICA.md)**.
+
+## Calidad y pruebas
+
+El proyecto incluye pruebas automatizadas de lógica, persistencia y navegación:
+
+```bash
+npm run lint
+npm test
+npm run test:db
+npm run build
+npm run typecheck
+npm run test:browser
 ```
 
-| Variable | Uso previsto |
+Las pruebas de base de datos usan PostgreSQL de prueba y las pruebas de navegador utilizan autenticación simulada. **No equivalen a una auditoría completa de producción con dos cuentas reales.**
+
+## Estado y próximos pasos
+
+| Etapa | Estado |
 |---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | URL pública del proyecto Supabase. Obligatoria. |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Clave pública publicable del proyecto. Obligatoria; reemplaza el nombre ANON_KEY del plan inicial. |
-| `SUPABASE_SERVICE_ROLE_KEY` | Solo servidor; opcional si una operación requiere privilegios administrativos. |
-| `GEMINI_API_KEY` | Configurada por el usuario en Vercel para Fase 4A; **solo servidor**, nunca en el repositorio ni `NEXT_PUBLIC_*`. |
-| `GOOGLE_CLIENT_ID` | Integración futura de Google Calendar. |
-| `GOOGLE_CLIENT_SECRET` | Solo servidor; integración futura de Google Calendar. |
+| Base, seguimiento personal, entrenamiento y estudio | Implementados |
+| **Fase 4A — Asistente Gemini de consulta** | Implementada y validada funcionalmente por el usuario |
+| **Fase 4B — Acciones mediante IA** | Próxima etapa |
+| Recordatorios, Google Calendar y notificaciones | Pendientes |
+| Estadísticas avanzadas, voz y finanzas | Etapas futuras |
 
-Las variables con prefijo `NEXT_PUBLIC_` pueden incorporarse al código del navegador. No usar ese prefijo para secretos. Reiniciar el servidor después de modificar variables.
+La siguiente entrega propone permitir acciones desde el asistente —por ejemplo, marcar hábitos o guardar un check-in— **con validación, confirmación y auditoría**, sin habilitar escrituras libres en la base de datos.
 
-Git excluye `.env` y sus variantes locales; la excepción es `.env.example`, que debe mantenerse sin credenciales. `.gitignore` no elimina archivos que ya estén versionados.
+## Documentación
 
-## Comandos disponibles
+- **[Guía técnica](docs/GUIA_TECNICA.md)** — instalación, arquitectura, variables y pruebas.
+- **[Estado del proyecto](PROJECT_STATUS.md)** — módulos, avances y pendientes verificados.
+- **[Plan maestro](docs/PLAN_MAESTRO.md)** — fases y roadmap.
+- **[Historial de desarrollo](DEVLOG.md)** — decisiones, cambios y verificaciones.
+- **[Entrenamiento](docs/ENTRENAMIENTO.md)** · **[Universidad y Estudio](docs/FASE_3_ESTUDIO.md)** · **[Asistente IA](docs/FASE_4_IA_V1.md)**
 
-| Comando | Función |
-|---|---|
-| `npm run dev` | Iniciar el servidor de desarrollo. |
-| `npm run lint` | Revisar el código con ESLint. |
-| `npm run typecheck` | Verificar los tipos de TypeScript. |
-| `npm run check:supabase` | Verificar Data API y Auth con las variables locales, sin escrituras. |
-| `npm run build` | Generar la compilación de producción. |
-| `npm start` | Servir la compilación de producción después de ejecutar `npm run build`. |
-| `node scripts/test-checkin.mjs` | Validaciones y acciones de check-in con servicios simulados. |
-| `node scripts/test-journal.mjs` | Fechas, textos, sesión, edición, filtros por usuario y paginación del diario con servicios simulados. |
-| `node scripts/test-goals.mjs` | Fechas, avance, estados, sesión, permisos de edición, filtros y paginación de objetivos con servicios simulados. |
+---
 
-En una copia nueva, ejecutar `npm run build` antes del primer `npm run typecheck` para generar los tipos de Next.js.
+<div align="center">
 
-## Estructura y seguimiento
+**Día a Día · Un paso más**
 
-- `src/app/`: página inicial, layout y estilos Tailwind.
-- `src/lib/supabase/`: configuración y clientes de navegador/servidor, más renovación de sesión.
-- `src/proxy.ts`: renueva la sesión y redirige sin sesión; las páginas privadas también verifican al usuario en servidor mediante `src/lib/auth/account.ts`.
-- `src/components/tracking-shell.tsx`: menú, encabezado y navegación compartidos de las pantallas internas.
-- `src/lib/journal/`: validación y consulta paginada del diario; las acciones autenticadas viven en `src/app/journal/actions.ts`.
-- `scripts/check-supabase.mjs`: verifica Auth y consulta una tabla de diagnóstico inexistente con límite cero. El error esperado `PGRST205` confirma acceso a PostgREST; no verifica tablas de negocio, políticas RLS ni login.
-- [PROJECT_STATUS.md](PROJECT_STATUS.md): estado actual, pendientes y limitaciones conocidas.
-- [DEVLOG.md](DEVLOG.md): historial de cambios y verificaciones.
-- [docs/PLAN_MAESTRO.md](docs/PLAN_MAESTRO.md): alcance y roadmap completo.
-- [docs/ESQUEMA_INICIAL.md](docs/ESQUEMA_INICIAL.md): seis tablas, reglas RLS, zona horaria y guía para aplicar/verificar la migración.
-- `supabase/migrations/`: migraciones versionadas; la primera está aplicada; tablas, RLS y políticas confirmados por los resultados remotos compartidos por el usuario.
-- `supabase/tests/`: pruebas SQL para una base PostgreSQL desechable, nunca el bootstrap en producción.
+[Aplicación](https://personal-ia-two.vercel.app/) · [Repositorio](https://github.com/d4vdxh1/personal-ia) · [Portafolio del desarrollador](https://d4vdxh1.github.io/david-espinola-portfolio/)
 
-Actualizar `PROJECT_STATUS.md`, `DEVLOG.md`, `docs/PLAN_MAESTRO.md` y `README.md` al terminar cada paso, manteniendo alcance, estado y uso coherentes. Avanzar al siguiente paso solo cuando el usuario lo indique.
-
-Versionar `package-lock.json` junto con los cambios de dependencias. Las dependencias instaladas, compilaciones, cachés, logs y configuración local de Vercel quedan excluidos por `.gitignore`.
-
-## Pendientes conocidos
-
-Antes del cierre de fase 9: activar Vercel Web Analytics en Hobby e integrar `@vercel/analytics`. Pendiente; no se implementa ni se agregan dependencias en este cambio de identidad.
-
-En el paso 1, la auditoría registró 5 alertas altas en dependencias de desarrollo de ESLint y 0 en producción. ESLint 9 se mantuvo por compatibilidad de plugins, aunque npm lo marca fuera de soporte. El detalle está en `PROJECT_STATUS.md`; estos resultados corresponden a esa verificación y no reemplazan una auditoría futura.
-
-El archivo local `promt_supabe_connect.md` se excluye de Git porque contiene los datos del proyecto utilizados para configurar `.env.local`. La integración utiliza solo la clave pública; no requiere una clave administrativa.
-
-## Verificaciones reproducibles
-
-Se usan versiones fijadas y `npm ci`. Next.js, @next/env y eslint-config-next se actualizaron a 16.4.5 por alertas de seguridad. Desarrollo y compilación usan Webpack, probado en este entorno Windows.
-
-- `npm test`: suites de check-in, diario, objetivos, Mi Día y validaciones de Entrenamiento.
-- `npm run test:db`: PostgreSQL desechable embebido, esquema inicial, Entrenamiento y Estudio con RLS, FK por dueño, transacciones, snapshots e inicio idempotente. No conecta a Supabase.
-- `npx playwright install chromium`, luego `npm run test:browser`: compila una copia aislada sin `.env.local`, usa Auth simulado y PostgreSQL embebido; prueba persistencia, errores y 360/390/768/800/930/1280 px. Capturas y logs en `test-results/` (ignorado).
-- `npm run lint`, `npm run build`, `npm run typecheck`: controles estáticos y compilación. Build debe preceder a typecheck en una copia nueva.
-
-GitHub Actions ejecuta estos controles sin secretos. No confundir el Auth simulado con dos logins/JWT reales contra producción.
-
-Migración incremental: `supabase/migrations/20261106031833_training.sql`, aplicada al proyecto existente. No repetirla ni repetir la inicial. `supabase/tests/training_remote_rollback.sql` verifica con fixtures transaccionales y roles PostgreSQL; siempre termina en rollback. Nunca ejecutar `supabase/tests/bootstrap.sql` en Supabase.
-
-La auditoría de dependencias tras actualizar y aplicar correcciones compatibles no reportó críticas/altas; quedaron ocho moderadas de desarrollo relacionadas con minimatch/ESLint. No se aplicó downgrade forzado.
-
-
-## Estado de entrega y siguiente fase
-
-Las fases 0–3 y la **Fase 4A de consultas Gemini** fueron confirmadas como funcionales por el usuario el 2026-11-06. La Fase 4A es de **solo lectura**: no modifica registros. **El próximo incremento será Fase 4B**, con validación, confirmación y auditoría antes de realizar acciones desde el asistente. No existe todavía un módulo de tareas generales ni de recordatorios ejecutables; no se deben presentar como funciones activas.
-
-- [Fase 3 — alcance y cierre](docs/FASE_3_ESTUDIO.md)
-- [Fase 4 — plan de implementación IA V1](docs/FASE_4_IA_V1.md)
-
-## Fase 3 — Universidad y Estudio
-
-El módulo `/study` (Fase 3 publicada por PR #4) incorpora materias, tareas con prioridades y fechas límite, exámenes y sesiones de estudio con duración y tema. Cada registro pertenece al usuario autenticado; los formularios guardan a través de acciones del servidor. La barra lateral y el menú móvil integran estos apartados. Mi Día muestra tareas incompletas y próximos exámenes, utilizando registros reales.
-
-La migración incremental `supabase/migrations/20261106141453_study.sql` ya fue aplicada una vez en el proyecto personal-ia de Supabase y está alineada con el historial remoto. No volver a ejecutarla. No repetir las migraciones iniciales ni de entrenamiento. El alcance y estado del despliegue figuran en PROJECT_STATUS.md.
-
-
-## Fase 4A — Asistente de texto con Gemini
-
-**Estado:** implementada y fusionada en `main` mediante [PR #5](https://github.com/d4vdxh1/personal-ia/pull/5); CI y migración Supabase aprobadas. El usuario configuró Gemini en Vercel y **confirmó una prueba funcional satisfactoria** el 2026-11-06. No se inspeccionó la clave ni se verificó de manera independiente la respuesta del proveedor.
-
-El módulo `/assistant` permite consultar desde una interfaz accesible un resumen del día, hábitos, objetivos, entrenamiento y entregas académicas. Las herramientas son únicamente de lectura, autorizadas para el usuario autenticado, y no envían el contenido del diario ni los registros de molestias. No existen escrituras por IA, agenda automática ni recordatorios activos.
-
-Activación completada por el usuario: creó su clave en [Google AI Studio](https://aistudio.google.com/apikey), configuró `GEMINI_API_KEY` como variable de **Production** en Vercel y confirmó que el asistente responde. Para reinstalar el proyecto, configurar nuevamente el secreto de forma privada y redesplegar; nunca usar `NEXT_PUBLIC_` ni incluirlo en GitHub. Se solicita consentimiento antes de compartir preguntas y resúmenes relevantes con Google Gemini. El historial del chat vive solo en memoria del navegador y se pierde al recargar.
-
-La cuota interna es de 20 solicitudes/día por cuenta, con cinco segundos de separación, mediante la migración incremental `supabase/migrations/20261106152923_ai_usage.sql` (aplicada y verificada en Supabase; no repetir). No garantiza coste 0 del proveedor: verificar límites y facturación del proyecto Google. Ver [plan técnico de la Fase 4](docs/FASE_4_IA_V1.md).
+</div>

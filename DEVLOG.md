@@ -4,6 +4,15 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 
 ---
 
+## 2026-11-06 — Verificación completa y publicación de la rama
+
+- Migración training aplicada al proyecto existente. Catálogo remoto: ocho tablas nuevas con RLS, cuatro políticas por dueño y sin CRUD anon. Test remoto con dos identidades temporales aprobado, terminado en rollback; sin bootstrap ni fixtures persistentes.
+- Lint, build Webpack 16.4.5, typecheck, cinco suites y PostgreSQL embebido aprobados. Auditoría de producción: cero vulnerabilidades. Ocho moderadas transitivas de desarrollo siguen documentadas.
+- Chromium sobre build de producción y SQL real embebido: crear ejercicio/rutina/programación, iniciar sesión, guardar borrador/recargar/completar, historial/evolución, medidas/molestias, errores con formulario conservado y sesión vencida aprobados. Trece vistas a seis anchos (360/390/768/800/930/1280), sin overflow ni botones tapados; capturas 360/1280 inspeccionadas. Auth simulado; no se atribuyen dos JWT reales a esta evidencia.
+- Rama codex/training-phase2 subida; commit de implementación eb7a5ab y cierre previo 360df0e incluidos en PR #2. Pipeline CI creado y en seguimiento. La entrega reemplaza el PR documental #1 desactualizado.
+
+---
+
 ## 2026-11-06 — Modelo y recorrido de Entrenamiento implementados
 
 - Ocho tablas incrementales generadas con Supabase CLI; RLS en cuatro operaciones, FK compuestas por dueño y RPC SECURITY INVOKER. Rutinas/sesiones atómicas, snapshots históricos e inicio idempotente; programación iniciada protegida contra cambios.

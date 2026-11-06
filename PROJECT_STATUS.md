@@ -28,7 +28,7 @@ Next.js 16.4.5 + React + TypeScript + Tailwind; Supabase (PostgreSQL/Auth/RLS); 
 | Diario personal | Completado y confirmado por el usuario |
 | Objetivos y progreso | Completados y confirmados por el usuario |
 | Mi Día con datos reales | Completado y confirmado por el usuario |
-| Entrenamiento | Implementado localmente: ejercicios, rutinas, programación, sesiones, historial, evolución, medidas y molestias. QA de navegador y publicación en curso. |
+| Entrenamiento | Implementado y probado: ejercicios, rutinas, programación, sesiones, historial, evolución, medidas y molestias. PR #2 publicado; CI y despliegue en curso. |
 | Estudio | Fase 3 pendiente |
 | IA, recordatorios, estadísticas y voz | Fases posteriores |
 
@@ -67,7 +67,9 @@ Zona horaria diaria vigente: America/Argentina/Buenos_Aires. Fechas locales expl
 
 Modelo y recorrido implementados en la rama codex/training-phase2. Migración incremental generada por Supabase CLI: 20261106025508_training.sql, aplicada al proyecto existente. Catálogo remoto: ocho tablas con RLS, cuatro políticas cada una, sin CRUD anon. Pruebas SQL locales y remotas con rollback aprobadas, incluidas transacciones, snapshots, inicio duplicado y aislamiento por roles. No se utilizaron dos JWT reales ni se dejaron fixtures remotos.
 
-Lint, build Webpack con Next 16.4.5 y typecheck aprobados. Suites previas y validaciones nuevas aprobadas. Pendientes antes de declarar publicación: finalizar navegador responsive, push/CI y comprobar Vercel. Se mantiene la distinción entre verificación SQL por roles y login real.
+Lint, build Webpack con Next 16.4.5 y typecheck aprobados. Suites previas y validaciones nuevas aprobadas. Chromium sobre compilación de producción con SQL real embebido: recorrido completo, borrador/recarga, completar/historial/evolución, medidas/molestias, fallos de lectura/escritura y sesión vencida aprobados. Trece pantallas/vistas a 360/390/768/800/930/1280 px sin overflow, navegación fija y botones accesibles; capturas móvil/escritorio inspeccionadas. Auditoría de producción: cero vulnerabilidades.
+
+Rama subida y PR #2: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue en seguimiento. Se mantiene la distinción entre verificación SQL por roles y dos logins/JWT reales; no se dispone de credenciales de las cuentas del usuario.
 
 ## Reglas y pendientes conocidos
 

@@ -165,4 +165,4 @@ La auditoría de dependencias tras actualizar y aplicar correcciones compatibles
 
 El módulo `/study` incorpora materias, tareas con prioridades y fechas límite, exámenes y sesiones de estudio con duración y tema. Cada registro pertenece al usuario autenticado; los formularios guardan a través de acciones del servidor. La barra lateral y el menú móvil integran estos apartados. Mi Día muestra tareas incompletas y próximos exámenes, utilizando registros reales.
 
-La migración incremental `supabase/migrations/20261106094500_study.sql` debe aplicarse una sola vez y solo tras validarse. No repetir las migraciones iniciales ni de entrenamiento. El alcance y estado del despliegue figuran en PROJECT_STATUS.md.
+La migración incremental `supabase/migrations/20261106141453_study.sql` ya fue aplicada una vez en el proyecto personal-ia de Supabase y está alineada con el historial remoto. No volver a ejecutarla. No repetir las migraciones iniciales ni de entrenamiento. El alcance y estado del despliegue figuran en PROJECT_STATUS.md.

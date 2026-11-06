@@ -533,5 +533,5 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - Chat blanco y verde (`/assistant`), accesible en escritorio y celular; aviso visible si Gemini no está configurado y aceptación explícita de transferencia a proveedor externo.
 - Endpoint autenticado con claves solo servidor, límite de longitud, control de origen y no-cache; provider Gemini REST `gemini-3.5-flash-lite` con IDs de function calling.
 - Cinco herramientas autorizadas de lectura desde datos existentes: hoy, hábitos, entrenamiento, estudio y objetivos. Sin modificaciones ni acceso a notas íntimas o molestias.
-- Migración pendiente `20261106150000_ai_usage.sql`: cuota atómica de 20 solicitudes/día y cinco segundos de enfriamiento por usuario. Test SQL y navegador añadidos.
+- Migración aplicada `20261106152923_ai_usage.sql`: cuota atómica de 20 solicitudes/día y cinco segundos de enfriamiento por usuario. Test SQL y navegador añadidos.
 - Pendiente: aprobar CI, aplicar/verificar migración, fusionar PR, desplegar en Vercel, configurar clave `GEMINI_API_KEY` por el usuario y probar respuestas reales; no confundir implementación con activación del proveedor.

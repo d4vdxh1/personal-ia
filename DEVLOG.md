@@ -497,3 +497,11 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - Confirmadas las cuatro tablas `study_*`, todas con RLS activo, cuatro políticas por tabla, lectura denegada a `anon` y lectura permitida a `authenticated` condicionada por políticas.
 - La validación de seguridad detectó avisos previos sobre `public.rls_auto_enable()` (EXECUTE para roles de API) y protección de contraseñas filtradas desactivada; requieren una revisión separada.
 - La primera ronda completa de CI aprobó, incluido Playwright. Volver a pasar CI al modificar nombres y documentación antes de fusionar PR #4.
+
+
+## 2026-11-06 — Migración académica en Supabase
+
+- La migración de Estudio fue aplicada como `20261106141453_study`; el archivo se alineó con el historial remoto.
+- Las tablas de materias, tareas, exámenes y sesiones tienen RLS activo y cuatro políticas por tabla.
+- Se confirmó ausencia de permisos de lectura para usuarios anónimos.
+- Queda por confirmar CI del último commit y posteriormente el despliegue de la Fase 3.

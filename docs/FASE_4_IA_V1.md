@@ -47,7 +47,7 @@ Crear una rama nueva de Fase 4A, revisar las APIs de Gemini vigentes antes de el
 - `/api/assistant`: solicitud POST autenticada por Supabase Auth, validada y con origen protegido. No permite acciones de escritura.
 - `src/lib/assistant/provider.ts`: `AIProvider` y `GeminiProvider` vía REST, modelo `gemini-3.5-flash-lite` (estable), clave exclusivamente del lado servidor; URLs fijas, tiempo máximo de espera, resultados de herramientas con IDs y limitación de tokens de salida.
 - `src/lib/assistant/tools.ts`: lista de cinco herramientas autorizadas de lectura, con consultas al usuario autenticado y límites en filas/campos; se evitan datos de diario, molestias y notas personales.
-- `supabase/migrations/20261106150000_ai_usage.sql`: contadores por usuario y fecha, hasta 20 solicitudes diarias y intervalo mínimo de cinco segundos, con función de reserva atómica autorizada, sin guardar contenidos de chat.
+- `supabase/migrations/20261106152923_ai_usage.sql`: contadores por usuario y fecha, hasta 20 solicitudes diarias y intervalo mínimo de cinco segundos, con función de reserva atómica autorizada, sin guardar contenidos de chat.
 - `scripts/test-ai-db.mjs`: verificación de contadores, privilegios y aislamiento en PostgreSQL desechable. Prueba de navegación con clave ausente para verificar que no se simulan respuestas.
 
 ### Activación

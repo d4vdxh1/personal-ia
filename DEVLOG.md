@@ -469,3 +469,12 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - `src/app/page.tsx`: se retira fila de accesos redundantes porque los módulos ahora están en navegación principal.
 - `scripts/test-browser.mjs`: se agregan `/menu` y comprobaciones de navegación a 360/390/768/800/930/1280 px; prueba de fase 1 adaptada a etiquetas distintas según ancho.
 - Estado: rama `design/premium-ui-v2`, PR #3 en borrador; sin fusionar ni publicar. Pendientes CI y evaluación visual de capturas.
+
+
+## 2026-11-06 — Rendimiento de navegación y carga selectiva
+
+- Se investigó la latencia al navegar por menú y submenú. Cada ruta dinámica obtiene usuario y perfil, y Entrenamiento realizaba consultas paralelas a siete tablas en todas las vistas.
+- En `src/lib/training/data.ts` se filtran las consultas por vista, evitando llamadas a tablas no requeridas; no cambia el aislamiento por usuario.
+- `src/app/training/page.tsx` comunica la vista activa al cargador de datos.
+- `src/app/loading.tsx` y estilos nuevos: indicador de carga accesible mientras responde Next.js.
+- Antes de producción: ejecutar lint, suites, build, typecheck y Playwright; contrastar tiempos de red reales con DevTools y revisar que ninguna pestaña pierda información.

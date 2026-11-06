@@ -1,7 +1,7 @@
 import "server-only";
 import { READ_TOOLS, isReadToolName, type ReadToolName } from "./tools";
 
-export type ModelToolCall = { name: ReadToolName; args: Record<string, unknown> };
+export type ModelToolCall = { name: ReadToolName; id: string; args: Record<string, unknown> };
 export type ModelTurn = { text: string; calls: ModelToolCall[]; parts: unknown[] };
 export type ModelMessage = { role: "user" | "model"; parts: unknown[] };
 
@@ -9,7 +9,7 @@ export interface AIProvider {
   generate(messages: ModelMessage[], allowTools: boolean): Promise<ModelTurn>;
 }
 const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/";
-const MODEL = "gemini-2.5-flash";
+const MODEL = "gemini-3.5-flash-lite";
 const systemPrompt = `Sos el asistente de Día a Día. Respondé en español claro y breve, con lenguaje natural.
 Usá herramientas para consultar datos reales del usuario antes de afirmar horarios, tareas, hábitos o entrenamientos.
 Las herramientas son de SOLO LECTURA. Nunca afirmes haber cambiado, creado o eliminado un registro.
@@ -38,7 +38,7 @@ export class GeminiProvider implements AIProvider {
         body: JSON.stringify({
           systemInstruction: { parts: [{ text: systemPrompt }] },
           contents: messages,
-          generationConfig: { maxOutputTokens: 700, temperature: 0.2 },
+          generationConfig: { maxOutputTokens: 700 },
           ...(allowTools ? {
             tools: [{
               functionDeclarations: READ_TOOLS.map(tool => ({
@@ -66,14 +66,15 @@ export class GeminiProvider implements AIProvider {
     const texts: string[] = [];
     for (const item of parts) {
       if (!item || typeof item !== "object") continue;
-      const part = item as { text?: unknown; functionCall?: { name?: unknown; args?: unknown } };
+      const part = item as { text?: unknown; functionCall?: { name?: unknown; id?: unknown; args?: unknown } };
       if (typeof part.text === "string") texts.push(part.text);
       if (part.functionCall && typeof part.functionCall.name === "string") {
         const name = part.functionCall.name;
         if (!isReadToolName(name) || (part.functionCall.args && (typeof part.functionCall.args !== "object" || Object.keys(part.functionCall.args).length !== 0))) {
           throw new ProviderError("invalid", "Gemini solicitó una herramienta no autorizada.");
         }
-        calls.push({ name, args: {} });
+        if (typeof part.functionCall.id !== "string" || !part.functionCall.id) throw new ProviderError("invalid", "Gemini devolvió una llamada sin identificador.");
+        calls.push({ name, id: part.functionCall.id, args: {} });
       }
     }
     if (calls.length > 5) throw new ProviderError("invalid", "Demasiadas consultas en una solicitud.");

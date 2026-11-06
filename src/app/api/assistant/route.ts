@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
       messages.push({
         role: "user",
         parts: first.calls.map((call, i) => ({
-          functionResponse: { name: call.name, response: results[i] },
+          functionResponse: { id: call.id, name: call.name, response: results[i] },
         })),
       });
       const answer = await provider.generate(messages, false);

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { TrackingShell } from "@/components/tracking-shell";
-import { allDestinations, trainingLinks } from "@/components/app-navigation";
+import { allDestinations, trainingLinks, studyLinks } from "@/components/app-navigation";
 import { Icon } from "@/components/ui/icon";
 import { getAccount } from "@/lib/auth/account";
 
@@ -23,6 +23,16 @@ export default async function MenuPage() {
                 <Icon name="arrow" />
               </Link>
             ))}
+          </div>
+        </section>
+        <section className="directory-section" aria-labelledby="directory-study">
+          <h2 id="directory-study">Universidad y Estudio</h2>
+          <p>Materias, tareas, exámenes y sesiones registradas.</p>
+          <div className="directory-grid">
+            {studyLinks.map(item => <Link className="directory-link" key={item.view} href={item.href}>
+              <span className="directory-icon"><Icon name="book" /></span>
+              <strong>{item.title}</strong><Icon name="arrow" />
+            </Link>)}
           </div>
         </section>
         <section className="directory-section" aria-labelledby="directory-training">

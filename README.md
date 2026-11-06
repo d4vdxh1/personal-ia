@@ -4,9 +4,9 @@
 
 Aplicación personal para organizar rutina, hábitos, estudio, entrenamiento y objetivos. El núcleo funcionará manualmente antes de integrar IA.
 
-Estado actual (2026-11-06): fases 0 y 1 cerradas por las confirmaciones registradas. Fase 2 — Entrenamiento implementada; pruebas y publicación de esta entrega se detallan en [PROJECT_STATUS.md](PROJECT_STATUS.md).
+Estado actual (2026-11-06): fases 0–3 implementadas y publicadas; Entrenamiento y Estudio aún requieren aceptación de uso con una cuenta real. La siguiente fase prevista es IA de texto V1. Ver [PROJECT_STATUS.md](PROJECT_STATUS.md).
 
-Entrenamiento agrega ejercicios propios, rutinas ordenadas, programación por fecha, sesiones con borrador y series, historial/evolución por ejercicio, medidas corporales y molestias. Abrir `/training` desde Mi Día o Seguimiento. Ver [alcance y datos](docs/ENTRENAMIENTO.md).
+Entrenamiento agrega ejercicios propios, rutinas ordenadas, programación por fecha, sesiones con borrador y series, historial/evolución por ejercicio, medidas corporales y molestias. Abrir `/training` desde Mi Día o el menú lateral. Ver [alcance y datos](docs/ENTRENAMIENTO.md).
 
 ## Módulos disponibles
 
@@ -163,6 +163,6 @@ La auditoría de dependencias tras actualizar y aplicar correcciones compatibles
 
 ## Fase 3 — Universidad y Estudio
 
-El módulo `/study` incorpora materias, tareas con prioridades y fechas límite, exámenes y sesiones de estudio con duración y tema. Cada registro pertenece al usuario autenticado; los formularios guardan a través de acciones del servidor. La barra lateral y el menú móvil integran estos apartados. Mi Día muestra tareas incompletas y próximos exámenes, utilizando registros reales.
+El módulo `/study` (Fase 3 publicada por PR #4) incorpora materias, tareas con prioridades y fechas límite, exámenes y sesiones de estudio con duración y tema. Cada registro pertenece al usuario autenticado; los formularios guardan a través de acciones del servidor. La barra lateral y el menú móvil integran estos apartados. Mi Día muestra tareas incompletas y próximos exámenes, utilizando registros reales.
 
 La migración incremental `supabase/migrations/20261106141453_study.sql` ya fue aplicada una vez en el proyecto personal-ia de Supabase y está alineada con el historial remoto. No volver a ejecutarla. No repetir las migraciones iniciales ni de entrenamiento. El alcance y estado del despliegue figuran en PROJECT_STATUS.md.

@@ -5,7 +5,7 @@
 **Identificador técnico:** `personal-ia`. Se conservan repositorio, carpeta, URL de Vercel y proyecto Supabase actuales.
 
 **Estado:** Plan vigente — v1.4, actualizado el 2026-11-06.
-**Avance:** Fases 0 y 1 cerradas; paso 8 de fase 1 cerrado por confirmación del usuario el 2026-10-11. Fase 2 — Entrenamiento implementada; verificaciones y publicación en PROJECT_STATUS. Ver `docs/CIERRE_FASE_1.md` y `docs/ENTRENAMIENTO.md`.
+**Avance:** Fases 0–3 implementadas; Fase 3 publicada el 2026-11-06 (PR #4, Supabase y Vercel). Pendiente aceptación de uso con cuenta real para Entrenamiento y Estudio. Siguiente fase: IA de texto V1. Ver PROJECT_STATUS, `docs/CIERRE_FASE_1.md` y `docs/ENTRENAMIENTO.md`.
 **Objetivo:** construir una aplicación web/PWA personal, inteligente y progresiva para organizar rutina, entrenamiento, estudio, hábitos, sueño, objetivos, recordatorios y, más adelante, finanzas personales.
 
 ---
@@ -1075,6 +1075,8 @@ Todas las pantallas reutilizarán la navegación compartida. Verificar 360/390/7
 ---
 
 ## Fase 3 — Universidad
+
+**Estado:** implementada y publicada el 2026-11-06. Cuatro tablas con RLS, formularios de materias/tareas/exámenes/sesiones e integración con Mi Día; pruebas automatizadas aprobadas. Pendiente aceptación con cuenta real.
 
 Implementar:
 

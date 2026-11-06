@@ -3,7 +3,7 @@
 **Última actualización:** 2026-11-06
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
 **Estado general:** Fases 0 y 1 cerradas. Paso 8 de fase 1 cerrado por confirmación del usuario el 2026-10-11: «funciona todo».
-**Fase actual:** Fase 2 — Entrenamiento implementada, verificada técnicamente y publicada el 2026-11-06. Pendiente aceptación de uso con la cuenta real del usuario.
+**Fase actual:** Fase 3 — Universidad y Estudio implementada y publicada el 2026-11-06. Pendiente aceptación funcional con una cuenta real. Próxima fase: IA de texto V1 (Gemini).
 
 ## Entrega y continuidad del 2026-11-06
 
@@ -30,7 +30,7 @@ Next.js 16.4.5 + React + TypeScript + Tailwind; Supabase (PostgreSQL/Auth/RLS); 
 | Objetivos y progreso | Completados y confirmados por el usuario |
 | Mi Día con datos reales | Completado y confirmado por el usuario |
 | Entrenamiento | Implementado, probado e integrado por PR #2; CI y Vercel aprobados. Ejercicios, rutinas, programación, sesiones, historial, evolución, medidas y molestias. |
-| Estudio | Fase 3 pendiente |
+| Estudio | Fase 3 implementada y publicada (PR #4): materias, tareas, exámenes, sesiones y resumen en Mi Día. Pendiente aceptación con cuenta real. |
 | IA, recordatorios, estadísticas y voz | Fases posteriores |
 
 Mi Día integra hábitos, check-in, notas de hoy, vencimientos de objetivos y entrenamiento de hoy. El calendario general independiente y las relaciones de objetivos con actividades requieren ampliaciones posteriores.
@@ -83,12 +83,12 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - Nunca versionar secretos; finanzas futuras sin transferencias/pagos; minimizar datos sensibles enviados a IA.
 
 
-## Propuesta de interfaz clara (PR #3, sin fusionar)
+## Rediseño claro (PR #3 fusionado)
 
 - Rama de diseño: `design/premium-ui-v2`. Propuesta basada en composición del demo CEX y criterios de Emil Kowalski.
 - Paleta: fondo claro, menú blanco, verde original `#16734a` y colores sólidos; sin degradados ni violetas.
 - Panel de Mi Día con datos reales; sin cambios en Supabase, RLS, autenticación ni migraciones.
-- Estado: borrador. Pendientes CI y capturas autenticadas responsive antes de aprobar.
+- Estado: PR #3 integrado en main (`30b293b`), CI y Vercel aprobados. Aceptación visual de cuenta real reportada por el usuario; medición de rendimiento real pendiente.
 
 
 ## Navegación reorganizada — PR #3
@@ -97,7 +97,7 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - Entrenamiento tiene cinco subapartados en el lateral de escritorio; en móvil conserva pestañas de sus vistas y acceso desde la pantalla "Más" (`/menu`).
 - Diseño coherente extendido a formularios, registros, objetivos, historial, perfil y tarjetas de Entrenamiento mediante `navigation-v2.css`.
 - Pruebas de navegación incorporadas a `scripts/test-browser.mjs` y adaptación del test antiguo de etiquetas de navegación.
-- Pendiente: comprobar CI y revisión visual autenticada antes de fusionar. Sin modificación de la persistencia ni de la producción.
+- Estado de PR #3: fusionado; CI, Playwright y despliegue Vercel aprobados. La persistencia no se modificó con el rediseño.
 
 
 ## Mejora de latencia de navegación (2026-11-06, PR #3)
@@ -108,11 +108,20 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - La latencia percibida y la reducción de llamadas no implican valores medidos de producción; pendiente CI, comprobación autenticada y medición de tiempos de red.
 
 
-## Fase 3 — Universidad y Estudio (rama de desarrollo)
+## Fase 3 — Universidad y Estudio (publicada)
 
 - Integrado previamente en `main`: PR #3 de rediseño y rendimiento (squash `30b293b`).
-- Rama `feat/university-phase3`, PR #4 en borrador; **sin fusionar hasta concluir pruebas y despliegue de migración**.
+- PR #4 fusionado en `main` como `655cb6a`; CI completo aprobado en https://github.com/d4vdxh1/personal-ia/actions/runs/42233135767 y Vercel informó despliegue exitoso. Rama de desarrollo conservada.
 - Cuatro entidades: `study_subjects`, `study_assignments`, `study_exams`, `study_sessions`; cada tabla con RLS por dueño, FK compuestas e índices.
 - Nuevas pantallas de Estudio: resumen, materias, tareas, exámenes y sesiones; enlaces laterales y desde el menú móvil; vencimientos de estudio en Mi Día.
-- Migración aplicada en Supabase como `20261106141453_study.sql` (cotejada con el historial remoto). Cuatro tablas con RLS y cuatro políticas por tabla verificadas, sin permisos SELECT de `anon`. CI previo de la fase aprobado; revisión final de CI pendiente por alineación del historial.
-- QA: suite de aislamiento SQL con dos identidades, CI y navegador con recorrido de formularios nuevos. No se presume aceptación del usuario ni despliegue de producción.
+- Migración aplicada en Supabase como `20261106141453_study.sql` (cotejada con el historial remoto). Cuatro tablas con RLS y cuatro políticas por tabla verificadas, sin permisos SELECT de `anon`. CI final aprobado tras alinear el historial.
+- QA: suite de aislamiento SQL con dos identidades, CI y navegador con recorrido de formularios nuevos. Despliegue registrado como exitoso en Vercel; la aceptación mediante cuenta real y medición de latencia permanecen pendientes.
+
+
+## Cierre técnico de Fase 3 — 2026-11-06
+
+- GitHub PR #4: https://github.com/d4vdxh1/personal-ia/pull/4 (fusionado en `main`, commit `655cb6a`).
+- Supabase: migración `20261106141453_study` aplicada una vez, cuatro tablas de Estudio con 16 políticas de RLS; no repetir.
+- GitHub Actions #42233135767: lint, pruebas unitarias/SQL, build, TypeScript y Playwright aprobados.
+- Vercel informó `success` para el commit de integración. El acceso privado a `/study` aún requiere aceptación con la cuenta real, no demostrada por CI con Auth simulado.
+- Siguientes pendientes: revisar permisos de ejecución de `rls_auto_enable()`, protección de contraseñas filtradas y comenzar fase 4 tras aceptación.

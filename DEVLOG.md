@@ -505,3 +505,12 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - Las tablas de materias, tareas, exámenes y sesiones tienen RLS activo y cuatro políticas por tabla.
 - Se confirmó ausencia de permisos de lectura para usuarios anónimos.
 - Queda por confirmar CI del último commit y posteriormente el despliegue de la Fase 3.
+
+
+## 2026-11-06 — Cierre técnico de Fase 3 en producción
+
+- PR #4 fusionado por squash en main (`655cb6aec781bf81209774f0f86da4e54984d091`).
+- GitHub Actions #42233135767: instalación, lint, pruebas de lógica, test SQL, build, typecheck y Playwright aprobados.
+- Supabase: migración `20261106141453_study` aplicada una vez; cuatro tablas verificadas con RLS y permisos de acceso controlados.
+- Estado Vercel del commit de integración: `success`. Pendiente validación autenticada con la cuenta real; CI usa autenticación simulada.
+- Quedan pendientes preexistentes de seguridad detectados por advisors Supabase, sin relación causal con el módulo de Estudio.

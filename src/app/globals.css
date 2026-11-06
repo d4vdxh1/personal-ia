@@ -954,6 +954,29 @@ progress::-moz-progress-bar {
 .auth-submit { background: var(--green); color: white; border: 0; border-radius: 8px; padding: 12px; }
 button:disabled { cursor: wait; opacity: .65; }
 .session-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 8px 24px; background: white; border-bottom: 1px solid var(--border); }
+.training-card { min-width: 0; margin-bottom: 20px; overflow-wrap: anywhere; }
+.training-card h2 { margin-bottom: 16px; }
+.training-form { margin: 16px 0; }
+.training-form fieldset { min-width: 0; padding: 0; border: 0; }
+.training-form legend { font-size: 19px; font-weight: 700; margin-bottom: 16px; }
+.training-form .auth-submit { width: 100%; margin-top: 16px; }
+.training-form .form-hint { margin: 12px 0; color: var(--muted); font-size: 13px; }
+.training-form .form-error, .training-form .form-success { margin-top: 16px; }
+.training-item { padding: 16px; margin: 16px 0; border: 1px solid var(--border); border-radius: 12px; }
+.training-item label { display: grid; gap: 6px; font-size: 14px; min-width: 0; }
+.training-form select, .training-item input { width: 100%; min-width: 0; min-height: 44px; padding: 9px; border: 1px solid #64748b; border-radius: 8px; font: inherit; background: white; }
+.training-form select:focus-visible, .training-form textarea:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+.training-values { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.training-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.training-buttons button { min-width: 44px; min-height: 44px; padding: 8px; border: 1px solid var(--border); border-radius: 8px; }
+.training-check { display: flex !important; align-items: center; gap: 12px; min-height: 44px; margin: 12px 0; }
+.training-check input { width: 24px; min-height: 24px; height: 24px; }
+.training-week { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px; }
+.training-week article { min-width: 0; padding: 16px; border: 1px solid var(--border); border-radius: 12px; }
+.training-week time { font-weight: 700; }
+.training-week p { margin: 10px 0; }
+.training-open { display: inline-flex; align-items: center; min-height: 44px; max-width: 100%; overflow-wrap: anywhere; margin: 10px 0; color: var(--green); font-weight: 600; }
+.training-notes { white-space: pre-wrap; overflow-wrap: anywhere; margin: 12px 0; }
 .session-bar-with-sidebar { margin-left: 232px; }
 .session-bar button { border: 1px solid var(--border); border-radius: 8px; background: white; padding: 8px 12px; }
 @media (min-width: 801px) and (max-width: 1100px) { .session-bar-with-sidebar { margin-left: 200px; } }

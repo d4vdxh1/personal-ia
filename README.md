@@ -4,7 +4,9 @@
 
 Aplicación personal para organizar rutina, hábitos, estudio, entrenamiento y objetivos. El núcleo funcionará manualmente antes de integrar IA.
 
-Estado actual (2026-10-11): fases 0 y 1 cerradas; paso 8 de fase 1 cerrado por confirmación del usuario. Push de `ae65292` y estado Vercel `success` verificados. Fase 2 — Entrenamiento en planificación; cuadro de diez pasos en [el plan maestro](docs/PLAN_MAESTRO.md#fase-2--entrenamiento).
+Estado actual (2026-11-06): fases 0 y 1 cerradas por las confirmaciones registradas. Fase 2 — Entrenamiento implementada; pruebas y publicación de esta entrega se detallan en [PROJECT_STATUS.md](PROJECT_STATUS.md).
+
+Entrenamiento agrega ejercicios propios, rutinas ordenadas, programación por fecha, sesiones con borrador y series, historial/evolución por ejercicio, medidas corporales y molestias. Abrir `/training` desde Mi Día o Seguimiento. Ver [alcance y datos](docs/ENTRENAMIENTO.md).
 
 ## Módulos disponibles
 
@@ -143,4 +145,17 @@ En el paso 1, la auditoría registró 5 alertas altas en dependencias de desarro
 
 El archivo local `promt_supabe_connect.md` se excluye de Git porque contiene los datos del proyecto utilizados para configurar `.env.local`. La integración utiliza solo la clave pública; no requiere una clave administrativa.
 
-Próximo paso: fase 2 — Entrenamiento, comenzando por modelo de datos y permisos. Ver el cuadro en `docs/PLAN_MAESTRO.md`. Implementación pendiente; sin nuevo commit ni push en esta sesión.
+## Verificaciones reproducibles
+
+Se usan versiones fijadas y `npm ci`. Next.js, @next/env y eslint-config-next se actualizaron a 16.4.5 por alertas de seguridad. Desarrollo y compilación usan Webpack, probado en este entorno Windows.
+
+- `npm test`: suites de check-in, diario, objetivos, Mi Día y validaciones de Entrenamiento.
+- `npm run test:db`: PostgreSQL desechable embebido, esquema inicial y entrenamiento con RLS, FK por dueño, transacciones, snapshots e inicio idempotente. No conecta a Supabase.
+- `npx playwright install chromium`, luego `npm run test:browser`: compila una copia aislada sin `.env.local`, usa Auth simulado y PostgreSQL embebido; prueba persistencia, errores y 360/390/768/800/930/1280 px. Capturas y logs en `test-results/` (ignorado).
+- `npm run lint`, `npm run build`, `npm run typecheck`: controles estáticos y compilación. Build debe preceder a typecheck en una copia nueva.
+
+GitHub Actions ejecuta estos controles sin secretos. No confundir el Auth simulado con dos logins/JWT reales contra producción.
+
+Migración incremental: `supabase/migrations/20261106025508_training.sql`, aplicada al proyecto existente. No repetirla ni repetir la inicial. `supabase/tests/training_remote_rollback.sql` verifica con fixtures transaccionales y roles PostgreSQL; siempre termina en rollback. Nunca ejecutar `supabase/tests/bootstrap.sql` en Supabase.
+
+La auditoría de dependencias tras actualizar y aplicar correcciones compatibles no reportó críticas/altas; quedaron ocho moderadas de desarrollo relacionadas con minimatch/ESLint. No se aplicó downgrade forzado.

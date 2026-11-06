@@ -1,15 +1,22 @@
 # PROJECT_STATUS — Día a Día
 
-**Última actualización:** 2026-10-18
+**Última actualización:** 2026-11-06
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
 **Estado general:** Fases 0 y 1 cerradas. Paso 8 de fase 1 cerrado por confirmación del usuario el 2026-10-11: «funciona todo».
-**Fase actual:** Fase 2 — Entrenamiento en planificación; implementación pendiente.
+**Fase actual:** Fase 2 — Entrenamiento en desarrollo, autorizada junto con recuperación de pruebas y sincronización de GitHub el 2026-11-05.
+
+## Continuidad y revisión del 2026-11-05
+
+- GitHub main está en ae65292. El cierre funcional y la planificación del commit local 360df0e siguen vigentes; el PR #1 contiene pendientes anteriores a esa confirmación y será reemplazado por la entrega actual.
+- Vercel success confirmado en GitHub. HTTP actual sin sesión: login 200; seis rutas internas y diagnóstico retirado redirigen 307 al login con private, no-store. No equivale a una nueva prueba autenticada.
+- Instalación local incompleta detectada: faltan Next.js, TypeScript y ESLint. Recuperación desde package-lock en curso; todavía no se declaran aprobadas las pruebas actuales.
+- Supabase conectado: proyecto personal-ia identificado y seis tablas actuales con RLS confirmado directamente. No repetir migración inicial. Auditoría funcional con dos JWT reales sigue separada del cierre aceptado por el usuario.
 
 ## Objetivo y stack
 
 PWA personal para registrar rutina, hábitos, entrenamiento, estudio, sueño, objetivos y progreso. Primero funcionamiento manual; IA después del núcleo.
 
-Next.js 16.4.0 + React + TypeScript + Tailwind; Supabase (PostgreSQL/Auth/RLS); Vercel. Gemini será el proveedor principal mediante tools validadas en backend e interfaz AIProvider. Google Calendar, recordatorios y voz corresponden a fases posteriores.
+Next.js 16.4.5 + React + TypeScript + Tailwind; Supabase (PostgreSQL/Auth/RLS); Vercel. Gemini será el proveedor principal mediante tools validadas en backend e interfaz AIProvider. Google Calendar, recordatorios y voz corresponden a fases posteriores.
 
 ## Funcionalidades actuales
 
@@ -21,7 +28,7 @@ Next.js 16.4.0 + React + TypeScript + Tailwind; Supabase (PostgreSQL/Auth/RLS); 
 | Diario personal | Completado y confirmado por el usuario |
 | Objetivos y progreso | Completados y confirmados por el usuario |
 | Mi Día con datos reales | Completado y confirmado por el usuario |
-| Entrenamiento | Fase 2 en planificación |
+| Entrenamiento | Implementado localmente: ejercicios, rutinas, programación, sesiones, historial, evolución, medidas y molestias. QA de navegador y publicación en curso. |
 | Estudio | Fase 3 pendiente |
 | IA, recordatorios, estadísticas y voz | Fases posteriores |
 
@@ -58,7 +65,9 @@ Zona horaria diaria vigente: America/Argentina/Buenos_Aires. Fechas locales expl
 | 9 | Integración con Mi Día | Mostrar el entrenamiento programado y su estado, con acceso al registro. |
 | 10 | Verificación y cierre | Pruebas funcionales, persistencia, aislamiento entre cuentas, interfaz responsive, push y comprobación en Vercel. |
 
-Comenzar por el paso 1. Cuadro y criterio de cierre en docs/PLAN_MAESTRO.md. Cierre y planificación preparados para commit local el 2026-10-18; sin implementación ni migraciones nuevas. Verificación documental: git diff --check correcto. Sin push en esta sesión.
+Modelo y recorrido implementados en la rama codex/training-phase2. Migración incremental generada por Supabase CLI: 20261106025508_training.sql, aplicada al proyecto existente. Catálogo remoto: ocho tablas con RLS, cuatro políticas cada una, sin CRUD anon. Pruebas SQL locales y remotas con rollback aprobadas, incluidas transacciones, snapshots, inicio duplicado y aislamiento por roles. No se utilizaron dos JWT reales ni se dejaron fixtures remotos.
+
+Lint, build Webpack con Next 16.4.5 y typecheck aprobados. Suites previas y validaciones nuevas aprobadas. Pendientes antes de declarar publicación: finalizar navegador responsive, push/CI y comprobar Vercel. Se mantiene la distinción entre verificación SQL por roles y login real.
 
 ## Reglas y pendientes conocidos
 
@@ -66,6 +75,6 @@ Comenzar por el paso 1. Cuadro y criterio de cierre en docs/PLAN_MAESTRO.md. Cie
 - Verificar celular/escritorio a 360/390/768/800/930/1280 px y acceso al botón final. Actualizar DEVLOG y PROJECT_STATUS al cerrar cada paso.
 - Priorizar aproximadamente 7 h de sueño; no asumir 17:30–18:00 entre semana como sesión normal de entrenamiento.
 - Antecedente de lesión meniscal con bloqueo ocasional: conservar las restricciones documentadas, sin diagnósticos ni recomendaciones automáticas de saltos altos, vallas, pivotes o sprints intensos mientras persista.
-- Auditoría histórica: cinco alertas altas en dependencias de desarrollo de ESLint y cero en producción. No se aplicó downgrade automático; revisar compatibilidad conjunta de ESLint/plugins en una tarea específica.
+- Auditoría actual: Next actualizado a 16.4.5 y correcciones compatibles aplicadas; sin críticas/altas, ocho moderadas de desarrollo relacionadas con minimatch/ESLint. No se aplicó downgrade forzado. Asesores Supabase conservan advertencias previas sobre EXECUTE de rls_auto_enable (event trigger) y protección de contraseñas filtradas desactivada; Entrenamiento no introduce funciones SECURITY DEFINER.
 - Antes de cerrar fase 9: activar Vercel Web Analytics e integrar @vercel/analytics.
 - Nunca versionar secretos; finanzas futuras sin transferencias/pagos; minimizar datos sensibles enviados a IA.

@@ -4,8 +4,8 @@
 **Bienvenida del login:** “Cada día se vuelve más fácil. Lo difícil es hacerlo cada día.”
 **Identificador técnico:** `personal-ia`. Se conservan repositorio, carpeta, URL de Vercel y proyecto Supabase actuales.
 
-**Estado:** Plan vigente — v1.3, actualizado el 2026-10-11.
-**Avance:** Fases 0 y 1 cerradas; paso 8 de fase 1 cerrado por confirmación del usuario el 2026-10-11. Fase 2 — Entrenamiento en planificación. Ver `docs/CIERRE_FASE_1.md`.
+**Estado:** Plan vigente — v1.4, actualizado el 2026-11-06.
+**Avance:** Fases 0 y 1 cerradas; paso 8 de fase 1 cerrado por confirmación del usuario el 2026-10-11. Fase 2 — Entrenamiento implementada; verificaciones y publicación en PROJECT_STATUS. Ver `docs/CIERRE_FASE_1.md` y `docs/ENTRENAMIENTO.md`.
 **Objetivo:** construir una aplicación web/PWA personal, inteligente y progresiva para organizar rutina, entrenamiento, estudio, hábitos, sueño, objetivos, recordatorios y, más adelante, finanzas personales.
 
 ---
@@ -1053,7 +1053,7 @@ Implementar:
 
 ## Fase 2 — Entrenamiento
 
-**Estado:** planificación iniciada el 2026-10-11; implementación pendiente. Se ejecutará paso a paso.
+**Estado:** implementación del 2026-11-06: ocho tablas con RLS, catálogo, rutinas, programación manual por fecha, sesiones, historial/evolución, medidas y síntomas. Integración en Mi Día. Migración incremental aplicada; pruebas SQL locales y remotas con rollback aprobadas. QA responsive y publicación se registran en PROJECT_STATUS y DEVLOG.
 
 | Paso | Trabajo | Resultado esperado |
 |---|---|---|

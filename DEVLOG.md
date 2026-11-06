@@ -4,6 +4,25 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 
 ---
 
+## 2026-11-06 — Modelo y recorrido de Entrenamiento implementados
+
+- Ocho tablas incrementales generadas con Supabase CLI; RLS en cuatro operaciones, FK compuestas por dueño y RPC SECURITY INVOKER. Rutinas/sesiones atómicas, snapshots históricos e inicio idempotente; programación iniciada protegida contra cambios.
+- Catálogo, rutinas ordenadas, semana manual, sesiones con borrador y series realizadas/omitidas, historial/evolución, medidas y molestias; integración en Mi Día y TrackingShell. Sin prescripción automática de cargas ni horarios inventados.
+- Recuperadas dependencias. Cuatro suites previas, validaciones nuevas y esquema inicial/Entrenamiento con PostgreSQL embebido aprobados. Webpack compiló; Turbopack falló en su proceso CSS de Windows. Navegador y publicación aún en curso; no se acredita todavía QA responsive actual.
+- Auditoría actual encontró vulnerabilidades críticas de Next 16.4.0: actualizado Next, @next/env y eslint-config-next a 16.4.5. npm audit fix compatible elimina críticas/altas; permanecen ocho moderadas transitivas de desarrollo en ESLint/minimatch. Sin downgrade forzado.
+- Agregadas dependencias de pruebas fijadas y pipeline CI sin credenciales reales. Excluidos caché de npm y copia de pruebas de Git, TypeScript y ESLint.
+
+---
+
+## 2026-11-05 — Inicio de recuperación y fase 2
+
+- Usuario autoriza los cuatro puntos: unificar continuidad/GitHub, recuperar y automatizar verificaciones, recorrido completo de Entrenamiento y ampliación con calendario semanal, métricas y progresión.
+- Se conserva el cierre funcional previo confirmado por el usuario. PR #1 documental desactualizado identificado; rama de entrega codex/training-phase2 desde el cierre local 360df0e.
+- Revisión HTTP sin sesión: login 200; seis rutas privadas y diagnóstico retirado 307 con private, no-store. Supabase: seis tablas con RLS directamente confirmado; migración inicial no se repite.
+- Dependencias locales incompletas; recuperación en curso. Sin cambios de interfaz en esta etapa ni nuevas comprobaciones responsive.
+
+---
+
 ## 2026-10-18 — Commit documental del cierre de fase 1
 
 - Revisado el cierre de fase 1 por confirmación del usuario y la planificación de fase 2; commit local solicitado por el usuario.

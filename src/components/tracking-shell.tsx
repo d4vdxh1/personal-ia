@@ -15,7 +15,7 @@ export function TrackingShell({ title, dateLabel, copy, displayName, active, chi
   dateLabel: string;
   copy: string;
   displayName: string;
-  active: "today" | "habits" | "check-in" | "profile" | "journal" | "goals";
+  active: "today" | "habits" | "check-in" | "profile" | "journal" | "goals" | "training";
   children: ReactNode;
 }) {
   const selectedSection = active === "today" ? "Hoy" : active === "profile" ? "Más" : active === "goals" ? "Progreso" : "Seguimiento";
@@ -63,6 +63,7 @@ export function TrackingShell({ title, dateLabel, copy, displayName, active, chi
             <Link href="/check-in" aria-current={active === "check-in" ? "page" : undefined}>Check-in diario</Link>
             <Link href="/journal" aria-current={active === "journal" ? "page" : undefined}>Diario</Link>
             <Link href="/goals" aria-current={active === "goals" ? "page" : undefined}>Objetivos</Link>
+            <Link href="/training" aria-current={active === "training" ? "page" : undefined}>Entrenamiento</Link>
           </nav>}
           {children}
         </main>

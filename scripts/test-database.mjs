@@ -1,0 +1,53 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
+import { createTestDatabase, asUser, alice, bob } from "./test-db.mjs";
+const db = await createTestDatabase(false);
+try {
+  await db.exec(await readFile("supabase/tests/initial_schema.sql", "utf8"));
+  await db.exec(await readFile("supabase/migrations/20261106025508_training.sql", "utf8"));
+  await db.exec(await readFile("supabase/tests/training_remote_rollback.sql", "utf8"));
+  await db.query("insert into auth.users(id) values ($1),($2)", [alice, bob]);
+  const exercise = await asUser(db, alice, async () => (await db.query("insert into public.training_exercises(user_id,name) values($1,'Remo') returning id", [alice])).rows[0].id);
+  const other = await asUser(db, bob, async () => (await db.query("insert into public.training_exercises(user_id,name) values($1,'Ajeno') returning id", [bob])).rows[0].id);
+  const items = JSON.stringify([{ exercise_id: exercise, sets: 2, reps: 10, weight_kg: 5, rest_seconds: 60 }]);
+  const plan = await asUser(db, alice, async () => (await db.query("select public.save_training_plan(null,'Fuerza','',$1::jsonb) id", [items])).rows[0].id);
+  await assert.rejects(asUser(db, alice, () => db.query("select public.save_training_plan($1,'Cambio','',$2::jsonb)", [plan, JSON.stringify([{ exercise_id: other, sets: 1, reps: 1, weight_kg: 1, rest_seconds: 1 }])])));
+  assert.equal((await db.query("select name from public.training_plans where id=$1", [plan])).rows[0].name, "Fuerza", "rollback atómico de rutina");
+  const session = randomUUID();
+  await asUser(db, alice, () => db.query("select public.start_training_session($1,$2,null)", [session, plan]));
+  await asUser(db, alice, () => db.query("select public.start_training_session($1,$2,null)", [session, plan]));
+  assert.equal((await db.query("select count(*)::int n from public.training_sessions")).rows[0].n, 1, "inicio idempotente");
+  let sets = (await db.query("select id,reps,weight_kg,rpe,done from public.training_sets order by set_number")).rows;
+  assert.equal(sets.length, 2);
+  await asUser(db, alice, () => db.query("select public.save_training_plan($1,'Nueva rutina','',$2::jsonb)", [plan, items]));
+  assert.equal((await db.query("select plan_name from public.training_sessions")).rows[0].plan_name, "Fuerza", "snapshot histórico");
+  sets = sets.map((s, i) => ({ ...s, done: i === 0, weight_kg: 10 }));
+  await assert.rejects(asUser(db, bob, () => db.query("select public.save_training_session($1,$2,30,5,'',true)", [session, JSON.stringify(sets)])));
+  await assert.rejects(asUser(db, alice, () => db.query("select public.save_training_session($1,$2,30,5,'',true)", [session, JSON.stringify([sets[0], sets[0]])])));
+  assert.equal((await db.query("select weight_kg from public.training_sets limit 1")).rows[0].weight_kg, "5.00", "rollback atómico de series");
+  await asUser(db, alice, () => db.query("select public.save_training_session($1,$2,null,null,'borrador',false)", [session, JSON.stringify(sets)]));
+  await asUser(db, alice, () => db.query("select public.save_training_session($1,$2,30,5,'lista',true)", [session, JSON.stringify(sets)]));
+  assert.equal((await asUser(db, alice, () => db.query("select * from public.training_progress()"))).rows[0].max_weight, "10.00");
+  assert.equal((await asUser(db, bob, () => db.query("select * from public.training_progress()"))).rows.length, 0);
+  assert.equal((await asUser(db, alice, () => db.query("select * from public.training_exercise_history($1,1)", [exercise]))).rows.length, 1);
+  await assert.rejects(asUser(db, alice, () => db.query("insert into public.training_metrics(user_id,entry_date,weight_kg) values($1,current_date+10,70)", [alice])));
+  await assert.rejects(asUser(db, alice, () => db.query("insert into public.training_plan_items(user_id,plan_id,exercise_id,position,sets,reps,weight_kg,rest_seconds) values($1,$2,$3,2,1,1,0,0)", [alice, plan, other])));
+  const schedule = await asUser(db, alice, async () => (await db.query("insert into public.training_schedule(user_id,plan_id,scheduled_date) values($1,$2,(now() at time zone 'America/Argentina/Buenos_Aires')::date) returning id", [alice, plan])).rows[0].id);
+  const scheduledSession = randomUUID();
+  await asUser(db, alice, () => db.query("select public.start_training_session($1,$2,$3)", [scheduledSession, plan, schedule]));
+  await assert.rejects(asUser(db, alice, () => db.query("update public.training_schedule set scheduled_date=scheduled_date+1 where id=$1", [schedule])));
+  await asUser(db, alice, () => db.query("insert into public.training_metrics(user_id,entry_date,weight_kg) values($1,(now() at time zone 'America/Argentina/Buenos_Aires')::date,70)", [alice]));
+  await asUser(db, alice, () => db.query("insert into public.training_symptoms(user_id,entry_date,area,intensity,session_id) values($1,(now() at time zone 'America/Argentina/Buenos_Aires')::date,'Rodilla',2,$2)", [alice, session]));
+  const tables = ['training_exercises','training_plans','training_plan_items','training_schedule','training_sessions','training_sets','training_metrics','training_symptoms'];
+  for (const table of tables) {
+    const catalog = (await db.query("select relrowsecurity from pg_class where oid=$1::regclass", [`public.${table}`])).rows[0]; assert.equal(catalog.relrowsecurity, true);
+    assert.equal((await db.query("select count(*)::int n from pg_policies where schemaname='public' and tablename=$1", [table])).rows[0].n, 4);
+    for (const privilege of ['select','insert','update','delete']) assert.equal((await db.query("select has_table_privilege('anon',$1,$2) ok", [`public.${table}`, privilege])).rows[0].ok, false);
+    const own = (await asUser(db, alice, () => db.query(`select * from public.${table}`))).rows; assert.ok(own.length > 0, table+' tiene filas reales para verificar');
+    await asUser(db, bob, async () => { assert.equal((await db.query(`select count(*)::int n from public.${table} where user_id=$1`, [alice])).rows[0].n, 0); assert.equal((await db.query(`delete from public.${table} where user_id=$1 returning user_id`, [alice])).rows.length, 0); assert.equal((await db.query(`update public.${table} set user_id=$1 where user_id=$2 returning user_id`,[bob,alice])).rows.length,0); });
+    await assert.rejects(asUser(db, bob, () => db.query(`insert into public.${table} select * from jsonb_populate_record(null::public.${table},$1::jsonb)`,[JSON.stringify(own[0])])), e => e.code === '42501');
+    await assert.rejects(asUser(db, alice, () => db.query(`update public.${table} set user_id=$1 where user_id=$2`,[bob,alice])));
+  }
+  console.log("PASS: esquema inicial y Entrenamiento, RLS/anon, FK entre dueños, rollback, snapshots, inicio duplicado, borrador/completar, historial y progresión en PostgreSQL real embebido.");
+} finally { await db.close(); }

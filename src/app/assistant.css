@@ -1,0 +1,31 @@
+/* Fase 4A — original Día a Día light green visual system. */
+.assistant-chat{display:flex;flex-direction:column;min-height:min(68vh,760px);border:1px solid #dce7df;border-radius:16px;background:#fff;overflow:hidden}
+.assistant-conversation{flex:1;min-height:310px;display:flex;flex-direction:column;gap:18px;padding:clamp(18px,3vw,30px);overflow-wrap:anywhere}
+.assistant-welcome{max-width:690px;margin:auto;text-align:center;padding:35px 10px}
+.assistant-mark{display:inline-grid;place-items:center;background:#e8f3eb;color:#16734a;width:62px;height:62px;border-radius:20px;font-size:38px;margin-bottom:17px}
+.assistant-welcome h2{font-size:clamp(22px,2.5vw,30px);color:#1b3627;letter-spacing:-.6px;margin:0 0 12px}
+.assistant-welcome p{color:#5a7160;max-width:530px;margin:0 auto 23px;font-size:14px;line-height:1.65}
+.assistant-suggestions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.assistant-suggestions button{border:1px solid #c9dfcf;border-radius:10px;padding:11px 14px;background:#f4faf6;color:#1c6340;font-size:13px;text-align:left;cursor:pointer;min-height:44px}
+.assistant-suggestions button:hover:not(:disabled){border-color:#73aa83;background:#e8f4eb}
+.assistant-suggestions button:disabled{cursor:not-allowed;opacity:.6}
+.assistant-message{max-width:min(84%,720px);border:1px solid #dde8df;border-radius:15px;padding:16px 18px;background:#f8fbf8;align-self:flex-start}
+.assistant-message.is-user{align-self:flex-end;color:#fff;background:#16734a;border-color:#16734a}
+.assistant-role{font-size:11px;display:block;opacity:.8;font-weight:750;margin-bottom:6px}
+.assistant-message p{margin:0;white-space:pre-wrap;line-height:1.65;font-size:14px}
+.assistant-thinking{display:flex;align-items:center;gap:10px;color:#55725f;font-size:13px}
+.assistant-spinner{width:15px;height:15px;border:2px solid #c4d9ca;border-top-color:#16734a;border-radius:50%;animation:assistant-spin 800ms linear infinite}
+@keyframes assistant-spin{to{transform:rotate(360deg)}}
+.assistant-bottom{border-top:1px solid #e1e9e3;background:#f9fcfa;padding:16px clamp(16px,3vw,28px)}
+.assistant-bottom>.form-error{margin:0 0 13px;color:#9e342a;font-size:13px}
+.assistant-unavailable{padding:13px 15px;margin:0 0 13px;border:1px solid #e9d9b0;border-radius:10px;background:#fff9e9;color:#765721;font-size:13px}
+.assistant-compose{display:flex;align-items:flex-end;gap:10px;border:1px solid #b9d0c0;border-radius:12px;background:#fff;padding:9px}
+.assistant-compose:focus-within{outline:2px solid #16734a;outline-offset:2px}
+.assistant-compose textarea{flex:1;min-width:0;resize:vertical;max-height:220px;border:0;outline:none;box-shadow:none;min-height:55px;padding:9px;color:#1b3425;background:#fff;font:inherit;line-height:1.5}
+.assistant-compose textarea:focus-visible{outline:none}
+.assistant-send{min-height:44px;min-width:78px;border-radius:9px;padding:10px 15px;background:#16734a;border:0;color:#fff;font-weight:750;cursor:pointer}
+.assistant-send:hover:not(:disabled){background:#115a39}
+.assistant-send:disabled{opacity:.5;cursor:not-allowed}
+.assistant-disclaimer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:#637a69}
+@media(max-width:600px){.assistant-chat{min-height:calc(100dvh - 305px);border-radius:12px}.assistant-conversation{padding:15px;min-height:290px}.assistant-welcome{padding:25px 0}.assistant-message{max-width:94%;padding:12px}.assistant-disclaimer{font-size:10px}.assistant-bottom{padding:12px}.assistant-suggestions{flex-direction:column}}
+@media(prefers-reduced-motion:reduce){.assistant-spinner{animation:none}.assistant-suggestions button{transition:none}}

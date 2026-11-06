@@ -449,3 +449,12 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 
 ### Commit(s)
 - Pendiente.
+
+
+## 2026-11-06 — Rediseño claro, PR #3 (pendiente de validación)
+
+- Cambios aislados en rama `design/premium-ui-v2`; sin integrar ni publicar.
+- `src/app/design-v2.css`: diseño blanco/verde sin degradados; navegación, botones y formularios de mayor contraste.
+- `src/app/page.tsx`: hero editorial + panel de actividad con información real y enlaces a módulos.
+- `src/app/layout.tsx`: carga del CSS adicional; sin modificar reglas de negocio.
+- Pendiente CI y pruebas visuales autenticadas a 360/390/768/800/930/1280 px; comprobar también 900/1100 px.

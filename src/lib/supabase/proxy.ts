@@ -25,7 +25,9 @@ export async function updateSession(request: NextRequest) {
   // Verifica el token y renueva las cookies si corresponde.
   const { data, error } = await supabase.auth.getClaims();
   response.headers.set("Cache-Control", "private, no-store");
-  if (request.nextUrl.pathname !== "/login" && (error || !data?.claims)) {
+  const publicPath = ["/login", "/signup", "/forgot-password", "/reset-password"].includes(request.nextUrl.pathname)
+    || request.nextUrl.pathname.startsWith("/auth/");
+  if (!publicPath && (error || !data?.claims)) {
     const destination = request.nextUrl.clone();
     destination.pathname = "/login";
     destination.search = "?reason=session";

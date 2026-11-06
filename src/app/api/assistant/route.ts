@@ -25,7 +25,24 @@ export async function POST(request: NextRequest) {
 
   let question: string;
   try {
-    const value: unknown = await request.json();
+    const reader = request.body?.getReader();
+    if (!reader) return send({ error: "Solicitud vacía." }, 400);
+    const chunks: Uint8Array[] = [];
+    let size = 0;
+    while (true) {
+      const chunk = await reader.read();
+      if (chunk.done) break;
+      size += chunk.value.byteLength;
+      if (size > 4000) {
+        void reader.cancel();
+        return send({ error: "Solicitud demasiado extensa." }, 413);
+      }
+      chunks.push(chunk.value);
+    }
+    const bytes = new Uint8Array(size);
+    let offset = 0;
+    for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+    const value: unknown = JSON.parse(new TextDecoder().decode(bytes));
     if (!value || typeof value !== "object" || Array.isArray(value)) return send({ error: "Solicitud inválida." }, 400);
     const body = value as Record<string, unknown>;
     if (Object.keys(body).length !== 1 || typeof body.message !== "string") return send({ error: "Se requiere un mensaje de texto." }, 400);

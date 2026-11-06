@@ -17,11 +17,11 @@ export async function POST(request: NextRequest) {
   const length = Number(request.headers.get("content-length") || "0");
   if (length > 4000) return send({ error: "Solicitud demasiado extensa." }, 413);
 
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) return send({ error: "El asistente aún no está configurado. Falta GEMINI_API_KEY en Vercel." }, 503);
   const client = await createClient();
   const { data: auth, error: authError } = await client.auth.getUser();
   if (authError || !auth.user) return send({ error: "Iniciá sesión para utilizar el asistente." }, 401);
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) return send({ error: "El asistente aún no está configurado. Falta GEMINI_API_KEY en Vercel." }, 503);
 
   let question: string;
   try {

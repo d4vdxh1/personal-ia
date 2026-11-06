@@ -180,7 +180,7 @@ La migración incremental `supabase/migrations/20261106141453_study.sql` ya fue 
 
 ## Fase 4A — Asistente de texto con Gemini
 
-**Estado:** implementación en el [PR #5](https://github.com/d4vdxh1/personal-ia/pull/5), en revisión; no se considera activada hasta completar pruebas, migración y clave privada.
+**Estado:** implementada y fusionada en `main` mediante [PR #5](https://github.com/d4vdxh1/personal-ia/pull/5), con CI y migración Supabase aprobadas. Para consultas reales aún falta configurar una clave privada de Gemini en Vercel y verificar la respuesta del proveedor.
 
 El módulo `/assistant` permite consultar desde una interfaz accesible un resumen del día, hábitos, objetivos, entrenamiento y entregas académicas. Las herramientas son únicamente de lectura, autorizadas para el usuario autenticado, y no envían el contenido del diario ni los registros de molestias. No existen escrituras por IA, agenda automática ni recordatorios activos.
 

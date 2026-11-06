@@ -535,3 +535,12 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - Cinco herramientas autorizadas de lectura desde datos existentes: hoy, hábitos, entrenamiento, estudio y objetivos. Sin modificaciones ni acceso a notas íntimas o molestias.
 - Migración aplicada `20261106152923_ai_usage.sql`: cuota atómica de 20 solicitudes/día y cinco segundos de enfriamiento por usuario. Test SQL y navegador añadidos.
 - Pendiente: aprobar CI, aplicar/verificar migración, fusionar PR, desplegar en Vercel, configurar clave `GEMINI_API_KEY` por el usuario y probar respuestas reales; no confundir implementación con activación del proveedor.
+
+
+## 2026-11-06 — Integración Fase 4A
+
+- PR #5 fusionado a main, commit `79a27ac`; GitHub Actions #42243871582 aprobado con SQL, TypeScript, compilación y pruebas Playwright.
+- Supabase: migración `20261106152923_ai_usage` aplicada y verificada (RLS activo, tabla sin SELECT público ni autenticado, RPC solo autenticados). No volver a aplicarla.
+- Integración Gemini implementada exclusivamente en servidor, pero **sin API key configurada ni prueba real al proveedor**. La interfaz queda informativa hasta activación privada en Vercel.
+- Pendiente de la persona usuaria: agregar `GEMINI_API_KEY` directamente a Vercel y redesplegar, sin compartir la clave. Revisar cuotas y condiciones del proyecto Google.
+- Fase 4B no iniciada; no se han agregado herramientas con escrituras.

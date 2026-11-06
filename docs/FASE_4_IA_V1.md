@@ -1,6 +1,6 @@
 # Fase 4 — Asistente IA de texto V1 (Gemini)
 
-**Estado:** Fase 4A implementada en rama `feat/assistant-phase4a` y pendiente de revisión/despliegue y configuración de API key (2026-11-06). Las fases 0–3 proveen datos y operaciones manuales reales. No hay credenciales, conversación ni modelo conectado en la aplicación actual.
+**Estado:** Fase 4A implementada y fusionada en `main` mediante PR #5; CI y migración confirmadas; pendiente de configuración de API key y validación real del proveedor (2026-11-06). Las fases 0–3 proveen datos y operaciones manuales reales. No hay credenciales, conversación ni modelo conectado en la aplicación actual.
 
 ## Objetivo
 
@@ -64,4 +64,4 @@ Los datos enviados a Gemini se limitan a la pregunta y a respuestas estructurada
 
 Una nueva consulta no hereda el contexto de preguntas anteriores (el transcript visible vive únicamente en la sesión del navegador). La fase no crea tareas generales, recordatorios, sesiones nuevas ni modificaciones; Fase 4B sigue pendiente.
 
-**Estado de publicación:** no indicar que está activado hasta que el CI, la migración y la configuración de `GEMINI_API_KEY` estén verificados.
+**Estado:** CI y migración aprobados; PR #5 fusionado como `79a27ac`. La aplicación puede mostrar la página, pero no se declara Gemini activado hasta configurar `GEMINI_API_KEY` y probar una respuesta real.

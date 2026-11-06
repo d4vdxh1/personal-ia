@@ -4,7 +4,7 @@
 
 Aplicación personal para organizar rutina, hábitos, estudio, entrenamiento y objetivos. El núcleo funcionará manualmente antes de integrar IA.
 
-Estado actual (2026-11-06): fases 0–3 implementadas y publicadas; Entrenamiento y Estudio aún requieren aceptación de uso con una cuenta real. La siguiente fase prevista es IA de texto V1. Ver [PROJECT_STATUS.md](PROJECT_STATUS.md).
+Estado actual (2026-11-06): **fases 0–3 implementadas y publicadas; Fase 3 aceptada por confirmación del usuario**. Siguiente fase: **IA de texto V1 con Gemini** (pendiente de implementar). La aceptación no equivale a una prueba independiente con dos cuentas reales. Ver [PROJECT_STATUS.md](PROJECT_STATUS.md).
 
 Entrenamiento agrega ejercicios propios, rutinas ordenadas, programación por fecha, sesiones con borrador y series, historial/evolución por ejercicio, medidas corporales y molestias. Abrir `/training` desde Mi Día o el menú lateral. Ver [alcance y datos](docs/ENTRENAMIENTO.md).
 
@@ -12,7 +12,7 @@ Entrenamiento agrega ejercicios propios, rutinas ordenadas, programación por fe
 
 ### Mi Día y cierre de fase 1
 
-Mi Día muestra únicamente registros propios. Diario: últimas tres entradas de la fecha local, con conteo total. Objetivos: hasta tres activos por fecha límite, incluidos vencidos, con avance real. Los cambios de los módulos revalidan el inicio. Se retiran horarios inventados y maquetas: vencimientos reemplazan la agenda de ejemplo; calendario de eventos independiente, entrenamiento y estudio requieren alcance/esquema posterior. No se agregan migraciones.
+Mi Día muestra únicamente registros propios. Diario: últimas tres entradas de la fecha local, con conteo total. Objetivos: hasta tres activos por fecha límite, incluidos vencidos, con avance real. Los cambios de los módulos revalidan el inicio. Se retiran horarios inventados y maquetas: vencimientos reemplazan la agenda de ejemplo; el calendario de eventos independiente sigue pendiente; Entrenamiento y Estudio ya están integrados con sus propias migraciones posteriores. Esta sección conserva el contexto del cierre de la Fase 1.
 
 Se retiraron `/api/health/supabase`, su excepción del proxy, la demo y sus pruebas obsoletas. `npm run check:supabase` sigue disponible como diagnóstico local. Ver [cierre de fase 1](docs/CIERRE_FASE_1.md).
 
@@ -28,12 +28,15 @@ Navegador reproducible con Playwright externo y Edge: `node scripts/test-phase1-
 | `/check-in` | Guardar y actualizar el check-in del día. |
 | `/journal` | Crear, consultar y editar entradas del diario; historial de 10 entradas por página. |
 | `/goals` | Crear y editar objetivos semanales/mensuales, registrar avance y filtrar por estado; 10 objetivos por página. |
+| `/training` | Ejercicios, rutinas, programación, sesiones, historial y medidas. |
+| `/study` | Resumen académico, materias, tareas, exámenes y sesiones de estudio. |
+| `/menu` | Directorio de módulos y subapartados en dispositivos móviles. |
 
 Todas las pantallas internas, incluido Mi Día, comparten el menú lateral fijo en escritorio y la barra inferior fija en celular. Las reglas de interfaz están en `AGENTS.md`.
 
 ### Diario personal
 
-Abrir **Escribir una nota** desde Mi Día, o la pestaña **Diario** de Seguimiento. Elegir hoy o una fecha anterior y completar un hecho relevante (hasta 2.000 caracteres), una nota (hasta 10.000), o ambos. Aprendizajes, momentos positivos y cosas a mejorar se pueden escribir en las notas.
+Abrir **Mi diario** desde el menú lateral, o el directorio **Más** en celular. Elegir hoy o una fecha anterior y completar un hecho relevante (hasta 2.000 caracteres), una nota (hasta 10.000), o ambos. Aprendizajes, momentos positivos y cosas a mejorar se pueden escribir en las notas.
 
 Se permiten varias entradas por día. Después de guardar, **Escribir otra entrada** abre un formulario nuevo. En **Tus entradas**, desplegar una entrada para leerla y usar **Editar entrada** para corregirla. El historial muestra las más recientes primero, con navegación entre páginas. Las fechas usan `America/Argentina/Buenos_Aires`; no se admiten fechas futuras. No hace falta repetir la migración existente.
 
@@ -43,7 +46,7 @@ Verificación local del diario: lint, TypeScript, build y pruebas de acciones co
 
 ### Objetivos y progreso
 
-Abrir **Progreso** desde el menú o **Objetivos** desde las pestañas compartidas. Completar título (hasta 200 caracteres), tipo semanal/mensual, fecha límite, avance entero de 0 a 100 y estado. Se admiten fechas anteriores para conservar y actualizar objetivos históricos; los activos con fecha anterior a hoy muestran el aviso de vencimiento.
+Abrir **Objetivos** desde el menú principal. Completar título (hasta 200 caracteres), tipo semanal/mensual, fecha límite, avance entero de 0 a 100 y estado. Se admiten fechas anteriores para conservar y actualizar objetivos históricos; los activos con fecha anterior a hoy muestran el aviso de vencimiento.
 
 Elegir **Completado** fija el avance en 100%; bajarlo vuelve el estado a **Activo**. **Cancelado** conserva el objetivo y su avance. Usar **Editar objetivo** para cambiar cualquier campo. Los filtros Todos, Activos, Completados y Cancelados y la paginación permiten consultar el historial; no se eliminan registros. Vincular objetivos con hábitos/actividades queda para una ampliación posterior del esquema.
 
@@ -150,7 +153,7 @@ El archivo local `promt_supabe_connect.md` se excluye de Git porque contiene los
 Se usan versiones fijadas y `npm ci`. Next.js, @next/env y eslint-config-next se actualizaron a 16.4.5 por alertas de seguridad. Desarrollo y compilación usan Webpack, probado en este entorno Windows.
 
 - `npm test`: suites de check-in, diario, objetivos, Mi Día y validaciones de Entrenamiento.
-- `npm run test:db`: PostgreSQL desechable embebido, esquema inicial y entrenamiento con RLS, FK por dueño, transacciones, snapshots e inicio idempotente. No conecta a Supabase.
+- `npm run test:db`: PostgreSQL desechable embebido, esquema inicial, Entrenamiento y Estudio con RLS, FK por dueño, transacciones, snapshots e inicio idempotente. No conecta a Supabase.
 - `npx playwright install chromium`, luego `npm run test:browser`: compila una copia aislada sin `.env.local`, usa Auth simulado y PostgreSQL embebido; prueba persistencia, errores y 360/390/768/800/930/1280 px. Capturas y logs en `test-results/` (ignorado).
 - `npm run lint`, `npm run build`, `npm run typecheck`: controles estáticos y compilación. Build debe preceder a typecheck en una copia nueva.
 
@@ -160,6 +163,13 @@ Migración incremental: `supabase/migrations/20261106031833_training.sql`, aplic
 
 La auditoría de dependencias tras actualizar y aplicar correcciones compatibles no reportó críticas/altas; quedaron ocho moderadas de desarrollo relacionadas con minimatch/ESLint. No se aplicó downgrade forzado.
 
+
+## Estado de entrega y siguiente fase
+
+La versión de las fases 0–3 fue confirmada como funcional por el usuario el 2026-11-06. **La Fase 4 no está desarrollada todavía.** El próximo incremento será un asistente de texto que pueda consultar datos reales, pero sin modificar registros hasta implementar permisos, validación y auditoría de herramientas. No existe todavía un módulo de tareas generales ni de recordatorios ejecutables; no se deben presentar como funciones activas.
+
+- [Fase 3 — alcance y cierre](docs/FASE_3_ESTUDIO.md)
+- [Fase 4 — plan de implementación IA V1](docs/FASE_4_IA_V1.md)
 
 ## Fase 3 — Universidad y Estudio
 

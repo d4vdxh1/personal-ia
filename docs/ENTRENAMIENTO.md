@@ -30,6 +30,6 @@ Aplicar únicamente la migración incremental, después de probarla en una base 
 
 Entrega del 2026-11-06: PR #2 integrado, CI completo y Vercel aprobados. Migración aplicada: `20261106031833_training.sql` (versión asignada por Supabase MCP, alineada con el archivo local generado originalmente por CLI). El esquema inicial aplicado manualmente se registró como baseline en el historial; su SQL no se repitió.
 
-Catálogo remoto confirmado: ocho tablas nuevas, 32 políticas y ningún permiso CRUD anon. Prueba remota con dos identidades PostgreSQL temporales y rollback aprobada. Navegador local y CI Linux: recorrido completo y trece vistas a seis anchos aprobados. Esto no representa dos logins/JWT reales de producción; aceptación con cuenta real pendiente.
+Catálogo remoto confirmado: ocho tablas nuevas, 32 políticas y ningún permiso CRUD anon. Prueba remota con dos identidades PostgreSQL temporales y rollback aprobada. Navegador local y CI Linux: recorrido completo y trece vistas a seis anchos aprobados. Esto no representa dos logins/JWT reales de producción; el usuario confirmó el funcionamiento general de la aplicación el 2026-11-06, pero sigue pendiente una comprobación independiente con dos identidades reales.
 
 Límites visibles de esta versión: 200 ejercicios, 100 rutinas y 60 próximas programaciones por carga; historial de sesiones/medidas/molestias paginado de diez en diez. Programación manual de una rutina por fecha; sin recurrencia automática ni horarios prescritos.

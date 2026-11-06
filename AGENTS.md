@@ -21,7 +21,16 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Navegación modular (rediseño 2026-11-06)
 
-- Barra lateral de escritorio: Mi día, Hábitos, Check-in diario, Mi diario, Objetivos, Entrenamiento (Mi semana, Ejercicios, Rutinas, Historial, Medidas y molestias) y Mi perfil. Los módulos deben conservar accesos directos; no volver a agruparlos bajo "Seguimiento".
-- Barra inferior móvil: Hoy, Hábitos, Entrenar, Objetivos y Más. "Más" abre `/menu` con accesos a los siete módulos y cinco vistas de Entrenamiento; los formularios y la navegación deben quedar accesibles sobre la barra fija.
+- Barra lateral de escritorio: Mi día, Hábitos, Check-in diario, Mi diario, Objetivos, Entrenamiento (Mi semana, Ejercicios, Rutinas, Historial, Medidas y molestias), Estudio (Resumen, Materias, Tareas, Exámenes, Sesiones) y Mi perfil. Los módulos deben conservar accesos directos; no volver a agruparlos bajo "Seguimiento".
+- Barra inferior móvil: Hoy, Hábitos, Entrenar, Objetivos y Más. "Más" abre `/menu` con accesos a los módulos de seguimiento, Estudio y las vistas de Entrenamiento; los formularios y la navegación deben quedar accesibles sobre la barra fija.
 - Componentes de navegación: `src/components/app-navigation.tsx` y `src/components/tracking-shell.tsx`. Diseño: `src/app/design-v2.css` y `src/app/navigation-v2.css`.
 - Mantener estilo claro, verde original `#16734a`, contraste suficiente; sin fondos oscuros, degradados o violetas.
+
+
+## Continuidad: Fase 4 — IA de texto (aún pendiente)
+
+- Fases 0–3 publicadas; el usuario confirmó funcionamiento general el 2026-11-06. Conservar la diferencia entre aceptación del usuario y pruebas independientes de dos cuentas.
+- Primero 4A de solo lectura: herramienta de consulta sobre registros del usuario autenticado, `AIProvider` y Gemini solo en servidor; no exponer tokens ni claves, no crear memoria paralela a la BD.
+- Implementar restricciones de cuota/coste, límites de tokens, control de errores, rate limiting, validación de argumentos y pruebas de autorización; registrar mínimo de datos sensibles.
+- Una tool de escritura exige confirmación contextual, verificación de propietario, acción transaccional cuando proceda y auditoría. No anunciar `create_task` general ni `create_reminder` como disponibles: no existen actualmente su backend y scheduler.
+- Documentar avances en `PROJECT_STATUS.md`, `DEVLOG.md`, `docs/PLAN_MAESTRO.md` y `README.md` sin reescribir entradas históricas.

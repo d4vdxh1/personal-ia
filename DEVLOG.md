@@ -4,6 +4,17 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 
 ---
 
+## 2026-11-06 — Aceptación funcional y actualización del roadmap
+
+- El usuario confirmó «está todo ok» después de la integración de PR #4, la migración de Estudio y el despliegue exitoso de Vercel. Se registra **cierre funcional de Fase 3 por confirmación**, no un nuevo test automatizado ni una auditoría con dos JWT reales.
+- Fases 0–3 publicadas. Se revisaron y sincronizaron `PROJECT_STATUS.md`, `README.md`, `docs/PLAN_MAESTRO.md`, `AGENTS.md` y las guías de Entrenamiento y Estudio.
+- Se distingue el MVP académico ya implementado (tareas por materia) del gestor general de tareas y los recordatorios programados, todavía inexistentes.
+- Se propone Fase 4A de IA Gemini de solo lectura, seguida de 4B con herramientas de escritura validadas y auditadas; los recordatorios reales se reservan para Fase 5.
+- Pendientes no bloqueantes: medir latencia real, prueba independiente entre dos cuentas, revisar alertas Supabase sobre `public.rls_auto_enable()` y protección de contraseñas filtradas, activar Web Analytics y observabilidad en Fase 9.
+- No se modificó código funcional, esquema, RLS ni claves durante esta actualización documental.
+
+---
+
 ## 2026-11-06 — Integración y comprobación de producción
 
 - CI completo en GitHub aprobado (42156866761), incluido navegador Linux y todos los controles estáticos/SQL. PR #2 integrado en main como c6d6a7a; PR #1 cerrado como sustituido. Copia local sincronizada por fast-forward.

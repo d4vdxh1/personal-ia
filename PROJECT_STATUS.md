@@ -2,8 +2,8 @@
 
 **Última actualización:** 2026-11-06
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
-**Estado general:** Fases 0 y 1 cerradas. Paso 8 de fase 1 cerrado por confirmación del usuario el 2026-10-11: «funciona todo».
-**Fase actual:** Fase 3 — Universidad y Estudio implementada y publicada el 2026-11-06. Pendiente aceptación funcional con una cuenta real. Próxima fase: IA de texto V1 (Gemini).
+**Estado general:** Fases 0 a 3 implementadas y publicadas. El usuario confirmó el 2026-11-06 que la versión actual funciona correctamente; esta aceptación de uso no sustituye una auditoría independiente con dos cuentas reales.
+**Fase actual:** Fase 3 cerrada funcionalmente por confirmación del usuario el 2026-11-06. **Siguiente: Fase 4 — Asistente IA de texto V1 (Gemini), aún no iniciada.**
 
 ## Entrega y continuidad del 2026-11-06
 
@@ -11,7 +11,7 @@
 - CI completo aprobado en GitHub, incluido Chromium en Linux: https://github.com/d4vdxh1/personal-ia/actions/runs/42156866761. Vercel success confirmado para c6d6a7a. Producción: https://personal-ia-two.vercel.app/training.
 - HTTP actual sin sesión: login 200; inicio y rutas nuevas de Entrenamiento/sesión/evolución redirigen 307 al login con private, no-store. No equivale a una nueva prueba autenticada de producción.
 - Dependencias recuperadas, Next actualizado a 16.4.5. Lint, build, tipos, suites, SQL y navegador aprobados; auditoría de producción sin vulnerabilidades.
-- Supabase: catorce tablas con RLS (seis iniciales y ocho nuevas). Historial de migraciones alineado con los archivos: baseline initial_schema registrado como ya aplicado, sin volver a ejecutar SQL; training usa la versión remota 20261106031833. No repetir migraciones.
+- Supabase: 18 tablas con RLS (6 iniciales, 8 de Entrenamiento y 4 de Estudio). Historial de migraciones alineado: `202610090001_initial_schema`, `20261106031833_training` y `20261106141453_study`. No repetir migraciones.
 
 ## Objetivo y stack
 
@@ -29,11 +29,12 @@ Next.js 16.4.5 + React + TypeScript + Tailwind; Supabase (PostgreSQL/Auth/RLS); 
 | Diario personal | Completado y confirmado por el usuario |
 | Objetivos y progreso | Completados y confirmados por el usuario |
 | Mi Día con datos reales | Completado y confirmado por el usuario |
-| Entrenamiento | Implementado, probado e integrado por PR #2; CI y Vercel aprobados. Ejercicios, rutinas, programación, sesiones, historial, evolución, medidas y molestias. |
-| Estudio | Fase 3 implementada y publicada (PR #4): materias, tareas, exámenes, sesiones y resumen en Mi Día. Pendiente aceptación con cuenta real. |
-| IA, recordatorios, estadísticas y voz | Fases posteriores |
+| Entrenamiento | Publicado y probado (PR #2); incluye ejercicios, rutinas, programación, sesiones, historial, evolución, medidas y molestias. El usuario confirmó el funcionamiento general de la aplicación; falta la comprobación independiente con dos logins reales. |
+| Estudio | **Fase 3 cerrada por confirmación del usuario (2026-11-06)**: materias, tareas, exámenes, sesiones y resumen en Mi Día. CI, RLS, migración y Vercel verificados. |
+| Asistente IA | **Fase 4 pendiente**: Gemini, consultas autorizadas, herramientas validadas y auditoría de acciones. |
+| Recordatorios, Calendar, estadísticas, voz y finanzas | Fases 5–8 pendientes. Analítica de Vercel y observabilidad: Fase 9. |
 
-Mi Día integra hábitos, check-in, notas de hoy, vencimientos de objetivos y entrenamiento de hoy. El calendario general independiente y las relaciones de objetivos con actividades requieren ampliaciones posteriores.
+Mi Día integra hábitos, check-in, notas de hoy, vencimientos de objetivos, entrenamiento y próximos compromisos académicos. El calendario general independiente y las relaciones de objetivos con actividades siguen pendientes.
 
 ## Cierre de fase 1 y verificación
 
@@ -70,7 +71,7 @@ Modelo y recorrido implementados en la rama codex/training-phase2. Migración in
 
 Lint, build Webpack con Next 16.4.5 y typecheck aprobados. Suites previas y validaciones nuevas aprobadas. Chromium sobre compilación de producción con SQL real embebido: recorrido completo, borrador/recarga, completar/historial/evolución, medidas/molestias, fallos de lectura/escritura y sesión vencida aprobados. Trece pantallas/vistas a 360/390/768/800/930/1280 px sin overflow, navegación fija y botones accesibles; capturas móvil/escritorio inspeccionadas. Auditoría de producción: cero vulnerabilidades.
 
-PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue aprobados. Se mantiene la distinción entre verificación SQL por roles y dos logins/JWT reales; no se dispone de credenciales de las cuentas del usuario. Próximo control funcional: usar Entrenamiento con la cuenta real. Estudio corresponde a fase 3 y requiere una nueva indicación.
+PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue aprobados. Se mantiene la distinción entre verificación SQL por roles y dos logins/JWT reales; no se dispone de credenciales de las cuentas del usuario. El usuario confirmó posteriormente que la aplicación publicada funciona; el control con dos JWT reales de cuentas diferentes continúa pendiente como prueba de seguridad independiente.
 
 ## Reglas y pendientes conocidos
 
@@ -105,7 +106,7 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - Diagnóstico por código: páginas dinámicas verifican usuario y perfil en cada visita; módulos esperan respuesta de Supabase. Entrenamiento cargaba siete tablas independientemente de la pestaña visible.
 - `loadTraining` ahora recibe la vista actual: semana (planes, programación, sesiones), ejercicios (catálogo), rutinas (catálogo, planes, ítems), historial (sesiones y series), salud (medidas y molestias). Se mantiene `user_id` y la autorización existentes.
 - `src/app/loading.tsx` introduce feedback visual inmediato de carga de rutas y `navigation-v2.css` define skeleton claro y responsive.
-- La latencia percibida y la reducción de llamadas no implican valores medidos de producción; pendiente CI, comprobación autenticada y medición de tiempos de red.
+- CI del rediseño aprobado y navegación aceptada visualmente por el usuario; la mejora de latencia aún no tiene benchmarks de producción comparables.
 
 
 ## Fase 3 — Universidad y Estudio (publicada)
@@ -115,7 +116,7 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - Cuatro entidades: `study_subjects`, `study_assignments`, `study_exams`, `study_sessions`; cada tabla con RLS por dueño, FK compuestas e índices.
 - Nuevas pantallas de Estudio: resumen, materias, tareas, exámenes y sesiones; enlaces laterales y desde el menú móvil; vencimientos de estudio en Mi Día.
 - Migración aplicada en Supabase como `20261106141453_study.sql` (cotejada con el historial remoto). Cuatro tablas con RLS y cuatro políticas por tabla verificadas, sin permisos SELECT de `anon`. CI final aprobado tras alinear el historial.
-- QA: suite de aislamiento SQL con dos identidades, CI y navegador con recorrido de formularios nuevos. Despliegue registrado como exitoso en Vercel; la aceptación mediante cuenta real y medición de latencia permanecen pendientes.
+- QA: suite de aislamiento SQL con dos identidades, CI y navegador con recorrido de formularios nuevos. Despliegue exitoso en Vercel y aceptación funcional del usuario confirmada el 2026-11-06. Siguen pendientes benchmarks de latencia y una auditoría independiente con dos JWT reales.
 
 
 ## Cierre técnico de Fase 3 — 2026-11-06
@@ -123,5 +124,15 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - GitHub PR #4: https://github.com/d4vdxh1/personal-ia/pull/4 (fusionado en `main`, commit `655cb6a`).
 - Supabase: migración `20261106141453_study` aplicada una vez, cuatro tablas de Estudio con 16 políticas de RLS; no repetir.
 - GitHub Actions #42233135767: lint, pruebas unitarias/SQL, build, TypeScript y Playwright aprobados.
-- Vercel informó `success` para el commit de integración. El acceso privado a `/study` aún requiere aceptación con la cuenta real, no demostrada por CI con Auth simulado.
-- Siguientes pendientes: revisar permisos de ejecución de `rls_auto_enable()`, protección de contraseñas filtradas y comenzar fase 4 tras aceptación.
+- Vercel informó `success` para el commit de integración. El usuario confirmó el funcionamiento de la versión publicada; las pruebas CI usan Auth simulado y no sustituyen dos logins independientes.
+- Siguientes pendientes: revisar permisos de ejecución de `rls_auto_enable()`, protección de contraseñas filtradas e iniciar fase 4 (IA de texto) con controles de coste y seguridad.
+
+
+## Cierre funcional confirmado — 2026-11-06
+
+- El usuario confirmó: «está todo ok» tras la publicación del rediseño y del módulo académico. Se considera **Fase 3 aceptada funcionalmente**; no se afirma haber realizado un nuevo login desde el agente ni pruebas independientes con dos JWT reales.
+- PR #2, #3 y #4 fusionados; commit principal de Fase 3 `655cb6a` y cierre documental `88c5075`. Vercel informó despliegue exitoso.
+- Próxima fase recomendada: **Fase 4A — asistente de texto de solo lectura**, con `AIProvider`, Gemini en servidor, control de límites y consultas reales de Mi Día, hábitos, Entrenamiento y Estudio; después Fase 4B con escrituras limitadas y auditadas.
+- **No implementado aún:** proveedor Gemini, chat y tool calling; tareas generales y recordatorios (el MVP académico tiene tareas por materia, que no son tareas generales), Calendar, scheduler, estadísticas inteligentes, voz y finanzas.
+- Riesgos pendientes: avisos de asesores Supabase sobre ejecución de `public.rls_auto_enable()` y contraseñas filtradas; verificar permisos antes de exponer nuevas capacidades de IA. Analítica/observabilidad y benchmarks de navegación pendientes.
+- Detalle de Fase 3: [docs/FASE_3_ESTUDIO.md](docs/FASE_3_ESTUDIO.md). Plan de Fase 4: [docs/FASE_4_IA_V1.md](docs/FASE_4_IA_V1.md).

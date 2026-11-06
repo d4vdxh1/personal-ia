@@ -4,8 +4,8 @@
 **Bienvenida del login:** “Cada día se vuelve más fácil. Lo difícil es hacerlo cada día.”
 **Identificador técnico:** `personal-ia`. Se conservan repositorio, carpeta, URL de Vercel y proyecto Supabase actuales.
 
-**Estado:** Plan vigente — v1.4, actualizado el 2026-11-06.
-**Avance:** Fases 0–3 implementadas; Fase 3 publicada el 2026-11-06 (PR #4, Supabase y Vercel). Pendiente aceptación de uso con cuenta real para Entrenamiento y Estudio. Siguiente fase: IA de texto V1. Ver PROJECT_STATUS, `docs/CIERRE_FASE_1.md` y `docs/ENTRENAMIENTO.md`.
+**Estado:** Plan vigente — v1.5, actualizado el 2026-11-06.
+**Avance:** Fases 0–3 publicadas; Fase 3 aceptada funcionalmente por confirmación del usuario el 2026-11-06. Sin prueba independiente de dos JWT reales. Siguiente fase: IA de texto V1 (Gemini), aún no implementada. Ver PROJECT_STATUS, `docs/CIERRE_FASE_1.md` y `docs/ENTRENAMIENTO.md`.
 **Objetivo:** construir una aplicación web/PWA personal, inteligente y progresiva para organizar rutina, entrenamiento, estudio, hábitos, sueño, objetivos, recordatorios y, más adelante, finanzas personales.
 
 ---
@@ -1076,7 +1076,7 @@ Todas las pantallas reutilizarán la navegación compartida. Verificar 360/390/7
 
 ## Fase 3 — Universidad
 
-**Estado:** implementada y publicada el 2026-11-06. Cuatro tablas con RLS, formularios de materias/tareas/exámenes/sesiones e integración con Mi Día; pruebas automatizadas aprobadas. Pendiente aceptación con cuenta real.
+**Estado:** implementada, publicada y **aceptada por confirmación del usuario el 2026-11-06**. Cuatro tablas con RLS, formularios de materias/tareas/exámenes/sesiones e integración con Mi Día; pruebas automatizadas y despliegue aprobados. La confirmación no equivale a una auditoría con dos cuentas reales.
 
 Implementar:
 
@@ -1093,7 +1093,15 @@ Implementar:
 
 ## Fase 4 — IA de texto V1
 
-Implementar Google Gemini API con function calling.
+**Estado:** próxima fase; aún sin código ni credenciales de Gemini configuradas. Implementar Google Gemini API mediante un adaptador `AIProvider`, exclusivamente desde el servidor, con límites de consumo, autenticación y respuestas fundamentadas en datos existentes.
+
+**Entrega 4A (primero):** conversación de texto de solo lectura y herramientas `get_today_plan`, `get_today_workout` y consultas de Estudio/Hábitos; validar autenticación, RLS, límites, errores y protección de datos.
+
+**Entrega 4B (después):** acciones con confirmación/validación/auditoría para dominios ya existentes (`mark_habit`, `log_daily_checkin`, `log_study_session`). Las escrituras de entrenamiento requieren el mismo modelo transaccional del módulo manual.
+
+**Dependencias futuras:** `create_task` general y `create_reminder`/`list_reminders` requieren módulos persistentes aún no implementados; no deben ofrecerse como tools funcionales hasta completar sus tablas, acciones y un scheduler fiable (Fase 5). Véase [FASE_4_IA_V1.md](FASE_4_IA_V1.md).
+
+Catálogo objetivo original de function calling:
 
 Skills iniciales:
 
@@ -1107,7 +1115,7 @@ Skills iniciales:
 8. `create_reminder`
 9. `list_reminders`
 
-**No agregar más tools hasta que estas sean confiables.**
+**No habilitar tools del catálogo que todavía carezcan de persistencia o ejecución fiable.** Primero aprobar el conjunto de solo lectura; incorporar escrituras con validación, confirmación y auditoría.
 
 Criterios:
 
@@ -1196,6 +1204,25 @@ Comenzar con carga manual/conversacional.
 - evaluaciones de tool calling;
 - recuperación ante fallos;
 - exportación completa de datos.
+
+---
+
+## Estado consolidado de fases (2026-11-06)
+
+| Fase | Estado | Próximo hito o evidencia |
+|---|---|---|
+| 0 · Preparación | Cerrada | Esquema y plataforma operativos |
+| 1 · Tracker personal | Cerrada | Usuario confirmó funcionamiento |
+| 2 · Entrenamiento | Publicada | Confirmación general del usuario; prueba independiente con dos cuentas aún pendiente |
+| 3 · Universidad y Estudio | **Cerrada** | Usuario confirmó funcionamiento; PR #4, CI, RLS y Vercel aprobados |
+| 4 · Asistente IA texto | **Siguiente** | 4A consultas seguras; 4B herramientas de escritura |
+| 5 · Recordatorios/Calendar | Pendiente | Tabla y ejecución programada, notificaciones, OAuth |
+| 6 · Analytics | Pendiente | Revisión semanal y gráficas con datos reales |
+| 7 · Voz | Pendiente | Transcripción y, después, tiempo real |
+| 8 · Finanzas | Pendiente | Registros manuales y controles adicionales |
+| 9 · Estabilidad | En curso, sin cierre | Métricas, backups, auditoría y control de costes |
+
+No se debe asumir que las fases anteriores contienen un calendario independiente, recordatorios automáticos o IA activa. Hay tareas **académicas** por materia, pero no un gestor de tareas **generales**. Las estadísticas detalladas por materia, sincronización Calendar y recomendaciones automatizadas no forman parte del MVP de Estudio cerrado.
 
 ---
 

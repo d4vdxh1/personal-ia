@@ -25,7 +25,7 @@ export default async function LoginPage({ searchParams }: {
       {reason === "session" && <p role="status">Tu sesión no está activa. Ingresá para continuar.</p>}
       {reason === "logout" && <p role="status">Cerraste tu sesión correctamente.</p>}
       {reason === "oauth-error" && <p role="alert" className="auth-feedback error">No se pudo completar el acceso con Google. Intentá de nuevo.</p>}
-      {reason === "confirmation-error" && <p role="alert" className="auth-feedback error">El enlace es inválido o ya venció. Solicitá uno nuevo.</p>
+      {reason === "confirmation-error" && <p role="alert" className="auth-feedback error">El enlace es inválido o ya venció. Solicitá uno nuevo.</p>}
       <GoogleSignInButton />
       <div className="auth-divider"><span>o ingresá con tu correo</span></div>
       <LoginForm />

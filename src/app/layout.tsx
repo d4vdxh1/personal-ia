@@ -3,6 +3,7 @@ import "./globals.css";
 import "./design-v2.css";
 import "./navigation-v2.css";
 import "./study.css";
+import "./assistant.css";
 
 export const metadata: Metadata = {
   title: "Día a Día",

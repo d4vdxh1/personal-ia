@@ -1093,7 +1093,7 @@ Implementar:
 
 ## Fase 4 — IA de texto V1
 
-**Estado:** próxima fase; aún sin código ni credenciales de Gemini configuradas. Implementar Google Gemini API mediante un adaptador `AIProvider`, exclusivamente desde el servidor, con límites de consumo, autenticación y respuestas fundamentadas en datos existentes.
+**Estado:** Fase 4A implementándose en la rama `feat/assistant-phase4a` (PR #5 en revisión), con chat, herramientas de solo lectura y control de uso; migración y configuración de Gemini pendientes. Fase 4B no iniciada. Implementar Google Gemini API mediante un adaptador `AIProvider`, exclusivamente desde el servidor, con límites de consumo, autenticación y respuestas fundamentadas en datos existentes.
 
 **Entrega 4A (primero):** conversación de texto de solo lectura y herramientas `get_today_plan`, `get_today_workout` y consultas de Estudio/Hábitos; validar autenticación, RLS, límites, errores y protección de datos.
 
@@ -1215,7 +1215,7 @@ Comenzar con carga manual/conversacional.
 | 1 · Tracker personal | Cerrada | Usuario confirmó funcionamiento |
 | 2 · Entrenamiento | Publicada | Confirmación general del usuario; prueba independiente con dos cuentas aún pendiente |
 | 3 · Universidad y Estudio | **Cerrada** | Usuario confirmó funcionamiento; PR #4, CI, RLS y Vercel aprobados |
-| 4 · Asistente IA texto | **Siguiente** | 4A consultas seguras; 4B herramientas de escritura |
+| 4 · Asistente IA texto | **En desarrollo (PR #5)** | 4A consultas seguras y cuota diaria; falta activación de API, 4B escrituras posteriores |
 | 5 · Recordatorios/Calendar | Pendiente | Tabla y ejecución programada, notificaciones, OAuth |
 | 6 · Analytics | Pendiente | Revisión semanal y gráficas con datos reales |
 | 7 · Voz | Pendiente | Transcripción y, después, tiempo real |

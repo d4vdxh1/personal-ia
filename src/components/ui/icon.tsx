@@ -12,7 +12,8 @@ export type IconName =
   | "heart"
   | "target"
   | "calendar"
-  | "dumbbell";
+  | "dumbbell"
+  | "sparkles";
 const paths: Record<IconName, string> = {
   sun: "M12 3v2m0 14v2M3 12h2m14 0h2M5.6 5.6 7 7m10 10 1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0",
   grid: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z",
@@ -28,6 +29,7 @@ const paths: Record<IconName, string> = {
   target: "M12 2v3m0 14v3M2 12h3m14 0h3M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z",
   calendar: "M4 5h16v16H4zM8 3v4m8-4v4M4 10h16",
   dumbbell: "M6 7v10m-3-7v4m6-5v6m6-6v6m3-8v10m3-7v4M9 12h6",
+  sparkles: "m12 2 1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2zm7 15 .8 2.2L22 20l-2.2.8L19 23l-.8-2.2L16 20l2.2-.8L19 17z",
 };
 export function Icon({ name }: { name: IconName }) {
   return (

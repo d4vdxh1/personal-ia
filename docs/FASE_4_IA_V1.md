@@ -1,6 +1,6 @@
 # Fase 4 — Asistente IA de texto V1 (Gemini)
 
-**Estado:** siguiente fase planificada, **sin implementar** (2026-11-06). Las fases 0–3 proveen datos y operaciones manuales reales. No hay credenciales, conversación ni modelo conectado en la aplicación actual.
+**Estado:** Fase 4A implementada en rama `feat/assistant-phase4a` y pendiente de revisión/despliegue y configuración de API key (2026-11-06). Las fases 0–3 proveen datos y operaciones manuales reales. No hay credenciales, conversación ni modelo conectado en la aplicación actual.
 
 ## Objetivo
 
@@ -39,3 +39,29 @@ El registro de sesiones de Entrenamiento puede necesitar una herramienta adicion
 ## Siguiente trabajo técnico
 
 Crear una rama nueva de Fase 4A, revisar las APIs de Gemini vigentes antes de elegir SDK y modelo, diseñar interfaz `AIProvider`, establecer límites/validaciones y publicar una primera conversación únicamente de consulta. Actualizar `PROJECT_STATUS.md` y `DEVLOG.md` al verificar cada hito.
+
+
+## Implementación de Fase 4A (2026-11-06)
+
+- `/assistant`: chat accesible con mensajes limitados a 500 caracteres, historial solo en memoria de la página (no guardado en BD) y mensajes que indican configuración faltante.
+- `/api/assistant`: solicitud POST autenticada por Supabase Auth, validada y con origen protegido. No permite acciones de escritura.
+- `src/lib/assistant/provider.ts`: `AIProvider` y `GeminiProvider` vía REST, modelo `gemini-3.5-flash-lite` (estable), clave exclusivamente del lado servidor; URLs fijas, tiempo máximo de espera, resultados de herramientas con IDs y limitación de tokens de salida.
+- `src/lib/assistant/tools.ts`: lista de cinco herramientas autorizadas de lectura, con consultas al usuario autenticado y límites en filas/campos; se evitan datos de diario, molestias y notas personales.
+- `supabase/migrations/20261106152923_ai_usage.sql`: contadores por usuario y fecha, hasta 20 solicitudes diarias y intervalo mínimo de cinco segundos, con función de reserva atómica autorizada, sin guardar contenidos de chat.
+- `scripts/test-ai-db.mjs`: verificación de contadores, privilegios y aislamiento en PostgreSQL desechable. Prueba de navegación con clave ausente para verificar que no se simulan respuestas.
+
+### Activación
+
+1. Obtener una API key personal en [Google AI Studio](https://aistudio.google.com/apikey).
+2. Agregar `GEMINI_API_KEY` como variable de entorno **solo del servidor** en Vercel, para el ambiente Production; no enviarla por chat, no incluirla en GitHub, no usar prefijo `NEXT_PUBLIC_`.
+3. Ejecutar un nuevo despliegue de Vercel para que se aplique la variable y verificar `/assistant` con la cuenta real.
+4. Comprobar respuestas sobre Mi Día, Hábitos, Estudio y Entrenamiento, errores del proveedor y límites de cuota.
+5. Si el proyecto está en un plan de pago en Google Cloud, establecer presupuesto/alertas desde el proveedor; el límite local de solicitudes **no representa un límite monetario**.
+
+### Privacidad y limitaciones
+
+Los datos enviados a Gemini se limitan a la pregunta y a respuestas estructuradas de herramientas; no se envían automáticamente las notas del diario, síntomas o detalles de salud. Los datos transmitidos a una API externa están sujetos a sus términos y políticas, diferentes según el plan gratuito o pago. No se guarda un historial de chat en nuestro servidor.
+
+Una nueva consulta no hereda el contexto de preguntas anteriores (el transcript visible vive únicamente en la sesión del navegador). La fase no crea tareas generales, recordatorios, sesiones nuevas ni modificaciones; Fase 4B sigue pendiente.
+
+**Estado de publicación:** no indicar que está activado hasta que el CI, la migración y la configuración de `GEMINI_API_KEY` estén verificados.

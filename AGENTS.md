@@ -34,3 +34,12 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Implementar restricciones de cuota/coste, límites de tokens, control de errores, rate limiting, validación de argumentos y pruebas de autorización; registrar mínimo de datos sensibles.
 - Una tool de escritura exige confirmación contextual, verificación de propietario, acción transaccional cuando proceda y auditoría. No anunciar `create_task` general ni `create_reminder` como disponibles: no existen actualmente su backend y scheduler.
 - Documentar avances en `PROJECT_STATUS.md`, `DEVLOG.md`, `docs/PLAN_MAESTRO.md` y `README.md` sin reescribir entradas históricas.
+
+
+## Fase 4A — seguridad y privacidad
+
+- Nunca pasar `GEMINI_API_KEY` al cliente, a `NEXT_PUBLIC_*`, al repositorio, a mensajes de error o a logs. No usar `service_role` para leer información del asistente.
+- La ruta `/api/assistant` debe comprobar la sesión, validar mensajes, el origen, ejecutar el límite de solicitudes antes de consultar Gemini y devolver respuesta sin caché.
+- Funciones de Gemini solo pueden acceder a las herramientas explícitas de lectura: nada de SQL libre, escritura, recordatorios ni acceso a datos de otros usuarios.
+- Conservar la pantalla de aceptación de transmisión a Gemini; no guardar automáticamente las conversaciones en BD o navegador. Evitar enviar notas íntimas, síntomas y contenidos médicos.
+- Mantener tests SQL de presupuestos y Playwright de navegación sin credenciales reales; integrar claves solo en entornos autorizados. Toda migración debe cotejarse con el historial de Supabase antes de fusionar.

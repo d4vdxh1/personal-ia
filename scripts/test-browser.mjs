@@ -116,6 +116,7 @@ try {
       const buttons=page.locator('form button[type=submit]:visible'); if(await buttons.count()){const button=buttons.last();await button.scrollIntoViewIfNeeded();const b=await button.boundingBox();assert.ok(b.y>=0 && b.y+b.height<=(width<=800?box.y:900)+2,`botón tapado ${width} ${path}`);}
     }
     await page.goto(base+'/');
+    await page.locator('h1').waitFor(); // loading.tsx can stream before the authenticated shell
     const mainNav=page.getByRole('navigation',{name:'Navegación principal',exact:true});
     if(width<=800){
       assert.equal(await mainNav.getByRole('link').count(),5,'cinco accesos principales móviles');

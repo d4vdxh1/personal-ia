@@ -89,3 +89,12 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - Paleta: fondo claro, menú blanco, verde original `#16734a` y colores sólidos; sin degradados ni violetas.
 - Panel de Mi Día con datos reales; sin cambios en Supabase, RLS, autenticación ni migraciones.
 - Estado: borrador. Pendientes CI y capturas autenticadas responsive antes de aprobar.
+
+
+## Navegación reorganizada — PR #3
+
+- Se eliminaron las pestañas transversales redundantes de Seguimiento y se incorporaron accesos independientes para Mi día, Hábitos, Check-in, Mi diario, Objetivos, Entrenamiento y Perfil.
+- Entrenamiento tiene cinco subapartados en el lateral de escritorio; en móvil conserva pestañas de sus vistas y acceso desde la pantalla "Más" (`/menu`).
+- Diseño coherente extendido a formularios, registros, objetivos, historial, perfil y tarjetas de Entrenamiento mediante `navigation-v2.css`.
+- Pruebas de navegación incorporadas a `scripts/test-browser.mjs` y adaptación del test antiguo de etiquetas de navegación.
+- Pendiente: comprobar CI y revisión visual autenticada antes de fusionar. Sin modificación de la persistencia ni de la producción.

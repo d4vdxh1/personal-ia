@@ -114,5 +114,5 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - Rama `feat/university-phase3`, PR #4 en borrador; **sin fusionar hasta concluir pruebas y despliegue de migración**.
 - Cuatro entidades: `study_subjects`, `study_assignments`, `study_exams`, `study_sessions`; cada tabla con RLS por dueño, FK compuestas e índices.
 - Nuevas pantallas de Estudio: resumen, materias, tareas, exámenes y sesiones; enlaces laterales y desde el menú móvil; vencimientos de estudio en Mi Día.
-- Migración versionada `20261106094500_study.sql`: todavía no aplicar sobre la base existente sin cotejar historial y pruebas.
+- Migración aplicada en Supabase como `20261106141453_study.sql` (cotejada con el historial remoto). Cuatro tablas con RLS y cuatro políticas por tabla verificadas, sin permisos SELECT de `anon`. CI previo de la fase aprobado; revisión final de CI pendiente por alineación del historial.
 - QA: suite de aislamiento SQL con dos identidades, CI y navegador con recorrido de formularios nuevos. No se presume aceptación del usuario ni despliegue de producción.

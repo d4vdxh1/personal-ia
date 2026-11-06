@@ -2,6 +2,7 @@ import Link from "next/link";
 import { TrackingShell } from "@/components/tracking-shell";
 import { TodayList } from "@/components/habits/today-list";
 import { Card } from "@/components/ui/card";
+import { Icon } from "@/components/ui/icon";
 import { getAccount } from "@/lib/auth/account";
 import { loadHabits } from "@/lib/habits/data";
 import { loadCheckin } from "@/lib/checkins/data";
@@ -65,6 +66,34 @@ export default async function Home() {
         <Link href="/goals">Objetivos</Link>
         <Link href="/training">Entrenamiento</Link>
       </nav>
+      <section className="day-hero" aria-label="Resumen de tu día">
+        <div className="hero-content">
+          <p className="hero-kicker"><Icon name="sun" /> TU DÍA, A TU MANERA</p>
+          <h2>Hoy también cuenta<span>.</span></h2>
+          <p className="hero-subtitle">Un lugar para ver cómo vas y elegir tu siguiente paso. Sin apuro, con intención.</p>
+          <div className="hero-metrics" role="list">
+            <div className="hero-metric" role="listitem">
+              <strong>{completedCount}/{todayHabits.length}</strong>
+              <span>hábitos realizados</span>
+            </div>
+            <div className="hero-metric" role="listitem">
+              <strong>{checkinData.error ? "—" : checkinData.checkin ? "Listo" : "Pendiente"}</strong>
+              <span>check-in diario</span>
+            </div>
+            <div className="hero-metric" role="listitem">
+              <strong>{trainingData.error ? "—" : trainingData.sessions.some(s => s.status === "completed") ? "Hecho" : trainingData.sessions.length || trainingData.schedule.length ? "Planificado" : "Libre"}</strong>
+              <span>entrenamiento</span>
+            </div>
+          </div>
+        </div>
+        <div className="hero-visual" aria-hidden="true">
+          <div className="hero-orbit">
+            <div className="hero-ring" style={{ background: `conic-gradient(#80ead2 0% ${progressPercent}%, #ffffff40 ${progressPercent}% 100%)` }}>
+              <div className="hero-ring-inner"><strong>{progressPercent}%</strong><small>hábitos de hoy</small></div>
+            </div>
+          </div>
+        </div>
+      </section>
       <div className="dashboard-grid">
         <Card title="Entrenamiento de hoy" eyebrow="A TU RITMO">
           {trainingData.error ? <p role="alert" className="form-error">No pudimos cargar tu entrenamiento.</p> : <>

@@ -489,3 +489,11 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - Navegación de escritorio y celular enlazada; diseño claro verde coherente con rediseño anterior.
 - Pruebas SQL en `scripts/test-study-db.mjs` y recorrido Playwright en `scripts/test-browser.mjs`.
 - Pendientes: verificar CI final, aplicar migración después de revisar historial, registrar resultado y validar Vercel autenticado.
+
+
+## 2026-11-06 — Migración de Estudio aplicada y verificada
+
+- Supabase MCP aplicó la migración incremental como `20261106141453_study` y se alineó el nombre del archivo SQL versionado.
+- Confirmadas las cuatro tablas `study_*`, todas con RLS activo, cuatro políticas por tabla, lectura denegada a `anon` y lectura permitida a `authenticated` condicionada por políticas.
+- La validación de seguridad detectó avisos previos sobre `public.rls_auto_enable()` (EXECUTE para roles de API) y protección de contraseñas filtradas desactivada; requieren una revisión separada.
+- La primera ronda completa de CI aprobó, incluido Playwright. Volver a pasar CI al modificar nombres y documentación antes de fusionar PR #4.

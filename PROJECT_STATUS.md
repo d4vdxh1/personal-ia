@@ -6,11 +6,12 @@
 
 > Este archivo representa el **estado actual** del proyecto. Mantenerlo corto y actualizado. Reemplazar información obsoleta en lugar de acumular historia; la historia va en `DEVLOG.md`.
 
-**Última actualización:** 2026-10-10
+**Última actualización:** 2026-11-05
+**Comprobación de GitHub:** el commit `ae652929df37c921998aa4c560276d302166754c` ya está publicado en `main`. La subida dejó de estar pendiente; esta comprobación no acredita despliegue en Vercel ni validaciones con cuentas reales.
 **Corrección visual local:** perfil, hábitos, check-in, diario y objetivos comparten menú, encabezado y barra de sesión alineada; menú lateral fijo en escritorio e inferior fijo en celular. Perfil accesible desde «Más» y objetivos desde «Progreso». Avatar de Mi Día con inicial centrada.
 **Verificación del perfil con menú:** lint y build correctos; Edge a 360/390/768/800/930/1280 px con servicios simulados, sin overflow ni controles tapados. Navegación, edición y recarga del nombre correctas; capturas móvil/escritorio revisadas. No se hicieron escrituras en Supabase real.
 **Estado general:** Fase 0 cerrada; pasos 1 a 6 de fase 1 confirmados por el usuario. Mi Día integrado (paso 7); paso 8 en verificación local, pendiente cierre remoto. Ver `docs/CIERRE_FASE_1.md`.
-**Fase del roadmap:** Paso 7 implementado; verificación local del paso 8 correcta. Pendiente confirmar Mi Día con cuenta real, push, Vercel y aislamiento con dos cuentas.
+**Fase del roadmap:** Paso 7 implementado; verificación local del paso 8 correcta. Pendiente confirmar Mi Día con cuenta real, Vercel y aislamiento con dos cuentas. El commit ya está en GitHub.
 **Verificación final local:** cuatro suites de acciones/datos, lint, build, typecheck y diff correctos. Edge con servicios simulados: inicio vacío/real/error, persistencia de hábito, sesión vencida, no-store y diagnóstico 404 correctos. Seis pantallas a 360/390/768/800/930/1280 px sin overflow ni botones tapados; capturas inspeccionadas. Evidencia completa en `docs/CIERRE_FASE_1.md`.
 **Uso previsto:** Personal  
 
@@ -83,7 +84,7 @@ Fase 1: pasos 1 a 6 confirmados por el usuario. Estado de cierre:
 5. Diario personal (`journal_entries`): funcionamiento confirmado por el usuario.
 6. Objetivos y progreso confirmado por el usuario; aislamiento remoto pendiente.
 7. Mi Día implementado con datos reales. Agenda ficticia reemplazada por vencimientos reales; calendario de eventos independiente, entrenamiento y estudio quedan para fases posteriores.
-8. Verificación local y diagnóstico temporal retirado; pendiente push, Vercel y aislamiento real.
+8. Verificación local y diagnóstico temporal retirado; commit publicado en GitHub; pendientes Vercel y aislamiento real.
 
 IA en una fase posterior.
 
@@ -175,7 +176,7 @@ Integración: `src/lib/supabase/{config,client,server,proxy}.ts` y `src/proxy.ts
 
 ## 12. Próxima tarea concreta
 
-Pendiente: confirmar Mi Día con cuenta real y completar cierre remoto del paso 8 tras push: Vercel, sesiones/persistencia, aislamiento con dos cuentas y diagnóstico retirado en producción. Ver `docs/CIERRE_FASE_1.md`. Commit solicitado, sin push en esta sesión.
+Pendiente: confirmar Mi Día con cuenta real y completar cierre remoto del paso 8: Vercel, sesiones/persistencia, aislamiento con dos cuentas y diagnóstico retirado en producción. Ver `docs/CIERRE_FASE_1.md`. El commit `ae65292` ya está publicado en `main`, comprobado el 2026-11-05; no volver a tratar el push como pendiente.
 
 Verificaciones: lint, TypeScript y build correctos; Edge/Playwright con Auth simulado: login inválido/válido, recarga, redirección desde login con sesión, cierre, ruta privada, sesión revocada, no-store y login responsive a 360/390/768/1280 px. Sin errores de JavaScript. Prueba reproducible: `scripts/test-auth.mjs`, con Playwright externo y Edge.
 

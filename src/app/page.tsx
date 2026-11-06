@@ -59,6 +59,65 @@ export default async function Home() {
   return (
     <TrackingShell active="today" title={`Mi día, ${displayName}`} dateLabel={dateLabel}
       displayName={displayName} copy="Tus registros de hoy y los objetivos que querés alcanzar. Un paso a la vez.">
+      <section className="day-hero" aria-label="Tu resumen de hoy">
+        <div className="hero-content">
+          <p className="hero-kicker">TU ESPACIO PERSONAL</p>
+          <h1>Hacé que cada día <span>cuente.</span></h1>
+          <p className="hero-subtitle">Organizá tus hábitos, seguí tu entrenamiento y registrá tus avances. Todo lo importante, en un mismo lugar.</p>
+          <div className="hero-actions">
+            <Link className="hero-primary" href="/habits">Ver mis hábitos <Icon name="arrow" /></Link>
+            <Link className="hero-secondary" href="/training">Ir a entrenamiento</Link>
+          </div>
+          <div className="hero-metrics" aria-label="Tus números de hoy">
+            <div className="hero-metric">
+              <strong>{habitsData.error ? "—" : `${completedCount}/${todayHabits.length}`}</strong>
+              <span>Hábitos realizados</span>
+            </div>
+            <div className="hero-metric">
+              <strong>{goalsData.error ? "—" : goalsData.count}</strong>
+              <span>Objetivos activos</span>
+            </div>
+            <div className="hero-metric">
+              <strong>{journalData.error ? "—" : journalData.count}</strong>
+              <span>Notas de hoy</span>
+            </div>
+          </div>
+        </div>
+        <section className="hero-panel" aria-label="Actividad del día">
+          <header className="panel-header">
+            <div><p className="panel-eyebrow">VISTA GENERAL</p><h2>Actividad de hoy</h2></div>
+            <span className="panel-label">Hoy</span>
+          </header>
+          <div className="panel-progress">
+            <span>Hábitos completados</span>
+            <strong>{habitsData.error ? "—" : `${progressPercent}%`}</strong>
+          </div>
+          {habitsData.error
+            ? <p role="alert" className="form-error">No pudimos cargar el progreso de hábitos.</p>
+            : <progress aria-label="Progreso de hábitos de hoy" value={completedCount} max={todayHabits.length || 1} />}
+          <div className="panel-activity">
+            <div className="panel-row">
+              <span className="panel-icon panel-icon-habits" aria-hidden="true"><Icon name="check" /></span>
+              <div className="panel-row-copy"><strong>Hábitos</strong><span>{habitsData.error ? "No disponible" : `${completedCount} de ${todayHabits.length} realizados`}</span></div>
+              <Link href="/habits" aria-label="Abrir Hábitos">Ver <Icon name="arrow" /></Link>
+            </div>
+            <div className="panel-row">
+              <span className="panel-icon panel-icon-checkin" aria-hidden="true"><Icon name="sun" /></span>
+              <div className="panel-row-copy"><strong>Check-in diario</strong><span>{checkinData.error ? "No disponible" : checkinData.checkin ? "Registrado hoy" : "Pendiente de registrar"}</span></div>
+              <Link href="/check-in" aria-label="Abrir Check-in diario">Ver <Icon name="arrow" /></Link>
+            </div>
+            <div className="panel-row">
+              <span className="panel-icon panel-icon-training" aria-hidden="true"><Icon name="activity" /></span>
+              <div className="panel-row-copy"><strong>Entrenamiento</strong><span>{trainingData.error ? "No disponible" : trainingData.sessions.some(s => s.status === "completed") ? "Sesión completada" : trainingData.sessions.length > 0 ? "Sesión en curso" : trainingData.schedule.length > 0 ? "Programado para hoy" : "Sin sesión programada"}</span></div>
+              <Link href="/training" aria-label="Abrir Entrenamiento">Ver <Icon name="arrow" /></Link>
+            </div>
+          </div>
+          <footer className="panel-actions">
+            <Link href="/check-in" className="panel-action-primary">{checkinData.checkin ? "Actualizar check-in" : "Registrar check-in"}</Link>
+            <Link href="/training" className="panel-action-secondary">Ver entrenamiento</Link>
+          </footer>
+        </section>
+      </section>
       <nav className="tracking-tabs" aria-label="Registro rápido">
         <Link href="/check-in">Check-in</Link>
         <Link href="/habits">Hábitos</Link>
@@ -66,34 +125,6 @@ export default async function Home() {
         <Link href="/goals">Objetivos</Link>
         <Link href="/training">Entrenamiento</Link>
       </nav>
-      <section className="day-hero" aria-label="Resumen de tu día">
-        <div className="hero-content">
-          <p className="hero-kicker"><Icon name="sun" /> TU DÍA, A TU MANERA</p>
-          <h2>Hoy también cuenta<span>.</span></h2>
-          <p className="hero-subtitle">Un lugar para ver cómo vas y elegir tu siguiente paso. Sin apuro, con intención.</p>
-          <div className="hero-metrics" role="list">
-            <div className="hero-metric" role="listitem">
-              <strong>{completedCount}/{todayHabits.length}</strong>
-              <span>hábitos realizados</span>
-            </div>
-            <div className="hero-metric" role="listitem">
-              <strong>{checkinData.error ? "—" : checkinData.checkin ? "Listo" : "Pendiente"}</strong>
-              <span>check-in diario</span>
-            </div>
-            <div className="hero-metric" role="listitem">
-              <strong>{trainingData.error ? "—" : trainingData.sessions.some(s => s.status === "completed") ? "Hecho" : trainingData.sessions.length || trainingData.schedule.length ? "Planificado" : "Libre"}</strong>
-              <span>entrenamiento</span>
-            </div>
-          </div>
-        </div>
-        <div className="hero-visual" aria-hidden="true">
-          <div className="hero-orbit">
-            <div className="hero-ring" style={{ background: `conic-gradient(#80ead2 0% ${progressPercent}%, #ffffff40 ${progressPercent}% 100%)` }}>
-              <div className="hero-ring-inner"><strong>{progressPercent}%</strong><small>hábitos de hoy</small></div>
-            </div>
-          </div>
-        </div>
-      </section>
       <div className="dashboard-grid">
         <Card title="Entrenamiento de hoy" eyebrow="A TU RITMO">
           {trainingData.error ? <p role="alert" className="form-error">No pudimos cargar tu entrenamiento.</p> : <>

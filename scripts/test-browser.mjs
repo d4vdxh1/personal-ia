@@ -131,7 +131,15 @@ try {
   await page.getByRole('heading',{name:'Arquitectura de software',exact:true}).waitFor();
   await page.goto(base+'/study');
   await page.getByText('Trabajo final',{exact:true}).waitFor();
-  const paths=['/','/menu','/study','/study?view=subjects','/study?view=assignments','/study?view=exams','/study?view=sessions','/habits','/check-in','/journal','/goals','/profile','/training','/training?view=exercises','/training?view=plans','/training?view=history','/training?view=health',sessionUrl.replace(base,''),exerciseUrl.replace(base,'')];
+  await page.goto(base+'/assistant');
+  await page.getByRole('heading',{name:'¿En qué te puedo ayudar hoy?'}).waitFor();
+  assert.equal(await page.getByLabel('Tu pregunta').isDisabled(),true,'assistant requires a configured Gemini key');
+  assert.equal(await page.getByRole('link',{name:'Asistente IA'}).count()>0,true,'assistant is discoverable');
+  assert.equal((await page.request.post(base+'/api/assistant',{
+    headers: {'Content-Type':'application/json'},
+    data: {message:'Qué tengo hoy?'}
+  })).status(),503,'no provider key should never fake model output');
+  const paths=['/','/assistant','/menu','/study','/study?view=subjects','/study?view=assignments','/study?view=exams','/study?view=sessions','/habits','/check-in','/journal','/goals','/profile','/training','/training?view=exercises','/training?view=plans','/training?view=history','/training?view=health',sessionUrl.replace(base,''),exerciseUrl.replace(base,'')];
   for(const width of [360,390,768,800,930,1280]){
     await page.setViewportSize({width,height:900});
     for(const path of paths){ await page.goto(base+path); await page.locator('h1').waitFor(); assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`overflow ${width} ${path}`); const nav=page.getByRole('navigation',{name:'Navegación principal',exact:true}); assert.equal(await nav.isVisible(),true); const box=await nav.boundingBox(); if(width<=800)assert.ok(box.y>500,`menú móvil ${width}`); else assert.ok(box.x<250,`menú escritorio ${width}`);

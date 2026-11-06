@@ -10,6 +10,7 @@ const examples = [
 ];
 export function AssistantChat({ enabled }: { enabled: boolean }) {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [consent, setConsent] = useState(false);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -17,7 +18,7 @@ export function AssistantChat({ enabled }: { enabled: boolean }) {
   const inFlight = useRef(false);
 
   async function ask(message: string) {
-    if (!enabled || inFlight.current) return;
+    if (!enabled || !consent || inFlight.current) return;
     const text = message.trim();
     if (text.length < 2 || text.length > 500) {
       setError("La consulta debe tener entre 2 y 500 caracteres.");
@@ -61,7 +62,7 @@ export function AssistantChat({ enabled }: { enabled: boolean }) {
         <p>Consultá tus hábitos, objetivos, entrenamientos y compromisos académicos. Respondo usando lo que registraste en Día a Día.</p>
         <div className="assistant-suggestions">
           {examples.map(example => <button key={example} type="button" onClick={() => void ask(example)}
-            disabled={!enabled || busy}>{example}</button>)}
+            disabled={!enabled || !consent || busy}>{example}</button>)}
         </div>
       </div>}
       {messages.map((message, index) => <article key={index}
@@ -74,18 +75,22 @@ export function AssistantChat({ enabled }: { enabled: boolean }) {
     <div className="assistant-bottom">
       {error && <p className="form-error" role="alert">{error}</p>}
       {!enabled && <p className="assistant-unavailable" role="status">Para activar el asistente falta configurar la clave de Gemini en Vercel. Tus demás módulos siguen funcionando normalmente.</p>}
+      {enabled && <label className="assistant-privacy">
+        <input type="checkbox" checked={consent} onChange={event => setConsent(event.target.checked)} />
+        <span>Entiendo que mi pregunta y los datos necesarios para responderla se enviarán a Google Gemini. No se guardará el historial de esta conversación en Día a Día.</span>
+      </label>}
       <form className="assistant-compose" onSubmit={submit}>
         <label className="sr-only" htmlFor="assistant-question">Tu pregunta</label>
         <textarea id="assistant-question" rows={2} maxLength={500} value={input}
           onChange={event => setInput(event.target.value)}
           placeholder={enabled ? "Escribí una pregunta sobre tu día…" : "Asistente pendiente de configuración"}
-          disabled={busy || !enabled} onKeyDown={event => {
+          disabled={busy || !enabled || !consent} onKeyDown={event => {
             if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
               event.preventDefault();
               if (!busy) void ask(input);
             }
           }}/>
-        <button className="assistant-send" type="submit" disabled={!enabled || busy || input.trim().length < 2}>Enviar</button>
+        <button className="assistant-send" type="submit" disabled={!enabled || !consent || busy || input.trim().length < 2}>Enviar</button>
       </form>
       <div className="assistant-disclaimer">
         <span>Solo lectura · Sin cambios en tus registros · Sin historial guardado</span>

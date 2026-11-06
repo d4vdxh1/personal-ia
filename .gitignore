@@ -1,4 +1,8 @@
 node_modules
+.npm-cache/
+.test-workspace/
+test-results/
+supabase/.temp/
 
 # Next.js y archivos generados
 .next/

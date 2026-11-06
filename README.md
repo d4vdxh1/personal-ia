@@ -4,11 +4,13 @@
 
 Aplicación personal para organizar rutina, hábitos, estudio, entrenamiento y objetivos. El núcleo funcionará manualmente antes de integrar IA.
 
-Estado actual (2026-10-10): fase 0 completada; pasos 1 a 6 de fase 1 confirmados por el usuario. Paso 7 implementado con datos reales. Paso 8 en verificación local; pendiente push, Vercel y aislamiento con dos cuentas. No se hace push en esta sesión.
+Estado actual (2026-11-06): fases 0 y 1 cerradas por las confirmaciones registradas. Fase 2 — Entrenamiento implementada; pruebas y publicación de esta entrega se detallan en [PROJECT_STATUS.md](PROJECT_STATUS.md).
+
+Entrenamiento agrega ejercicios propios, rutinas ordenadas, programación por fecha, sesiones con borrador y series, historial/evolución por ejercicio, medidas corporales y molestias. Abrir `/training` desde Mi Día o Seguimiento. Ver [alcance y datos](docs/ENTRENAMIENTO.md).
 
 ## Módulos disponibles
 
-### Mi Día y cierre local
+### Mi Día y cierre de fase 1
 
 Mi Día muestra únicamente registros propios. Diario: últimas tres entradas de la fecha local, con conteo total. Objetivos: hasta tres activos por fecha límite, incluidos vencidos, con avance real. Los cambios de los módulos revalidan el inicio. Se retiran horarios inventados y maquetas: vencimientos reemplazan la agenda de ejemplo; calendario de eventos independiente, entrenamiento y estudio requieren alcance/esquema posterior. No se agregan migraciones.
 
@@ -35,7 +37,7 @@ Abrir **Escribir una nota** desde Mi Día, o la pestaña **Diario** de Seguimien
 
 Se permiten varias entradas por día. Después de guardar, **Escribir otra entrada** abre un formulario nuevo. En **Tus entradas**, desplegar una entrada para leerla y usar **Editar entrada** para corregirla. El historial muestra las más recientes primero, con navegación entre páginas. Las fechas usan `America/Argentina/Buenos_Aires`; no se admiten fechas futuras. No hace falta repetir la migración existente.
 
-El usuario confirmó el funcionamiento del diario. La comprobación remota de aislamiento entre dos cuentas sigue pendiente para el cierre de fase.
+El usuario confirmó el funcionamiento del diario. Cierre funcional aceptado el 2026-10-11 por confirmación del usuario: «funciona todo». Se conservan las evidencias previas con su alcance original; el agente no realizó nuevas pruebas autenticadas ni una auditoría remota independiente en esta sesión.
 
 Verificación local del diario: lint, TypeScript, build y pruebas de acciones correctos. Revisión en Edge con servicios simulados a 360/390/768/800/930/1280 px; creación, edición, recarga, paginación, fallos y sesión vencida comprobados. Menú fijo y controles accesibles al desplazarse, sin desbordamiento horizontal.
 
@@ -45,7 +47,7 @@ Abrir **Progreso** desde el menú o **Objetivos** desde las pestañas compartida
 
 Elegir **Completado** fija el avance en 100%; bajarlo vuelve el estado a **Activo**. **Cancelado** conserva el objetivo y su avance. Usar **Editar objetivo** para cambiar cualquier campo. Los filtros Todos, Activos, Completados y Cancelados y la paginación permiten consultar el historial; no se eliminan registros. Vincular objetivos con hábitos/actividades queda para una ampliación posterior del esquema.
 
-Paso 6 confirmado por el usuario. Pendiente aislamiento remoto entre dos cuentas; relación con hábitos/actividades requiere ampliación del esquema. No repetir migraciones; los servicios simulados no prueban RLS remoto.
+Paso 6 confirmado por el usuario. Fase 1 cerrada por confirmación del usuario; relación con hábitos/actividades requiere ampliación del esquema. No repetir migraciones; los servicios simulados no prueban RLS remoto.
 
 Verificación local: pruebas de acciones, lint y build con TypeScript correctos. Edge con servicios simulados a 360/390/768/800/930/1280 px: creación, edición, avance, estados, vencimientos, filtros, paginación, errores y sesión vencida correctos, sin desbordamientos horizontales ni errores JavaScript.
 
@@ -143,4 +145,17 @@ En el paso 1, la auditoría registró 5 alertas altas en dependencias de desarro
 
 El archivo local `promt_supabe_connect.md` se excluye de Git porque contiene los datos del proyecto utilizados para configurar `.env.local`. La integración utiliza solo la clave pública; no requiere una clave administrativa.
 
-Pendiente: confirmar Mi Día con cuenta real y completar cierre remoto del paso 8 tras push: Vercel, sesiones/persistencia, aislamiento con dos cuentas y diagnóstico retirado en producción. Ver `docs/CIERRE_FASE_1.md`. Commit solicitado, sin push en esta sesión.
+## Verificaciones reproducibles
+
+Se usan versiones fijadas y `npm ci`. Next.js, @next/env y eslint-config-next se actualizaron a 16.4.5 por alertas de seguridad. Desarrollo y compilación usan Webpack, probado en este entorno Windows.
+
+- `npm test`: suites de check-in, diario, objetivos, Mi Día y validaciones de Entrenamiento.
+- `npm run test:db`: PostgreSQL desechable embebido, esquema inicial y entrenamiento con RLS, FK por dueño, transacciones, snapshots e inicio idempotente. No conecta a Supabase.
+- `npx playwright install chromium`, luego `npm run test:browser`: compila una copia aislada sin `.env.local`, usa Auth simulado y PostgreSQL embebido; prueba persistencia, errores y 360/390/768/800/930/1280 px. Capturas y logs en `test-results/` (ignorado).
+- `npm run lint`, `npm run build`, `npm run typecheck`: controles estáticos y compilación. Build debe preceder a typecheck en una copia nueva.
+
+GitHub Actions ejecuta estos controles sin secretos. No confundir el Auth simulado con dos logins/JWT reales contra producción.
+
+Migración incremental: `supabase/migrations/20261106025508_training.sql`, aplicada al proyecto existente. No repetirla ni repetir la inicial. `supabase/tests/training_remote_rollback.sql` verifica con fixtures transaccionales y roles PostgreSQL; siempre termina en rollback. Nunca ejecutar `supabase/tests/bootstrap.sql` en Supabase.
+
+La auditoría de dependencias tras actualizar y aplicar correcciones compatibles no reportó críticas/altas; quedaron ocho moderadas de desarrollo relacionadas con minimatch/ESLint. No se aplicó downgrade forzado.

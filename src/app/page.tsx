@@ -8,6 +8,7 @@ import { loadCheckin } from "@/lib/checkins/data";
 import { loadGoals } from "@/lib/goals/data";
 import { loadTodayJournal } from "@/lib/today/data";
 import { createClient } from "@/lib/supabase/server";
+import { loadTrainingToday } from "@/lib/training/data";
 
 export const dynamic = "force-dynamic";
 
@@ -15,10 +16,11 @@ export default async function Home() {
   const { user, profile } = await getAccount();
   const supabase = await createClient();
   const habitsData = await loadHabits(supabase, user.id);
-  const [checkinData, journalData, goalsData] = await Promise.all([
+  const [checkinData, journalData, goalsData, trainingData] = await Promise.all([
     loadCheckin(supabase, user.id, habitsData.date),
     loadTodayJournal(supabase, user.id, habitsData.date),
     loadGoals(supabase, user.id, 1, "active"),
+    loadTrainingToday(supabase, user.id, habitsData.date),
   ]);
 
   const displayName = profile?.display_name.trim() || user.email?.split("@")[0] || "ahí";
@@ -61,8 +63,17 @@ export default async function Home() {
         <Link href="/habits">Hábitos</Link>
         <Link href="/journal">Escribir una nota</Link>
         <Link href="/goals">Objetivos</Link>
+        <Link href="/training">Entrenamiento</Link>
       </nav>
       <div className="dashboard-grid">
+        <Card title="Entrenamiento de hoy" eyebrow="A TU RITMO">
+          {trainingData.error ? <p role="alert" className="form-error">No pudimos cargar tu entrenamiento.</p> : <>
+            {trainingData.sessions.map(s => <p key={s.id}><Link className="training-open" href={`/training/${s.id}`}>{s.plan_name} · {s.status === 'completed' ? 'Completada' : 'Continuar sesión'}</Link></p>)}
+            {trainingData.schedule.length > 0 && !trainingData.sessions.some(s => s.schedule_id === trainingData.schedule[0].id) && <p>Tenés un entrenamiento programado para hoy.</p>}
+            {!trainingData.schedule.length && !trainingData.sessions.length && <p className="habit-empty">No hay entrenamiento programado para hoy.</p>}
+          </>}
+          <Link href="/training" className="habits-manage">Ver semana o iniciar entrenamiento →</Link>
+        </Card>
         {habitsSlot}
         <Card title="Tu check-in de hoy" eyebrow="UN MOMENTO PARA VOS">
           {checkinData.error ? (

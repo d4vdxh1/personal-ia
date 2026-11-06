@@ -4,6 +4,59 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 
 ---
 
+## 2026-11-06 — Verificación completa y publicación de la rama
+
+- Migración training aplicada al proyecto existente. Catálogo remoto: ocho tablas nuevas con RLS, cuatro políticas por dueño y sin CRUD anon. Test remoto con dos identidades temporales aprobado, terminado en rollback; sin bootstrap ni fixtures persistentes.
+- Lint, build Webpack 16.4.5, typecheck, cinco suites y PostgreSQL embebido aprobados. Auditoría de producción: cero vulnerabilidades. Ocho moderadas transitivas de desarrollo siguen documentadas.
+- Chromium sobre build de producción y SQL real embebido: crear ejercicio/rutina/programación, iniciar sesión, guardar borrador/recargar/completar, historial/evolución, medidas/molestias, errores con formulario conservado y sesión vencida aprobados. Trece vistas a seis anchos (360/390/768/800/930/1280), sin overflow ni botones tapados; capturas 360/1280 inspeccionadas. Auth simulado; no se atribuyen dos JWT reales a esta evidencia.
+- Rama codex/training-phase2 subida; commit de implementación eb7a5ab y cierre previo 360df0e incluidos en PR #2. Pipeline CI creado y en seguimiento. La entrega reemplaza el PR documental #1 desactualizado.
+
+---
+
+## 2026-11-06 — Modelo y recorrido de Entrenamiento implementados
+
+- Ocho tablas incrementales generadas con Supabase CLI; RLS en cuatro operaciones, FK compuestas por dueño y RPC SECURITY INVOKER. Rutinas/sesiones atómicas, snapshots históricos e inicio idempotente; programación iniciada protegida contra cambios.
+- Catálogo, rutinas ordenadas, semana manual, sesiones con borrador y series realizadas/omitidas, historial/evolución, medidas y molestias; integración en Mi Día y TrackingShell. Sin prescripción automática de cargas ni horarios inventados.
+- Recuperadas dependencias. Cuatro suites previas, validaciones nuevas y esquema inicial/Entrenamiento con PostgreSQL embebido aprobados. Webpack compiló; Turbopack falló en su proceso CSS de Windows. Navegador y publicación aún en curso; no se acredita todavía QA responsive actual.
+- Auditoría actual encontró vulnerabilidades críticas de Next 16.4.0: actualizado Next, @next/env y eslint-config-next a 16.4.5. npm audit fix compatible elimina críticas/altas; permanecen ocho moderadas transitivas de desarrollo en ESLint/minimatch. Sin downgrade forzado.
+- Agregadas dependencias de pruebas fijadas y pipeline CI sin credenciales reales. Excluidos caché de npm y copia de pruebas de Git, TypeScript y ESLint.
+
+---
+
+## 2026-11-05 — Inicio de recuperación y fase 2
+
+- Usuario autoriza los cuatro puntos: unificar continuidad/GitHub, recuperar y automatizar verificaciones, recorrido completo de Entrenamiento y ampliación con calendario semanal, métricas y progresión.
+- Se conserva el cierre funcional previo confirmado por el usuario. PR #1 documental desactualizado identificado; rama de entrega codex/training-phase2 desde el cierre local 360df0e.
+- Revisión HTTP sin sesión: login 200; seis rutas privadas y diagnóstico retirado 307 con private, no-store. Supabase: seis tablas con RLS directamente confirmado; migración inicial no se repite.
+- Dependencias locales incompletas; recuperación en curso. Sin cambios de interfaz en esta etapa ni nuevas comprobaciones responsive.
+
+---
+
+## 2026-10-18 — Commit documental del cierre de fase 1
+
+- Revisado el cierre de fase 1 por confirmación del usuario y la planificación de fase 2; commit local solicitado por el usuario.
+- Revisados los cinco archivos documentales y git diff --check correcto. Sin cambios de código o interfaz: no se repiten pruebas de aplicación ni responsive. Sin push.
+
+---
+
+## 2026-10-11 — Cierre de fase 1 y planificación de fase 2
+
+- El usuario confirmó «funciona todo» y solicitó cerrar fase 1 y su paso 8. Se registra el cierre funcional sobre esa confirmación y las evidencias previas de pruebas locales, push y estado Vercel success; sin atribuir nuevas pruebas autenticadas al agente.
+- Fase 2 — Entrenamiento en planificación: cuadro de diez pasos en PLAN_MAESTRO, desde esquema/RLS hasta validación y publicación; implementación pendiente. Se mantienen navegación compartida, controles accesibles y comprobaciones responsive a seis anchos.
+- Actualizados PROJECT_STATUS, DEVLOG, PLAN_MAESTRO, README y CIERRE_FASE_1. Solo documentación; sin cambios de interfaz, migraciones, nuevas pruebas de aplicación, commit ni push. Verificación: git diff --check.
+
+---
+
+## 2026-10-11 — Revisión del push y cierre de fase 1
+
+- Retomado el commit del 10 de octubre `ae65292`; árbol de trabajo limpio al comenzar. `git ls-remote` confirmó que GitHub `main` apunta a `ae652929df37c921998aa4c560276d302166754c`, coincidente con `HEAD` y `origin/main`. El push ya estaba realizado.
+- Consultado el estado de ese commit en GitHub: `Vercel: success`, con enlace al despliegue existente `EDYUU9M4bdgz9drcPFx4QUuuGayP`. Sin inspección del panel privado ni de la asignación del alias.
+- HTTP en producción sin sesión: login 200 con título Día a Día; las seis rutas internas redirigen 307 al login con `private, no-store`. El diagnóstico temporal también redirige al login y no devuelve datos públicos; 404 con sesión real pendiente.
+- Corregidos los pendientes obsoletos de push en PROJECT_STATUS y CIERRE_FASE_1. La fase 1 sigue abierta: confirmar Mi Día, sesiones/cierre, persistencia, navegación responsive en producción y aislamiento de seis tablas con dos cuentas reales.
+- Solo documentación; sin modificaciones de interfaz, migraciones, escrituras en Supabase, nuevo commit ni push. No se repitieron build ni pruebas visuales locales; se conserva la evidencia del 10 de octubre a 360/390/768/800/930/1280 px. Verificación documental con `git diff --check`.
+
+---
+
 ## 2026-10-10 — Fase 1, paso 7 y verificación del paso 8
 
 - El usuario confirmó el paso 6 y autorizó Mi Día, la verificación final y un commit detallado para hacer push después.

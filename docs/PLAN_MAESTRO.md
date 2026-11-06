@@ -4,8 +4,8 @@
 **Bienvenida del login:** “Cada día se vuelve más fácil. Lo difícil es hacerlo cada día.”
 **Identificador técnico:** `personal-ia`. Se conservan repositorio, carpeta, URL de Vercel y proyecto Supabase actuales.
 
-**Estado:** Plan vigente — v1.2, actualizado el 2026-10-10.
-**Avance:** Fase 0 cerrada; pasos 1 a 6 de fase 1 confirmados por el usuario. Mi Día integrado (paso 7); paso 8 en verificación local, pendiente cierre remoto. Ver `docs/CIERRE_FASE_1.md`.
+**Estado:** Plan vigente — v1.4, actualizado el 2026-11-06.
+**Avance:** Fases 0 y 1 cerradas; paso 8 de fase 1 cerrado por confirmación del usuario el 2026-10-11. Fase 2 — Entrenamiento implementada; verificaciones y publicación en PROJECT_STATUS. Ver `docs/CIERRE_FASE_1.md` y `docs/ENTRENAMIENTO.md`.
 **Objetivo:** construir una aplicación web/PWA personal, inteligente y progresiva para organizar rutina, entrenamiento, estudio, hábitos, sueño, objetivos, recordatorios y, más adelante, finanzas personales.
 
 ---
@@ -281,7 +281,7 @@ Opcionalmente:
 
 **Implementación del paso 6:** `/goals` permite crear y editar título, tipo semanal/mensual, fecha límite, avance entero (0–100) y estado activo/completado/cancelado. Completado requiere 100%; cancelar conserva el registro y su avance. Se muestran vencimientos de objetivos activos, filtros por estado e historial de 10 objetivos por página, con fecha límite ascendente. Usa la tabla `goals`, la sesión y RLS existentes; menú compartido y acceso desde Progreso. La relación con hábitos/actividades queda pendiente de una ampliación posterior del esquema.
 
-Verificación local: pruebas de validación/acciones, lint y build con TypeScript correctos; flujo de navegador con servicios simulados en seis anchos, incluidos creación, recarga, avance, estados, filtros, paginación, errores y sesión vencida. Falta validación funcional y de aislamiento con cuentas reales.
+Verificación local: pruebas de validación/acciones, lint y build con TypeScript correctos; flujo de navegador con servicios simulados en seis anchos, incluidos creación, recarga, avance, estados, filtros, paginación, errores y sesión vencida. Cierre funcional aceptado el 2026-10-11 por confirmación del usuario: «funciona todo». Se conservan las evidencias previas con su alcance original; el agente no realizó nuevas pruebas autenticadas ni una auditoría remota independiente en esta sesión.
 
 ## 5.8 Estadísticas
 
@@ -1019,7 +1019,7 @@ Tareas:
 
 **Objetivo:** que la aplicación ya sea útil aunque no exista IA.
 
-Estado operativo al 2026-10-10:
+Estado operativo al 2026-10-11: fase cerrada por confirmación del usuario.
 
 | Paso | Alcance | Estado |
 |---|---|---|
@@ -1029,12 +1029,12 @@ Estado operativo al 2026-10-10:
 | 4 | Check-in diario | Validado por el usuario |
 | 5 | Diario personal | Validado funcionalmente por el usuario |
 | 6 | Objetivos y progreso | Confirmado por el usuario |
-| 7 | Mi Día completo con datos reales | Implementado: hábitos/check-in/diario/objetivos; sin maquetas |
-| 8 | Validación completa, Vercel y retirada del diagnóstico | Pruebas locales y Edge correctos; diagnóstico retirado. Push, Vercel y aislamiento remoto pendientes |
+| 7 | Mi Día completo con datos reales | Completado y confirmado por el usuario |
+| 8 | Validación completa, Vercel y retirada del diagnóstico | Cerrado por confirmación del usuario; push y Vercel success verificados |
 
-La confirmación funcional del usuario no equivale a una auditoría remota de aislamiento entre cuentas. El cierre incluye verificar permisos con sesiones reales. Detalles de pruebas y limitaciones en `PROJECT_STATUS.md` y `DEVLOG.md`.
+Cierre funcional aceptado el 2026-10-11 por confirmación del usuario: «funciona todo». Se conservan las evidencias previas con su alcance original; el agente no realizó nuevas pruebas autenticadas ni una auditoría remota independiente en esta sesión.
 
-Verificación local del paso 5: validaciones y acciones con servicios simulados, lint/TypeScript/build y flujo de navegador en seis anchos correctos. Se comprobaron creación, edición, recarga, paginación, errores y sesión vencida; queda la prueba con cuenta real.
+Verificación local del paso 5: validaciones y acciones con servicios simulados, lint/TypeScript/build y flujo de navegador en seis anchos correctos. Se comprobaron creación, edición, recarga, paginación, errores y sesión vencida; validación funcional confirmada por el usuario.
 
 Implementar:
 
@@ -1053,18 +1053,24 @@ Implementar:
 
 ## Fase 2 — Entrenamiento
 
-Implementar:
+**Estado:** implementación del 2026-11-06: ocho tablas con RLS, catálogo, rutinas, programación manual por fecha, sesiones, historial/evolución, medidas y síntomas. Integración en Mi Día. Migración incremental aplicada; pruebas SQL locales y remotas con rollback aprobadas. QA responsive y publicación se registran en PROJECT_STATUS y DEVLOG.
 
-- ejercicios;
-- planes;
-- sesiones;
-- series/repeticiones/peso;
-- progresión;
-- métricas;
-- síntomas;
-- rutina semanal.
+| Paso | Trabajo | Resultado esperado |
+|---|---|---|
+| 1 | Modelo de datos y permisos | Migración incremental para ejercicios, planes, sesiones, series, métricas y síntomas; RLS y relaciones por usuario. |
+| 2 | Catálogo de ejercicios | Crear, editar y archivar ejercicios con grupo muscular, equipo y notas. |
+| 3 | Planes de entrenamiento | Rutinas con ejercicios ordenados, series, repeticiones, carga y descansos previstos. |
+| 4 | Rutina semanal | Asignar planes a días y reprogramar respetando los horarios personales. |
+| 5 | Registro de sesiones | Iniciar y completar entrenamientos; guardar series, repeticiones, peso, dificultad, duración y notas. |
+| 6 | Historial y progresión | Consultar sesiones y evolución por ejercicio con datos reales. |
+| 7 | Métricas corporales | Registrar peso y medidas opcionales con fecha e historial. |
+| 8 | Síntomas y molestias | Registrar dolor, bloqueos y observaciones asociados a una fecha o sesión. |
+| 9 | Integración con Mi Día | Mostrar el entrenamiento programado y su estado, con acceso al registro. |
+| 10 | Verificación y cierre | Pruebas funcionales, persistencia, aislamiento entre cuentas, interfaz responsive, push y comprobación en Vercel. |
 
-**Criterio:** completar una sesión desde el celular y consultar el historial.
+Todas las pantallas reutilizarán la navegación compartida. Verificar 360/390/768/800/930/1280 px, controles accesibles y botones libres del menú inferior. Actualizar DEVLOG y PROJECT_STATUS al cerrar cada paso. Conservar las restricciones físicas y de horarios documentadas; el registro de síntomas no realiza diagnósticos.
+
+**Criterio de cierre:** completar una sesión desde el celular, consultar su historial y confirmar persistencia y aislamiento en producción.
 
 ---
 

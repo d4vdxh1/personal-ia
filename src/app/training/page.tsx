@@ -13,11 +13,11 @@ export default async function TrainingPage({ searchParams }: { searchParams: Pro
   const { user, profile } = await getAccount(); const params = await searchParams;
   const view = params.view && params.view in tabs ? params.view as keyof typeof tabs : "week";
   const page = journalPage(params.page); const { date: today } = getBuenosAiresToday();
-  const client = await createClient(); const data = await loadTraining(client, user.id, page, today);
+  const client = await createClient(); const data = await loadTraining(client, user.id, page, today, view);
   const progress = view === "history" ? await client.rpc("training_progress") : { data: [], error: null };
   const weeks = Array.from({ length: 7 }, (_, index) => { const d = new Date(`${today}T12:00:00Z`); d.setUTCDate(d.getUTCDate() + index); return d.toISOString().slice(0, 10); });
-  return <TrackingShell title="Tu entrenamiento" dateLabel={today} active="training" displayName={profile?.display_name.trim() || user.email || "?"} copy="Planificá a tu ritmo y guardá lo que hiciste.">
-    <nav className="tracking-tabs" aria-label="Entrenamiento">{Object.entries(tabs).map(([key, label]) => <Link key={key} href={`/training?view=${key}`} aria-current={view === key ? "page" : undefined}>{label}</Link>)}</nav>
+  return <TrackingShell title="Tu entrenamiento" dateLabel={today} active="training" trainingView={view} displayName={profile?.display_name.trim() || user.email || "?"} copy="Planificá a tu ritmo y guardá lo que hiciste.">
+    <nav className="tracking-tabs training-view-tabs" aria-label="Entrenamiento">{Object.entries(tabs).map(([key, label]) => <Link key={key} href={`/training?view=${key}`} aria-current={view === key ? "page" : undefined}>{label}</Link>)}</nav>
     {data.error ? <section className="card"><p role="alert" className="form-error">No pudimos cargar Entrenamiento. Actualizá la página para volver a intentar.</p></section> : <>
       {view === "week" && <>
         <section className="card training-card"><h2>Próximos siete días</h2><div className="training-week">{weeks.map(day => { const slot = data.schedule.find(s => s.scheduled_date === day); const plan = data.plans.find(p => p.id === slot?.plan_id); const session = data.sessions.find(s => s.schedule_id === slot?.id); return <article key={day}><time dateTime={day}>{new Intl.DateTimeFormat("es-AR", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" }).format(new Date(`${day}T12:00:00Z`))}</time><p>{slot ? plan?.name ?? "Rutina programada" : "Sin entrenamiento programado"}</p>{session ? <Link href={`/training/${session.id}`}>{session.status === 'completed' ? 'Ver sesión completada' : 'Continuar sesión'}</Link> : slot && day === today && plan?.active ? <StartForm planId={slot.plan_id} scheduleId={slot.id} requestId={randomUUID()} /> : null}</article>; })}</div></section>

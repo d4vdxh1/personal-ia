@@ -17,3 +17,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Reservar espacio para la barra inferior y el área segura del dispositivo: ningún campo, mensaje o botón debe quedar tapado por el menú. Mantener controles táctiles de al menos 44 px y foco de teclado visible.
 - Al modificar la interfaz, comprobar celular y escritorio, incluidos los cambios de menú a 800 px. Usar como referencia 360, 390, 768, 800, 930 y 1280 px; verificar navegación y acceso al botón final de los formularios. Documentar qué se comprobó y cualquier validación pendiente.
 - Al cerrar cada paso funcional o ajuste de interfaz, actualizar `DEVLOG.md` y `PROJECT_STATUS.md` con el resultado y las verificaciones realizadas.
+
+
+## Navegación modular (rediseño 2026-11-06)
+
+- Barra lateral de escritorio: Mi día, Hábitos, Check-in diario, Mi diario, Objetivos, Entrenamiento (Mi semana, Ejercicios, Rutinas, Historial, Medidas y molestias) y Mi perfil. Los módulos deben conservar accesos directos; no volver a agruparlos bajo "Seguimiento".
+- Barra inferior móvil: Hoy, Hábitos, Entrenar, Objetivos y Más. "Más" abre `/menu` con accesos a los siete módulos y cinco vistas de Entrenamiento; los formularios y la navegación deben quedar accesibles sobre la barra fija.
+- Componentes de navegación: `src/components/app-navigation.tsx` y `src/components/tracking-shell.tsx`. Diseño: `src/app/design-v2.css` y `src/app/navigation-v2.css`.
+- Mantener estilo claro, verde original `#16734a`, contraste suficiente; sin fondos oscuros, degradados o violetas.

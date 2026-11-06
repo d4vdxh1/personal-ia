@@ -81,3 +81,28 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - Auditoría actual: Next actualizado a 16.4.5 y correcciones compatibles aplicadas; sin críticas/altas, ocho moderadas de desarrollo relacionadas con minimatch/ESLint. No se aplicó downgrade forzado. Asesores Supabase conservan advertencias previas sobre EXECUTE de rls_auto_enable (event trigger) y protección de contraseñas filtradas desactivada; Entrenamiento no introduce funciones SECURITY DEFINER.
 - Antes de cerrar fase 9: activar Vercel Web Analytics e integrar @vercel/analytics.
 - Nunca versionar secretos; finanzas futuras sin transferencias/pagos; minimizar datos sensibles enviados a IA.
+
+
+## Propuesta de interfaz clara (PR #3, sin fusionar)
+
+- Rama de diseño: `design/premium-ui-v2`. Propuesta basada en composición del demo CEX y criterios de Emil Kowalski.
+- Paleta: fondo claro, menú blanco, verde original `#16734a` y colores sólidos; sin degradados ni violetas.
+- Panel de Mi Día con datos reales; sin cambios en Supabase, RLS, autenticación ni migraciones.
+- Estado: borrador. Pendientes CI y capturas autenticadas responsive antes de aprobar.
+
+
+## Navegación reorganizada — PR #3
+
+- Se eliminaron las pestañas transversales redundantes de Seguimiento y se incorporaron accesos independientes para Mi día, Hábitos, Check-in, Mi diario, Objetivos, Entrenamiento y Perfil.
+- Entrenamiento tiene cinco subapartados en el lateral de escritorio; en móvil conserva pestañas de sus vistas y acceso desde la pantalla "Más" (`/menu`).
+- Diseño coherente extendido a formularios, registros, objetivos, historial, perfil y tarjetas de Entrenamiento mediante `navigation-v2.css`.
+- Pruebas de navegación incorporadas a `scripts/test-browser.mjs` y adaptación del test antiguo de etiquetas de navegación.
+- Pendiente: comprobar CI y revisión visual autenticada antes de fusionar. Sin modificación de la persistencia ni de la producción.
+
+
+## Mejora de latencia de navegación (2026-11-06, PR #3)
+
+- Diagnóstico por código: páginas dinámicas verifican usuario y perfil en cada visita; módulos esperan respuesta de Supabase. Entrenamiento cargaba siete tablas independientemente de la pestaña visible.
+- `loadTraining` ahora recibe la vista actual: semana (planes, programación, sesiones), ejercicios (catálogo), rutinas (catálogo, planes, ítems), historial (sesiones y series), salud (medidas y molestias). Se mantiene `user_id` y la autorización existentes.
+- `src/app/loading.tsx` introduce feedback visual inmediato de carga de rutas y `navigation-v2.css` define skeleton claro y responsive.
+- La latencia percibida y la reducción de llamadas no implican valores medidos de producción; pendiente CI, comprobación autenticada y medición de tiempos de red.

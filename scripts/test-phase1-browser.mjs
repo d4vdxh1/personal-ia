@@ -110,7 +110,7 @@ try {
         if (width <= 800) assert.ok(bounds.y + bounds.height <= sidebar.y, `Botón tapado ${route} ${width}`);
       }
       if (route === "/") {
-        assert.equal(await page.locator(".sidebar .selected").innerText(), "Hoy");
+        assert.equal(await page.locator(".sidebar .selected:visible").innerText(), width <= 800 ? "Hoy" : "Mi día");
         assert.equal(await page.getByText(/Contenido ficticio|VISTA PREVIA|DEMO/).count(), 0);
         if ([360, 1280].includes(width)) await page.screenshot({ path: join(artifacts, `today-${width}.png`), fullPage: true });
       }

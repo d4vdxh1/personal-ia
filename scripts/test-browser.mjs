@@ -151,7 +151,7 @@ try {
       await page.waitForURL(/\/journal$/);
       await mainNav.getByRole('link',{name:'Entrenamiento',exact:true}).click();
       await page.waitForURL(/\/training$/);
-      assert.equal(await mainNav.getByRole('link',{name:'Ejercicios'}).isVisible(),true);
+      await mainNav.getByRole('link',{name:'Ejercicios'}).waitFor({state:'visible'}); // streamed page may arrive after URL changes
     }
     await page.goto(base+'/training'); await page.screenshot({path:join(output,`training-${width}.png`),fullPage:true});
   }

@@ -3,14 +3,15 @@
 **Última actualización:** 2026-11-06
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
 **Estado general:** Fases 0 y 1 cerradas. Paso 8 de fase 1 cerrado por confirmación del usuario el 2026-10-11: «funciona todo».
-**Fase actual:** Fase 2 — Entrenamiento en desarrollo, autorizada junto con recuperación de pruebas y sincronización de GitHub el 2026-11-05.
+**Fase actual:** Fase 2 — Entrenamiento implementada, verificada técnicamente y publicada el 2026-11-06. Pendiente aceptación de uso con la cuenta real del usuario.
 
-## Continuidad y revisión del 2026-11-05
+## Entrega y continuidad del 2026-11-06
 
-- GitHub main está en ae65292. El cierre funcional y la planificación del commit local 360df0e siguen vigentes; el PR #1 contiene pendientes anteriores a esa confirmación y será reemplazado por la entrega actual.
-- Vercel success confirmado en GitHub. HTTP actual sin sesión: login 200; seis rutas internas y diagnóstico retirado redirigen 307 al login con private, no-store. No equivale a una nueva prueba autenticada.
-- Instalación local incompleta detectada: faltan Next.js, TypeScript y ESLint. Recuperación desde package-lock en curso; todavía no se declaran aprobadas las pruebas actuales.
-- Supabase conectado: proyecto personal-ia identificado y seis tablas actuales con RLS confirmado directamente. No repetir migración inicial. Auditoría funcional con dos JWT reales sigue separada del cierre aceptado por el usuario.
+- PR #2 integrado en main: c6d6a7a. Incluye el cierre funcional local 360df0e y la implementación eb7a5ab. PR #1 cerrado como sustituido, conservando su historial.
+- CI completo aprobado en GitHub, incluido Chromium en Linux: https://github.com/d4vdxh1/personal-ia/actions/runs/42156866761. Vercel success confirmado para c6d6a7a. Producción: https://personal-ia-two.vercel.app/training.
+- HTTP actual sin sesión: login 200; inicio y rutas nuevas de Entrenamiento/sesión/evolución redirigen 307 al login con private, no-store. No equivale a una nueva prueba autenticada de producción.
+- Dependencias recuperadas, Next actualizado a 16.4.5. Lint, build, tipos, suites, SQL y navegador aprobados; auditoría de producción sin vulnerabilidades.
+- Supabase: catorce tablas con RLS (seis iniciales y ocho nuevas). Historial de migraciones alineado con los archivos: baseline initial_schema registrado como ya aplicado, sin volver a ejecutar SQL; training usa la versión remota 20261106031833. No repetir migraciones.
 
 ## Objetivo y stack
 
@@ -28,11 +29,11 @@ Next.js 16.4.5 + React + TypeScript + Tailwind; Supabase (PostgreSQL/Auth/RLS); 
 | Diario personal | Completado y confirmado por el usuario |
 | Objetivos y progreso | Completados y confirmados por el usuario |
 | Mi Día con datos reales | Completado y confirmado por el usuario |
-| Entrenamiento | Implementado y probado: ejercicios, rutinas, programación, sesiones, historial, evolución, medidas y molestias. PR #2 publicado; CI y despliegue en curso. |
+| Entrenamiento | Implementado, probado e integrado por PR #2; CI y Vercel aprobados. Ejercicios, rutinas, programación, sesiones, historial, evolución, medidas y molestias. |
 | Estudio | Fase 3 pendiente |
 | IA, recordatorios, estadísticas y voz | Fases posteriores |
 
-Mi Día integra hábitos, check-in, notas de hoy y vencimientos de objetivos. El calendario independiente y las relaciones de objetivos con actividades requieren ampliaciones posteriores.
+Mi Día integra hábitos, check-in, notas de hoy, vencimientos de objetivos y entrenamiento de hoy. El calendario general independiente y las relaciones de objetivos con actividades requieren ampliaciones posteriores.
 
 ## Cierre de fase 1 y verificación
 
@@ -50,7 +51,7 @@ Zona horaria diaria vigente: America/Argentina/Buenos_Aires. Fechas locales expl
 
 .env.local contiene URL y clave pública de Supabase; está excluido de Git. .env.example versiona solo nombres vacíos. Sin claves administrativas, Gemini ni Google configurados. Clientes en src/lib/supabase y proxy en src/proxy.ts. npm run check:supabase es diagnóstico local; no prueba RLS ni login.
 
-## Próxima tarea: fase 2 — Entrenamiento
+## Entrega de fase 2 — Entrenamiento
 
 | Paso | Trabajo | Resultado esperado |
 |---|---|---|
@@ -65,11 +66,11 @@ Zona horaria diaria vigente: America/Argentina/Buenos_Aires. Fechas locales expl
 | 9 | Integración con Mi Día | Mostrar el entrenamiento programado y su estado, con acceso al registro. |
 | 10 | Verificación y cierre | Pruebas funcionales, persistencia, aislamiento entre cuentas, interfaz responsive, push y comprobación en Vercel. |
 
-Modelo y recorrido implementados en la rama codex/training-phase2. Migración incremental generada por Supabase CLI: 20261106025508_training.sql, aplicada al proyecto existente. Catálogo remoto: ocho tablas con RLS, cuatro políticas cada una, sin CRUD anon. Pruebas SQL locales y remotas con rollback aprobadas, incluidas transacciones, snapshots, inicio duplicado y aislamiento por roles. No se utilizaron dos JWT reales ni se dejaron fixtures remotos.
+Modelo y recorrido implementados en la rama codex/training-phase2. Migración incremental generada por Supabase CLI: 20261106031833_training.sql, aplicada al proyecto existente. Catálogo remoto: ocho tablas con RLS, cuatro políticas cada una, sin CRUD anon. Pruebas SQL locales y remotas con rollback aprobadas, incluidas transacciones, snapshots, inicio duplicado y aislamiento por roles. No se utilizaron dos JWT reales ni se dejaron fixtures remotos.
 
 Lint, build Webpack con Next 16.4.5 y typecheck aprobados. Suites previas y validaciones nuevas aprobadas. Chromium sobre compilación de producción con SQL real embebido: recorrido completo, borrador/recarga, completar/historial/evolución, medidas/molestias, fallos de lectura/escritura y sesión vencida aprobados. Trece pantallas/vistas a 360/390/768/800/930/1280 px sin overflow, navegación fija y botones accesibles; capturas móvil/escritorio inspeccionadas. Auditoría de producción: cero vulnerabilidades.
 
-Rama subida y PR #2: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue en seguimiento. Se mantiene la distinción entre verificación SQL por roles y dos logins/JWT reales; no se dispone de credenciales de las cuentas del usuario.
+PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue aprobados. Se mantiene la distinción entre verificación SQL por roles y dos logins/JWT reales; no se dispone de credenciales de las cuentas del usuario. Próximo control funcional: usar Entrenamiento con la cuenta real. Estudio corresponde a fase 3 y requiere una nueva indicación.
 
 ## Reglas y pendientes conocidos
 

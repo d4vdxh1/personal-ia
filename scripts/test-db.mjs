@@ -4,7 +4,7 @@ export async function createTestDatabase(training = true) {
   const db = new PGlite();
   await db.exec(await readFile("supabase/tests/bootstrap.sql", "utf8"));
   await db.exec(await readFile("supabase/migrations/202610090001_initial_schema.sql", "utf8"));
-  if (training) await db.exec(await readFile("supabase/migrations/20261106025508_training.sql", "utf8"));
+  if (training) await db.exec(await readFile("supabase/migrations/20261106031833_training.sql", "utf8"));
   return db;
 }
 export const alice = "11111111-1111-4111-8111-111111111111";

@@ -27,3 +27,9 @@ Guardar una rutina y reemplazar sus ejercicios, iniciar una sesión con sus seri
 ## Publicación
 
 Aplicar únicamente la migración incremental, después de probarla en una base desechable. No repetir el esquema inicial ni ejecutar el bootstrap de pruebas en producción. Verificar catálogo, políticas y asesores después de aplicar. Mantener el estado real de publicación y pruebas en PROJECT_STATUS y DEVLOG.
+
+Entrega del 2026-11-06: PR #2 integrado, CI completo y Vercel aprobados. Migración aplicada: `20261106031833_training.sql` (versión asignada por Supabase MCP, alineada con el archivo local generado originalmente por CLI). El esquema inicial aplicado manualmente se registró como baseline en el historial; su SQL no se repitió.
+
+Catálogo remoto confirmado: ocho tablas nuevas, 32 políticas y ningún permiso CRUD anon. Prueba remota con dos identidades PostgreSQL temporales y rollback aprobada. Navegador local y CI Linux: recorrido completo y trece vistas a seis anchos aprobados. Esto no representa dos logins/JWT reales de producción; aceptación con cuenta real pendiente.
+
+Límites visibles de esta versión: 200 ejercicios, 100 rutinas y 60 próximas programaciones por carga; historial de sesiones/medidas/molestias paginado de diez en diez. Programación manual de una rutina por fecha; sin recurrencia automática ni horarios prescritos.

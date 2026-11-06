@@ -5,7 +5,7 @@ import { createTestDatabase, asUser, alice, bob } from "./test-db.mjs";
 const db = await createTestDatabase(false);
 try {
   await db.exec(await readFile("supabase/tests/initial_schema.sql", "utf8"));
-  await db.exec(await readFile("supabase/migrations/20261106025508_training.sql", "utf8"));
+  await db.exec(await readFile("supabase/migrations/20261106031833_training.sql", "utf8"));
   await db.exec(await readFile("supabase/tests/training_remote_rollback.sql", "utf8"));
   await db.query("insert into auth.users(id) values ($1),($2)", [alice, bob]);
   const exercise = await asUser(db, alice, async () => (await db.query("insert into public.training_exercises(user_id,name) values($1,'Remo') returning id", [alice])).rows[0].id);

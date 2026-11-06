@@ -4,6 +4,16 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 
 ---
 
+## 2026-11-06 — Integración y comprobación de producción
+
+- CI completo en GitHub aprobado (42156866761), incluido navegador Linux y todos los controles estáticos/SQL. PR #2 integrado en main como c6d6a7a; PR #1 cerrado como sustituido. Copia local sincronizada por fast-forward.
+- GitHub registra Vercel success para c6d6a7a (despliegue FkyLRkCpwNmPyCw2o1ZcaVmUiUoL). HTTP de producción: login 200; inicio, entrenamiento, sesión y evolución 307 al login con private, no-store. No se atribuye login real ni aceptación del usuario a esta comprobación.
+- Historial de migraciones alineado: archivo training renombrado a la versión asignada por MCP (20261106031833); baseline initial_schema 202610090001 registrado como previamente aplicado, sin ejecutar nuevamente su SQL. Esto evita que una futura sincronización intente recrear tablas existentes. Suite SQL repetida correctamente tras ajustar las rutas de prueba.
+- Confirmado que los usuarios temporales de la prueba remota no permanecen. Sin cambios a los datos personales existentes. Auditoría de producción: cero vulnerabilidades; advertencias de desarrollo/Supabase preservadas en el estado.
+- Fase 2 implementada y publicada técnicamente. Pendiente aceptación de uso con cuenta real; fase 3 no iniciada.
+
+---
+
 ## 2026-11-06 — Verificación completa y publicación de la rama
 
 - Migración training aplicada al proyecto existente. Catálogo remoto: ocho tablas nuevas con RLS, cuatro políticas por dueño y sin CRUD anon. Test remoto con dos identidades temporales aprobado, terminado en rollback; sin bootstrap ni fixtures persistentes.

@@ -33,7 +33,7 @@ export async function loadStudy(client: SupabaseClient, userId: string, view: St
 export async function loadStudyToday(client: SupabaseClient, userId: string, today: string) {
   const [tasks, exams] = await Promise.all([
     client.from("study_assignments").select("id,title,due_date,subject_id")
-      .eq("user_id",userId).neq("status","completed").gte("due_date",today)
+      .eq("user_id",userId).in("status",["pending","in_progress"]).gte("due_date",today)
       .order("due_date").limit(3),
     client.from("study_exams").select("id,title,exam_date,subject_id")
       .eq("user_id",userId).eq("status","scheduled").gte("exam_date",today)

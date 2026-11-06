@@ -458,3 +458,14 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - `src/app/page.tsx`: hero editorial + panel de actividad con información real y enlaces a módulos.
 - `src/app/layout.tsx`: carga del CSS adicional; sin modificar reglas de negocio.
 - Pendiente CI y pruebas visuales autenticadas a 360/390/768/800/930/1280 px; comprobar también 900/1100 px.
+
+
+## 2026-11-06 — Reorganización integral de interfaz (PR #3)
+
+- `src/components/app-navigation.tsx`: navegación con siete módulos reales y cinco submódulos de Entrenamiento, activa por ruta y vista.
+- `src/components/tracking-shell.tsx`: barra de escritorio agrupada por áreas; navegación inferior de cinco accesos en móvil. Eliminada la barra transversal redundante.
+- `src/app/menu/page.tsx`: directorio móvil/alternativo de todos los módulos y las vistas de Entrenamiento.
+- `src/app/navigation-v2.css`: estilos compartidos de módulos, formularios, listas, perfil, entrenamiento y breakpoints. Corrige también el tamaño del título del panel de actividad, antes sobrescrito por el selector del hero.
+- `src/app/page.tsx`: se retira fila de accesos redundantes porque los módulos ahora están en navegación principal.
+- `scripts/test-browser.mjs`: se agregan `/menu` y comprobaciones de navegación a 360/390/768/800/930/1280 px; prueba de fase 1 adaptada a etiquetas distintas según ancho.
+- Estado: rama `design/premium-ui-v2`, PR #3 en borrador; sin fusionar ni publicar. Pendientes CI y evaluación visual de capturas.

@@ -22,7 +22,7 @@ Fecha: 2026-10-10. El usuario confirmó funcionalmente los pasos 1 a 6 y solicit
 ## Pendientes antes de cerrar producción
 
 1. Confirmar Mi Día con la cuenta real: notas solo de hoy, avance, vencimientos y actualización tras guardar/recargar.
-2. Hacer push del commit preparado y comprobar el despliegue del proyecto Vercel existente. No se hace push en esta sesión.
+2. Subida a GitHub comprobada el 2026-11-05: el commit `ae652929df37c921998aa4c560276d302166754c` ya está en `main`. Falta comprobar el despliegue del proyecto Vercel existente; la presencia del commit en GitHub no acredita un despliegue correcto.
 3. Verificar login, sesión vencida/cierre, persistencia tras recarga y navegación responsive en producción; comprobar ausencia del diagnóstico público.
 4. Probar aislamiento de las seis tablas con dos cuentas reales: lectura y escritura propias permitidas; acceso/modificación ajenos rechazados. Las simulaciones no demuestran RLS remoto.
 

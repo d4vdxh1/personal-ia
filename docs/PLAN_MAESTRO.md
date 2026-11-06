@@ -4,8 +4,8 @@
 **Bienvenida del login:** “Cada día se vuelve más fácil. Lo difícil es hacerlo cada día.”
 **Identificador técnico:** `personal-ia`. Se conservan repositorio, carpeta, URL de Vercel y proyecto Supabase actuales.
 
-**Estado:** Plan vigente — v1.5, actualizado el 2026-11-06.
-**Avance:** Fases 0–3 publicadas; Fase 3 aceptada funcionalmente por confirmación del usuario el 2026-11-06. Sin prueba independiente de dos JWT reales. Siguiente fase: IA de texto V1 (Gemini), aún no implementada. Ver PROJECT_STATUS, `docs/CIERRE_FASE_1.md` y `docs/ENTRENAMIENTO.md`.
+**Estado:** Plan vigente — v1.6, actualizado el 2026-11-06.
+**Avance:** Fases 0–3 y **Fase 4A de Gemini** implementadas y aceptadas funcionalmente por confirmación del usuario el 2026-11-06. Gemini fue configurado privadamente en Vercel y probado por el usuario. Sin verificación independiente de dos JWT reales. **Siguiente: Fase 4B**, acciones de escritura confirmadas y auditadas. Ver PROJECT_STATUS, `docs/CIERRE_FASE_1.md` y `docs/ENTRENAMIENTO.md`.
 **Objetivo:** construir una aplicación web/PWA personal, inteligente y progresiva para organizar rutina, entrenamiento, estudio, hábitos, sueño, objetivos, recordatorios y, más adelante, finanzas personales.
 
 ---
@@ -1093,7 +1093,7 @@ Implementar:
 
 ## Fase 4 — IA de texto V1
 
-**Estado:** Fase 4A integrada en `main` por PR #5, con chat, herramientas de solo lectura y control de uso; migración Supabase aplicada y CI aprobada. Falta API key privada de Gemini y prueba real del proveedor. Fase 4B no iniciada. Implementar Google Gemini API mediante un adaptador `AIProvider`, exclusivamente desde el servidor, con límites de consumo, autenticación y respuestas fundamentadas en datos existentes.
+**Estado:** **Fase 4A integrada, desplegada y aceptada funcionalmente por el usuario** el 2026-11-06 (PR #5, CI y migración aprobados; Gemini configurado en Vercel y prueba satisfactoria reportada). Sin auditoría directa del proveedor por el agente. **Fase 4B no iniciada.** Implementar Google Gemini API mediante un adaptador `AIProvider`, exclusivamente desde el servidor, con límites de consumo, autenticación y respuestas fundamentadas en datos existentes.
 
 **Entrega 4A (primero):** conversación de texto de solo lectura y herramientas `get_today_plan`, `get_today_workout` y consultas de Estudio/Hábitos; validar autenticación, RLS, límites, errores y protección de datos.
 
@@ -1215,14 +1215,14 @@ Comenzar con carga manual/conversacional.
 | 1 · Tracker personal | Cerrada | Usuario confirmó funcionamiento |
 | 2 · Entrenamiento | Publicada | Confirmación general del usuario; prueba independiente con dos cuentas aún pendiente |
 | 3 · Universidad y Estudio | **Cerrada** | Usuario confirmó funcionamiento; PR #4, CI, RLS y Vercel aprobados |
-| 4 · Asistente IA texto | **4A integrada; activación pendiente** | Falta configurar API key y probar Gemini; 4B escrituras posteriores |
+| 4 · Asistente IA texto | **4A activa y aceptada por el usuario** | 4B: escrituras con permisos, confirmaciones y auditoría; todavía pendiente |
 | 5 · Recordatorios/Calendar | Pendiente | Tabla y ejecución programada, notificaciones, OAuth |
 | 6 · Analytics | Pendiente | Revisión semanal y gráficas con datos reales |
 | 7 · Voz | Pendiente | Transcripción y, después, tiempo real |
 | 8 · Finanzas | Pendiente | Registros manuales y controles adicionales |
 | 9 · Estabilidad | En curso, sin cierre | Métricas, backups, auditoría y control de costes |
 
-No se debe asumir que las fases anteriores contienen un calendario independiente, recordatorios automáticos o IA activa. Hay tareas **académicas** por materia, pero no un gestor de tareas **generales**. Las estadísticas detalladas por materia, sincronización Calendar y recomendaciones automatizadas no forman parte del MVP de Estudio cerrado.
+No se debe asumir que las fases anteriores contienen un calendario independiente ni recordatorios automáticos; **la IA de consulta ya está activa según confirmación del usuario**, pero todavía no puede realizar acciones de escritura. Hay tareas **académicas** por materia, pero no un gestor de tareas **generales**. Las estadísticas detalladas por materia, sincronización Calendar y recomendaciones automatizadas no forman parte del MVP de Estudio cerrado.
 
 ---
 

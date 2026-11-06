@@ -1,6 +1,6 @@
 # Fase 4 — Asistente IA de texto V1 (Gemini)
 
-**Estado:** Fase 4A implementada y fusionada en `main` mediante PR #5; CI y migración confirmadas; pendiente de configuración de API key y validación real del proveedor (2026-11-06). Las fases 0–3 proveen datos y operaciones manuales reales. No hay credenciales, conversación ni modelo conectado en la aplicación actual.
+**Estado:** **Fase 4A integrada y aceptada funcionalmente el 2026-11-06**. CI, migración y despliegue de código aprobados; el usuario configuró su clave privada en Vercel y confirmó que el chat Gemini funciona. La prueba real fue realizada y reportada por el usuario, no reproducida independientemente por el agente. **Fase 4B pendiente**.
 
 ## Objetivo
 
@@ -38,7 +38,7 @@ El registro de sesiones de Entrenamiento puede necesitar una herramienta adicion
 
 ## Siguiente trabajo técnico
 
-Crear una rama nueva de Fase 4A, revisar las APIs de Gemini vigentes antes de elegir SDK y modelo, diseñar interfaz `AIProvider`, establecer límites/validaciones y publicar una primera conversación únicamente de consulta. Actualizar `PROJECT_STATUS.md` y `DEVLOG.md` al verificar cada hito.
+**Fase 4B:** crear una rama nueva para tools de escritura, empezando por acciones existentes (marcar un hábito, registrar check-in y sesión de estudio). Diseñar validación de argumentos, comprobación de propiedad, confirmación del usuario previa a cada acción pertinente, auditoría mínima y pruebas con Auth real cuando sea posible. Conservar el límite de consumo, los permisos RLS y los secretos solo en servidor. No habilitar creación de tareas generales o recordatorios hasta que existan los módulos y la ejecución programada.
 
 
 ## Implementación de Fase 4A (2026-11-06)
@@ -64,4 +64,11 @@ Los datos enviados a Gemini se limitan a la pregunta y a respuestas estructurada
 
 Una nueva consulta no hereda el contexto de preguntas anteriores (el transcript visible vive únicamente en la sesión del navegador). La fase no crea tareas generales, recordatorios, sesiones nuevas ni modificaciones; Fase 4B sigue pendiente.
 
-**Estado:** CI y migración aprobados; PR #5 fusionado como `79a27ac`. La aplicación puede mostrar la página, pero no se declara Gemini activado hasta configurar `GEMINI_API_KEY` y probar una respuesta real.
+**Estado actualizado (2026-11-06):** CI y migración aprobados; PR #5 fusionado como `79a27ac`; Gemini activado de forma privada en Vercel y **funcionando según confirmación directa del usuario**. No se compartió ni se registró ninguna clave en GitHub o en esta documentación. Fase 4A cerrada funcionalmente; Fase 4B pendiente.
+
+## Validación funcional comunicada por el usuario — 2026-11-06
+
+- Tras configurar `GEMINI_API_KEY` directamente en Vercel, el usuario confirmó: «ya puse todo, ya probé está ok y funciona».
+- Se da por cumplido el criterio de aceptación funcional de Fase 4A, **por reporte del usuario**. No se afirma que el agente haya visto respuestas privadas ni realizado llamadas directas a Gemini con la cuenta del usuario.
+- La integración conserva el consentimiento antes de transmitir datos, cuotas por usuario, cinco herramientas de solo lectura y ausencia de historial persistente.
+- Próximo alcance: Fase 4B de acciones auditadas. Siguen pendientes comprobaciones de aislamiento con dos sesiones reales, observabilidad, costes y alertas de seguridad generales de Supabase.

@@ -2,8 +2,8 @@
 
 **Última actualización:** 2026-11-06
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
-**Estado general:** Fases 0 a 3 implementadas y publicadas. El usuario confirmó el 2026-11-06 que la versión actual funciona correctamente; esta aceptación de uso no sustituye una auditoría independiente con dos cuentas reales.
-**Fase actual:** Fase 3 cerrada funcionalmente por confirmación del usuario el 2026-11-06. **Fase actual:** Fase 4A implementada, CI aprobada y fusionada en `main` (PR #5). La interfaz está disponible cuando Vercel termine el despliegue; **Gemini aún requiere una API key privada del usuario**. Fase 4B no iniciada.
+**Estado general:** Fases 0–3 implementadas y aceptadas funcionalmente; **Fase 4A activada y aceptada por el usuario el 2026-11-06** tras configurar Gemini en Vercel y probar el chat. La confirmación de uso no equivale a una auditoría independiente del proveedor o de aislamiento con dos cuentas reales.
+**Fase actual:** Fase 4A — **cerrada funcionalmente por confirmación del usuario** (PR #5, CI y Supabase verificados; Gemini configurado y probado por el usuario en Vercel). **Siguiente: Fase 4B** — herramientas de escritura validadas, confirmadas y auditadas; no implementada.
 
 ## Entrega y continuidad del 2026-11-06
 
@@ -11,13 +11,13 @@
 - CI completo aprobado en GitHub, incluido Chromium en Linux: https://github.com/d4vdxh1/personal-ia/actions/runs/42156866761. Vercel success confirmado para c6d6a7a. Producción: https://personal-ia-two.vercel.app/training.
 - HTTP actual sin sesión: login 200; inicio y rutas nuevas de Entrenamiento/sesión/evolución redirigen 307 al login con private, no-store. No equivale a una nueva prueba autenticada de producción.
 - Dependencias recuperadas, Next actualizado a 16.4.5. Lint, build, tipos, suites, SQL y navegador aprobados; auditoría de producción sin vulnerabilidades.
-- Supabase: 18 tablas con RLS (6 iniciales, 8 de Entrenamiento y 4 de Estudio). Historial de migraciones alineado: `202610090001_initial_schema`, `20261106031833_training` y `20261106141453_study`. No repetir migraciones.
+- Supabase: 19 tablas con RLS (6 iniciales, 8 de Entrenamiento, 4 de Estudio y `ai_daily_usage`), con migraciones `202610090001_initial_schema`, `20261106031833_training`, `20261106141453_study` y `20261106152923_ai_usage`. No repetir migraciones.
 
 ## Objetivo y stack
 
 PWA personal para registrar rutina, hábitos, entrenamiento, estudio, sueño, objetivos y progreso. Primero funcionamiento manual; IA después del núcleo.
 
-Next.js 16.4.5 + React + TypeScript + Tailwind; Supabase (PostgreSQL/Auth/RLS); Vercel. Gemini será el proveedor principal mediante tools validadas en backend e interfaz AIProvider. Google Calendar, recordatorios y voz corresponden a fases posteriores.
+Next.js 16.4.5 + React + TypeScript + Tailwind; Supabase (PostgreSQL/Auth/RLS); Vercel. Gemini está integrado en el backend mediante `AIProvider` y herramientas de solo lectura; el usuario confirmó que funciona tras configurar la clave en Vercel. Google Calendar, recordatorios y voz corresponden a fases posteriores.
 
 ## Funcionalidades actuales
 
@@ -31,7 +31,7 @@ Next.js 16.4.5 + React + TypeScript + Tailwind; Supabase (PostgreSQL/Auth/RLS); 
 | Mi Día con datos reales | Completado y confirmado por el usuario |
 | Entrenamiento | Publicado y probado (PR #2); incluye ejercicios, rutinas, programación, sesiones, historial, evolución, medidas y molestias. El usuario confirmó el funcionamiento general de la aplicación; falta la comprobación independiente con dos logins reales. |
 | Estudio | **Fase 3 cerrada por confirmación del usuario (2026-11-06)**: materias, tareas, exámenes, sesiones y resumen en Mi Día. CI, RLS, migración y Vercel verificados. |
-| Asistente IA | **Fase 4 pendiente**: Gemini, consultas autorizadas, herramientas validadas y auditoría de acciones. |
+| Asistente IA | **Fase 4A cerrada funcionalmente (2026-11-06)**: chat Gemini operativo según prueba del usuario, cinco consultas de solo lectura, cuota de 20 solicitudes/día y consentimiento. **Fase 4B pendiente**: escrituras validadas y auditadas. |
 | Recordatorios, Calendar, estadísticas, voz y finanzas | Fases 5–8 pendientes. Analítica de Vercel y observabilidad: Fase 9. |
 
 Mi Día integra hábitos, check-in, notas de hoy, vencimientos de objetivos, entrenamiento y próximos compromisos académicos. El calendario general independiente y las relaciones de objetivos con actividades siguen pendientes.
@@ -138,10 +138,19 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - Detalle de Fase 3: [docs/FASE_3_ESTUDIO.md](docs/FASE_3_ESTUDIO.md). Plan de Fase 4: [docs/FASE_4_IA_V1.md](docs/FASE_4_IA_V1.md).
 
 
-## Fase 4A — Asistente IA de texto (trabajo en PR #5)
+## Fase 4A — Asistente IA de texto (integrada y aceptada)
 
 - PR #5 fusionado en `main` como `79a27ac`; CI completa aprobada: https://github.com/d4vdxh1/personal-ia/actions/runs/42243871582. Chat `/assistant`, menú modular, API autenticada, consulta de datos de usuario mediante cinco tools de solo lectura y adaptador REST Gemini.
-- Gemini configurado para modelo estable `gemini-3.5-flash-lite`; clave `GEMINI_API_KEY` solo en servidor. Sin `GEMINI_API_KEY`, el chat informa que falta configuración y no genera respuestas falsas. La conexión real al proveedor no se ha comprobado porque aún no existe una clave configurada.
+- Gemini configurado para modelo estable `gemini-3.5-flash-lite`; clave `GEMINI_API_KEY` solo en servidor. Sin `GEMINI_API_KEY`, el chat informa que falta configuración y no genera respuestas falsas. El usuario configuró la clave de forma privada en Vercel y confirmó haber probado con éxito la conexión real con Gemini el 2026-11-06. El agente no vio la clave ni efectuó una prueba autenticada independiente.
 - Contador 20 solicitudes/día y espera de cinco segundos por usuario con migración `20261106152923_ai_usage.sql`, aplicada a Supabase con RLS y permisos de ejecución verificados.
 - Sin historial persistente, sin escrituras, con consentimiento explícito antes de enviar consultas o datos al proveedor. Fase 4B pendiente.
-- Próximos controles: verificar el despliegue final de Vercel, configurar clave propia solo en servidor y realizar prueba real autenticada con Gemini. CI, migración, RLS y privilegios confirmados. No afirmar que la IA ya responde en producción hasta comprobarlo.
+- Estado de entrega: CI, migración, RLS y despliegue del código aprobados; configuración de Gemini y conversación real **confirmadas por el usuario**. Próximo trabajo: Fase 4B, sin saltarse validaciones, confirmaciones ni auditoría. Pendiente prueba independiente de proveedor y aislamiento con dos cuentas.
+
+
+## Aceptación funcional de Gemini — 2026-11-06
+
+- El usuario comunicó: «ya puse todo, ya probé está ok y funciona». Se registra como confirmación de activación de `GEMINI_API_KEY` en Vercel y respuesta satisfactoria del asistente.
+- **Fase 4A cerrada funcionalmente por confirmación del usuario.** No se inspeccionó el secreto ni se validó directamente una llamada al proveedor desde el agente; no incluir claves ni datos privados en documentación.
+- PR #5 fusionado (`79a27ac`), CI #42243871582 aprobado, migración `20261106152923_ai_usage` aplicada una vez; el acceso a Gemini es exclusivamente de lectura en esta versión.
+- **Fase 4B pendiente:** agregar acciones con verificación de dueño, validación de argumentos, confirmación previa y auditoría; priorizar marcar hábitos y registrar check-ins/sesiones de estudio. Tareas generales y recordatorios requieren fases posteriores.
+- Pendientes transversales: avisos Supabase sobre `public.rls_auto_enable()` y contraseñas filtradas, pruebas de aislamiento con dos cuentas reales, benchmarks, Web Analytics, observabilidad y controles del gasto del proveedor.

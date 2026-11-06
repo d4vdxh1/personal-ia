@@ -2,9 +2,9 @@
 
 **Un paso más**. Nombre del producto: **Día a Día**. Identificador técnico: `personal-ia`; repositorio, carpeta, URL de Vercel y proyecto Supabase conservan sus nombres actuales.
 
-Aplicación personal para organizar rutina, hábitos, estudio, entrenamiento y objetivos. El núcleo funcionará manualmente antes de integrar IA.
+Aplicación personal para organizar rutina, hábitos, estudio, entrenamiento y objetivos, con módulos manuales y un asistente Gemini de consultas de solo lectura.
 
-Estado actual (2026-11-06): **fases 0–3 implementadas y publicadas; Fase 3 aceptada por confirmación del usuario**. Siguiente fase: **IA de texto V1 con Gemini** (pendiente de implementar). La aceptación no equivale a una prueba independiente con dos cuentas reales. Ver [PROJECT_STATUS.md](PROJECT_STATUS.md).
+Estado actual (2026-11-06): **fases 0–3 y Fase 4A publicadas y aceptadas funcionalmente por el usuario**. Gemini fue configurado en Vercel y probado por el usuario. **Siguiente fase: 4B**, herramientas de escritura con confirmación y auditoría (aún no implementadas). La aceptación no equivale a una prueba independiente de dos cuentas reales. Ver [PROJECT_STATUS.md](PROJECT_STATUS.md).
 
 Entrenamiento agrega ejercicios propios, rutinas ordenadas, programación por fecha, sesiones con borrador y series, historial/evolución por ejercicio, medidas corporales y molestias. Abrir `/training` desde Mi Día o el menú lateral. Ver [alcance y datos](docs/ENTRENAMIENTO.md).
 
@@ -97,7 +97,7 @@ if (-not (Test-Path .env.local)) {
 | `NEXT_PUBLIC_SUPABASE_URL` | URL pública del proyecto Supabase. Obligatoria. |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Clave pública publicable del proyecto. Obligatoria; reemplaza el nombre ANON_KEY del plan inicial. |
 | `SUPABASE_SERVICE_ROLE_KEY` | Solo servidor; opcional si una operación requiere privilegios administrativos. |
-| `GEMINI_API_KEY` | Solo servidor; integración de IA en una fase posterior. |
+| `GEMINI_API_KEY` | Configurada por el usuario en Vercel para Fase 4A; **solo servidor**, nunca en el repositorio ni `NEXT_PUBLIC_*`. |
 | `GOOGLE_CLIENT_ID` | Integración futura de Google Calendar. |
 | `GOOGLE_CLIENT_SECRET` | Solo servidor; integración futura de Google Calendar. |
 
@@ -166,7 +166,7 @@ La auditoría de dependencias tras actualizar y aplicar correcciones compatibles
 
 ## Estado de entrega y siguiente fase
 
-La versión de las fases 0–3 fue confirmada como funcional por el usuario el 2026-11-06. **La Fase 4 no está desarrollada todavía.** El próximo incremento será un asistente de texto que pueda consultar datos reales, pero sin modificar registros hasta implementar permisos, validación y auditoría de herramientas. No existe todavía un módulo de tareas generales ni de recordatorios ejecutables; no se deben presentar como funciones activas.
+Las fases 0–3 y la **Fase 4A de consultas Gemini** fueron confirmadas como funcionales por el usuario el 2026-11-06. La Fase 4A es de **solo lectura**: no modifica registros. **El próximo incremento será Fase 4B**, con validación, confirmación y auditoría antes de realizar acciones desde el asistente. No existe todavía un módulo de tareas generales ni de recordatorios ejecutables; no se deben presentar como funciones activas.
 
 - [Fase 3 — alcance y cierre](docs/FASE_3_ESTUDIO.md)
 - [Fase 4 — plan de implementación IA V1](docs/FASE_4_IA_V1.md)
@@ -180,10 +180,10 @@ La migración incremental `supabase/migrations/20261106141453_study.sql` ya fue 
 
 ## Fase 4A — Asistente de texto con Gemini
 
-**Estado:** implementada y fusionada en `main` mediante [PR #5](https://github.com/d4vdxh1/personal-ia/pull/5), con CI y migración Supabase aprobadas. Para consultas reales aún falta configurar una clave privada de Gemini en Vercel y verificar la respuesta del proveedor.
+**Estado:** implementada y fusionada en `main` mediante [PR #5](https://github.com/d4vdxh1/personal-ia/pull/5); CI y migración Supabase aprobadas. El usuario configuró Gemini en Vercel y **confirmó una prueba funcional satisfactoria** el 2026-11-06. No se inspeccionó la clave ni se verificó de manera independiente la respuesta del proveedor.
 
 El módulo `/assistant` permite consultar desde una interfaz accesible un resumen del día, hábitos, objetivos, entrenamiento y entregas académicas. Las herramientas son únicamente de lectura, autorizadas para el usuario autenticado, y no envían el contenido del diario ni los registros de molestias. No existen escrituras por IA, agenda automática ni recordatorios activos.
 
-Para habilitarlo, crear una clave en [Google AI Studio](https://aistudio.google.com/apikey) y agregar `GEMINI_API_KEY` como variable de entorno de **Production** en Vercel (solo servidor, nunca `NEXT_PUBLIC_` ni incluirla en GitHub); iniciar nuevo despliegue. Se solicita consentimiento antes de compartir preguntas y resúmenes relevantes con Google Gemini. El historial del chat vive solo en memoria del navegador y se pierde al recargar.
+Activación completada por el usuario: creó su clave en [Google AI Studio](https://aistudio.google.com/apikey), configuró `GEMINI_API_KEY` como variable de **Production** en Vercel y confirmó que el asistente responde. Para reinstalar el proyecto, configurar nuevamente el secreto de forma privada y redesplegar; nunca usar `NEXT_PUBLIC_` ni incluirlo en GitHub. Se solicita consentimiento antes de compartir preguntas y resúmenes relevantes con Google Gemini. El historial del chat vive solo en memoria del navegador y se pierde al recargar.
 
 La cuota interna es de 20 solicitudes/día por cuenta, con cinco segundos de separación, mediante la migración incremental `supabase/migrations/20261106152923_ai_usage.sql` (aplicada y verificada en Supabase; no repetir). No garantiza coste 0 del proveedor: verificar límites y facturación del proyecto Google. Ver [plan técnico de la Fase 4](docs/FASE_4_IA_V1.md).

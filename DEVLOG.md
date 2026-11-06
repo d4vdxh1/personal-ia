@@ -544,3 +544,12 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - Integración Gemini implementada exclusivamente en servidor, pero **sin API key configurada ni prueba real al proveedor**. La interfaz queda informativa hasta activación privada en Vercel.
 - Pendiente de la persona usuaria: agregar `GEMINI_API_KEY` directamente a Vercel y redesplegar, sin compartir la clave. Revisar cuotas y condiciones del proyecto Google.
 - Fase 4B no iniciada; no se han agregado herramientas con escrituras.
+
+
+## 2026-11-06 — Fase 4A activada y aceptada funcionalmente
+
+- Después de integrar PR #5 y desplegar el chat de solo lectura, el usuario configuró por su cuenta `GEMINI_API_KEY` en Vercel y comunicó: «ya puse todo, ya probé está ok y funciona».
+- Se registra **aceptación funcional de Fase 4A por reporte del usuario**. No se consultó ni guardó la clave, ni se realizó desde el agente una prueba independiente con el proveedor o dos cuentas reales.
+- Se mantienen como evidencia técnica CI #42243871582 aprobado, PR #5 fusionado en `main` (`79a27ac`), migración `20261106152923_ai_usage` y despliegue exitoso del código.
+- **Siguiente trabajo:** Fase 4B, acciones de escritura confirmadas, validadas y auditadas. No se habilitaron recordatorios, Calendar, voz ni tareas generales.
+- Actualizados `PROJECT_STATUS.md`, `README.md`, `docs/PLAN_MAESTRO.md`, `docs/FASE_4_IA_V1.md` y `AGENTS.md` para cerrar estados de «API key pendiente».

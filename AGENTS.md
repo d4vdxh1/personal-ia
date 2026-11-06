@@ -27,11 +27,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Mantener estilo claro, verde original `#16734a`, contraste suficiente; sin fondos oscuros, degradados o violetas.
 
 
-## Continuidad: Fase 4 — IA de texto (aún pendiente)
+## Continuidad: Fase 4A aceptada; siguiente Fase 4B
 
 - Fases 0–3 publicadas; el usuario confirmó funcionamiento general el 2026-11-06. Conservar la diferencia entre aceptación del usuario y pruebas independientes de dos cuentas.
-- Primero 4A de solo lectura: herramienta de consulta sobre registros del usuario autenticado, `AIProvider` y Gemini solo en servidor; no exponer tokens ni claves, no crear memoria paralela a la BD.
-- Implementar restricciones de cuota/coste, límites de tokens, control de errores, rate limiting, validación de argumentos y pruebas de autorización; registrar mínimo de datos sensibles.
+- Fase 4A ya implementada y aceptada funcionalmente por confirmación del usuario el 2026-11-06: `AIProvider`, Gemini en servidor y consultas solo lectura. No exponer tokens ni claves, no crear memoria paralela a la BD.
+- Conservar restricciones implementadas: cuota diaria por usuario, intervalo entre solicitudes, límites de tokens, validación de entrada, control de errores, consentimiento y pruebas de autorización; registrar solo el mínimo de datos necesario.
 - Una tool de escritura exige confirmación contextual, verificación de propietario, acción transaccional cuando proceda y auditoría. No anunciar `create_task` general ni `create_reminder` como disponibles: no existen actualmente su backend y scheduler.
 - Documentar avances en `PROJECT_STATUS.md`, `DEVLOG.md`, `docs/PLAN_MAESTRO.md` y `README.md` sin reescribir entradas históricas.
 
@@ -43,3 +43,11 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Funciones de Gemini solo pueden acceder a las herramientas explícitas de lectura: nada de SQL libre, escritura, recordatorios ni acceso a datos de otros usuarios.
 - Conservar la pantalla de aceptación de transmisión a Gemini; no guardar automáticamente las conversaciones en BD o navegador. Evitar enviar notas íntimas, síntomas y contenidos médicos.
 - Mantener tests SQL de presupuestos y Playwright de navegación sin credenciales reales; integrar claves solo en entornos autorizados. Toda migración debe cotejarse con el historial de Supabase antes de fusionar.
+
+
+## Próxima fase — 4B (acciones desde el asistente)
+
+- Gemini está funcionando en producción **según prueba comunicada por el usuario**; no afirmar que hubo auditoría externa ni acceso del agente al secreto.
+- No volver a configurar, imprimir o registrar `GEMINI_API_KEY`; permanece exclusivamente como secreto de Vercel.
+- Implementar acciones de escritura gradualmente, usando lógica de dominio ya existente: confirmaciones explícitas, validación de parámetros, propietario autenticado, RLS, errores legibles y auditoría mínima por operación.
+- Mantener la distinción entre tareas académicas existentes y tareas generales inexistentes. Los recordatorios reales y Calendar pertenecen a fases posteriores.

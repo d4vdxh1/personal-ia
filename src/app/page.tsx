@@ -118,13 +118,6 @@ export default async function Home() {
           </footer>
         </section>
       </section>
-      <nav className="tracking-tabs" aria-label="Registro rápido">
-        <Link href="/check-in">Check-in</Link>
-        <Link href="/habits">Hábitos</Link>
-        <Link href="/journal">Escribir una nota</Link>
-        <Link href="/goals">Objetivos</Link>
-        <Link href="/training">Entrenamiento</Link>
-      </nav>
       <div className="dashboard-grid">
         <Card title="Entrenamiento de hoy" eyebrow="A TU RITMO">
           {trainingData.error ? <p role="alert" className="form-error">No pudimos cargar tu entrenamiento.</p> : <>

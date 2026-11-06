@@ -478,3 +478,14 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - `src/app/training/page.tsx` comunica la vista activa al cargador de datos.
 - `src/app/loading.tsx` y estilos nuevos: indicador de carga accesible mientras responde Next.js.
 - Antes de producción: ejecutar lint, suites, build, typecheck y Playwright; contrastar tiempos de red reales con DevTools y revisar que ninguna pestaña pierda información.
+
+
+## 2026-11-06 — Inicio de Fase 3 Universidad y Estudio
+
+- PR #3 fusionado en `main` (`30b293b`), CI previo aprobado.
+- PR #4 iniciado desde `main` en `feat/university-phase3`.
+- Migración incremental de 4 tablas, índices, políticas RLS CRUD por dueño y FK de propietario.
+- Implementados validadores, operaciones de servidor, consultas por vista, formularios, listados, calendario de entregas y resumen en Mi Día.
+- Navegación de escritorio y celular enlazada; diseño claro verde coherente con rediseño anterior.
+- Pruebas SQL en `scripts/test-study-db.mjs` y recorrido Playwright en `scripts/test-browser.mjs`.
+- Pendientes: verificar CI final, aplicar migración después de revisar historial, registrar resultado y validar Vercel autenticado.

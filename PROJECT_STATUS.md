@@ -106,3 +106,13 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - `loadTraining` ahora recibe la vista actual: semana (planes, programación, sesiones), ejercicios (catálogo), rutinas (catálogo, planes, ítems), historial (sesiones y series), salud (medidas y molestias). Se mantiene `user_id` y la autorización existentes.
 - `src/app/loading.tsx` introduce feedback visual inmediato de carga de rutas y `navigation-v2.css` define skeleton claro y responsive.
 - La latencia percibida y la reducción de llamadas no implican valores medidos de producción; pendiente CI, comprobación autenticada y medición de tiempos de red.
+
+
+## Fase 3 — Universidad y Estudio (rama de desarrollo)
+
+- Integrado previamente en `main`: PR #3 de rediseño y rendimiento (squash `30b293b`).
+- Rama `feat/university-phase3`, PR #4 en borrador; **sin fusionar hasta concluir pruebas y despliegue de migración**.
+- Cuatro entidades: `study_subjects`, `study_assignments`, `study_exams`, `study_sessions`; cada tabla con RLS por dueño, FK compuestas e índices.
+- Nuevas pantallas de Estudio: resumen, materias, tareas, exámenes y sesiones; enlaces laterales y desde el menú móvil; vencimientos de estudio en Mi Día.
+- Migración versionada `20261106094500_study.sql`: todavía no aplicar sobre la base existente sin cotejar historial y pruebas.
+- QA: suite de aislamiento SQL con dos identidades, CI y navegador con recorrido de formularios nuevos. No se presume aceptación del usuario ni despliegue de producción.

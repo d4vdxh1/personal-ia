@@ -81,3 +81,11 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - Auditoría actual: Next actualizado a 16.4.5 y correcciones compatibles aplicadas; sin críticas/altas, ocho moderadas de desarrollo relacionadas con minimatch/ESLint. No se aplicó downgrade forzado. Asesores Supabase conservan advertencias previas sobre EXECUTE de rls_auto_enable (event trigger) y protección de contraseñas filtradas desactivada; Entrenamiento no introduce funciones SECURITY DEFINER.
 - Antes de cerrar fase 9: activar Vercel Web Analytics e integrar @vercel/analytics.
 - Nunca versionar secretos; finanzas futuras sin transferencias/pagos; minimizar datos sensibles enviados a IA.
+
+
+## Propuesta de interfaz clara (PR #3, sin fusionar)
+
+- Rama de diseño: `design/premium-ui-v2`. Propuesta basada en composición del demo CEX y criterios de Emil Kowalski.
+- Paleta: fondo claro, menú blanco, verde original `#16734a` y colores sólidos; sin degradados ni violetas.
+- Panel de Mi Día con datos reales; sin cambios en Supabase, RLS, autenticación ni migraciones.
+- Estado: borrador. Pendientes CI y capturas autenticadas responsive antes de aprobar.

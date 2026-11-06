@@ -176,3 +176,14 @@ La versión de las fases 0–3 fue confirmada como funcional por el usuario el 2
 El módulo `/study` (Fase 3 publicada por PR #4) incorpora materias, tareas con prioridades y fechas límite, exámenes y sesiones de estudio con duración y tema. Cada registro pertenece al usuario autenticado; los formularios guardan a través de acciones del servidor. La barra lateral y el menú móvil integran estos apartados. Mi Día muestra tareas incompletas y próximos exámenes, utilizando registros reales.
 
 La migración incremental `supabase/migrations/20261106141453_study.sql` ya fue aplicada una vez en el proyecto personal-ia de Supabase y está alineada con el historial remoto. No volver a ejecutarla. No repetir las migraciones iniciales ni de entrenamiento. El alcance y estado del despliegue figuran en PROJECT_STATUS.md.
+
+
+## Fase 4A — Asistente de texto con Gemini
+
+**Estado:** implementación en el [PR #5](https://github.com/d4vdxh1/personal-ia/pull/5), en revisión; no se considera activada hasta completar pruebas, migración y clave privada.
+
+El módulo `/assistant` permite consultar desde una interfaz accesible un resumen del día, hábitos, objetivos, entrenamiento y entregas académicas. Las herramientas son únicamente de lectura, autorizadas para el usuario autenticado, y no envían el contenido del diario ni los registros de molestias. No existen escrituras por IA, agenda automática ni recordatorios activos.
+
+Para habilitarlo, crear una clave en [Google AI Studio](https://aistudio.google.com/apikey) y agregar `GEMINI_API_KEY` como variable de entorno de **Production** en Vercel (solo servidor, nunca `NEXT_PUBLIC_` ni incluirla en GitHub); iniciar nuevo despliegue. Se solicita consentimiento antes de compartir preguntas y resúmenes relevantes con Google Gemini. El historial del chat vive solo en memoria del navegador y se pierde al recargar.
+
+La cuota interna es de 20 solicitudes/día por cuenta, con cinco segundos de separación, mediante la migración incremental `supabase/migrations/20261106150000_ai_usage.sql` (pendiente mientras el PR está en revisión). No garantiza coste 0 del proveedor: verificar límites y facturación del proyecto Google. Ver [plan técnico de la Fase 4](docs/FASE_4_IA_V1.md).

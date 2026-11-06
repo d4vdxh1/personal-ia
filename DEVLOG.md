@@ -525,3 +525,13 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - Supabase: migración `20261106141453_study` aplicada una vez; cuatro tablas verificadas con RLS y permisos de acceso controlados.
 - Estado Vercel del commit de integración: `success`. Pendiente validación autenticada con la cuenta real; CI usa autenticación simulada.
 - Quedan pendientes preexistentes de seguridad detectados por advisors Supabase, sin relación causal con el módulo de Estudio.
+
+
+## 2026-11-06 — Fase 4A, implementación de chat de solo lectura
+
+- Rama `feat/assistant-phase4a`, PR #5 en borrador.
+- Chat blanco y verde (`/assistant`), accesible en escritorio y celular; aviso visible si Gemini no está configurado y aceptación explícita de transferencia a proveedor externo.
+- Endpoint autenticado con claves solo servidor, límite de longitud, control de origen y no-cache; provider Gemini REST `gemini-3.5-flash-lite` con IDs de function calling.
+- Cinco herramientas autorizadas de lectura desde datos existentes: hoy, hábitos, entrenamiento, estudio y objetivos. Sin modificaciones ni acceso a notas íntimas o molestias.
+- Migración pendiente `20261106150000_ai_usage.sql`: cuota atómica de 20 solicitudes/día y cinco segundos de enfriamiento por usuario. Test SQL y navegador añadidos.
+- Pendiente: aprobar CI, aplicar/verificar migración, fusionar PR, desplegar en Vercel, configurar clave `GEMINI_API_KEY` por el usuario y probar respuestas reales; no confundir implementación con activación del proveedor.

@@ -3,7 +3,7 @@
 **Última actualización:** 2026-11-06
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
 **Estado general:** Fases 0 a 3 implementadas y publicadas. El usuario confirmó el 2026-11-06 que la versión actual funciona correctamente; esta aceptación de uso no sustituye una auditoría independiente con dos cuentas reales.
-**Fase actual:** Fase 3 cerrada funcionalmente por confirmación del usuario el 2026-11-06. **Siguiente: Fase 4 — Asistente IA de texto V1 (Gemini), aún no iniciada.**
+**Fase actual:** Fase 3 cerrada funcionalmente por confirmación del usuario el 2026-11-06. **En desarrollo:** Fase 4A — chat Gemini de solo lectura en PR #5; pendiente de validación, migración y activación privada. Fase 4B todavía no iniciada.
 
 ## Entrega y continuidad del 2026-11-06
 
@@ -136,3 +136,12 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - **No implementado aún:** proveedor Gemini, chat y tool calling; tareas generales y recordatorios (el MVP académico tiene tareas por materia, que no son tareas generales), Calendar, scheduler, estadísticas inteligentes, voz y finanzas.
 - Riesgos pendientes: avisos de asesores Supabase sobre ejecución de `public.rls_auto_enable()` y contraseñas filtradas; verificar permisos antes de exponer nuevas capacidades de IA. Analítica/observabilidad y benchmarks de navegación pendientes.
 - Detalle de Fase 3: [docs/FASE_3_ESTUDIO.md](docs/FASE_3_ESTUDIO.md). Plan de Fase 4: [docs/FASE_4_IA_V1.md](docs/FASE_4_IA_V1.md).
+
+
+## Fase 4A — Asistente IA de texto (trabajo en PR #5)
+
+- Rama `feat/assistant-phase4a`, PR #5 en borrador. Chat `/assistant`, menú modular, API autenticada, consulta de datos de usuario mediante cinco tools de solo lectura y adaptador REST Gemini.
+- Gemini configurado para modelo estable `gemini-3.5-flash-lite`; clave `GEMINI_API_KEY` solo en servidor. Hasta que se configure en Vercel el chat muestra un estado informativo y no produce respuestas ficticias.
+- Contador 20 solicitudes/día y espera de cinco segundos por usuario con migración `20261106150000_ai_usage.sql`, pendiente de aplicación al servidor remoto tras CI.
+- Sin historial persistente, sin escrituras, con consentimiento explícito antes de enviar consultas o datos al proveedor. Fase 4B pendiente.
+- Próximos controles: CI, catálogo y permisos de Supabase, activar clave propia en Vercel y realizar prueba real autenticada con Gemini. No afirmar que la IA ya responde en producción hasta comprobarlo.

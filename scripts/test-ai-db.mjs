@@ -4,7 +4,7 @@ import { createTestDatabase, asUser, alice, bob } from "./test-db.mjs";
 
 const db = await createTestDatabase();
 try {
-  await db.exec(await readFile("supabase/migrations/20261106150000_ai_usage.sql", "utf8"));
+  await db.exec(await readFile("supabase/migrations/20261106152923_ai_usage.sql", "utf8"));
   await db.query("insert into auth.users(id) values($1),($2)",[alice,bob]);
   for (const table of ["ai_daily_usage"]) {
     const result = (await db.query("select relrowsecurity from pg_class where oid=$1::regclass",["public."+table])).rows[0];

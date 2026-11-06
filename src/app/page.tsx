@@ -10,6 +10,7 @@ import { loadGoals } from "@/lib/goals/data";
 import { loadTodayJournal } from "@/lib/today/data";
 import { createClient } from "@/lib/supabase/server";
 import { loadTrainingToday } from "@/lib/training/data";
+import { loadStudyToday } from "@/lib/study/data";
 
 export const dynamic = "force-dynamic";
 
@@ -17,11 +18,12 @@ export default async function Home() {
   const { user, profile } = await getAccount();
   const supabase = await createClient();
   const habitsData = await loadHabits(supabase, user.id);
-  const [checkinData, journalData, goalsData, trainingData] = await Promise.all([
+  const [checkinData, journalData, goalsData, trainingData, studyData] = await Promise.all([
     loadCheckin(supabase, user.id, habitsData.date),
     loadTodayJournal(supabase, user.id, habitsData.date),
     loadGoals(supabase, user.id, 1, "active"),
     loadTrainingToday(supabase, user.id, habitsData.date),
+    loadStudyToday(supabase, user.id, habitsData.date),
   ]);
 
   const displayName = profile?.display_name.trim() || user.email?.split("@")[0] || "ahí";
@@ -119,6 +121,22 @@ export default async function Home() {
         </section>
       </section>
       <div className="dashboard-grid">
+        <Card title="Universidad y estudio" eyebrow="LO QUE SIGUE">
+          {studyData.error ? <p role="alert" className="form-error">No pudimos cargar tus entregas y exámenes.</p>
+            : studyData.tasks.length === 0 && studyData.exams.length === 0
+              ? <p className="habit-empty">No tenés tareas o exámenes próximos registrados.</p>
+              : <>
+                {studyData.tasks.map(t => <div className="study-list-row" key={t.id}>
+                  <div><strong>{t.title}</strong><p>Tarea pendiente</p></div>
+                  <span>{t.due_date.split("-").reverse().join("/")}</span>
+                </div>)}
+                {studyData.exams.map(e => <div className="study-list-row" key={e.id}>
+                  <div><strong>{e.title}</strong><p>Examen programado</p></div>
+                  <span>{e.exam_date.split("-").reverse().join("/")}</span>
+                </div>)}
+              </>}
+          <Link className="habits-manage" href="/study">Organizar estudios →</Link>
+        </Card>
         <Card title="Entrenamiento de hoy" eyebrow="A TU RITMO">
           {trainingData.error ? <p role="alert" className="form-error">No pudimos cargar tu entrenamiento.</p> : <>
             {trainingData.sessions.map(s => <p key={s.id}><Link className="training-open" href={`/training/${s.id}`}>{s.plan_name} · {s.status === 'completed' ? 'Completada' : 'Continuar sesión'}</Link></p>)}

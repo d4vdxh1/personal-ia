@@ -4,7 +4,9 @@
 **Bienvenida del login:** “Cada día se vuelve más fácil. Lo difícil es hacerlo cada día.”
 **Identificador técnico:** `personal-ia`. Se conservan repositorio, carpeta, URL de Vercel y proyecto Supabase actuales.
 
-**Estado:** Plan vigente — v1.2, actualizado el 2026-10-10.
+**Estado:** Plan vigente — v1.2; continuidad revisada el 2026-11-05.
+**Comprobación de GitHub (2026-11-05):** el commit `ae65292` ya está publicado en `main`. No se verificaron en esta revisión Vercel, persistencia con cuentas reales ni aislamiento remoto.
+
 **Avance:** Fase 0 cerrada; pasos 1 a 6 de fase 1 confirmados por el usuario. Mi Día integrado (paso 7); paso 8 en verificación local, pendiente cierre remoto. Ver `docs/CIERRE_FASE_1.md`.
 **Objetivo:** construir una aplicación web/PWA personal, inteligente y progresiva para organizar rutina, entrenamiento, estudio, hábitos, sueño, objetivos, recordatorios y, más adelante, finanzas personales.
 
@@ -1030,7 +1032,7 @@ Estado operativo al 2026-10-10:
 | 5 | Diario personal | Validado funcionalmente por el usuario |
 | 6 | Objetivos y progreso | Confirmado por el usuario |
 | 7 | Mi Día completo con datos reales | Implementado: hábitos/check-in/diario/objetivos; sin maquetas |
-| 8 | Validación completa, Vercel y retirada del diagnóstico | Pruebas locales y Edge correctos; diagnóstico retirado. Push, Vercel y aislamiento remoto pendientes |
+| 8 | Validación completa, Vercel y retirada del diagnóstico | Pruebas locales y Edge correctos; diagnóstico retirado. Commit publicado en GitHub; Vercel y aislamiento remoto pendientes |
 
 La confirmación funcional del usuario no equivale a una auditoría remota de aislamiento entre cuentas. El cierre incluye verificar permisos con sesiones reales. Detalles de pruebas y limitaciones en `PROJECT_STATUS.md` y `DEVLOG.md`.
 

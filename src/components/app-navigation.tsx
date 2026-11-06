@@ -38,7 +38,7 @@ export function DesktopNavigation({ active, trainingView }: { active: AppSection
           className={active === item.key ? "nav-item selected" : "nav-item"}>
           <Icon name={item.icon} /><span>{item.title}</span>
         </Link>
-        {item.key === "training" && active === "training" &&
+        {item.key === "training" &&
           <div className="sidebar-subnav" aria-label="Apartados de entrenamiento">
             {trainingLinks.map(sub => <Link href={sub.href} key={sub.view}
               className={trainingView === sub.view ? "sidebar-subitem selected-subitem" : "sidebar-subitem"}

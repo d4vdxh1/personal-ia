@@ -109,11 +109,26 @@ try {
   await page.goto(base+'/training?view=health'); await page.getByLabel('Peso corporal (kg)',{exact:true}).fill('70'); await page.getByRole('button',{name:'Guardar medidas',exact:true}).click(); await page.getByText('Peso: 70 kg',{exact:false}).waitFor(); await page.getByLabel('Zona o molestia',{exact:true}).fill('Rodilla'); await page.getByLabel('Hubo bloqueo',{exact:true}).check(); await page.getByRole('button',{name:'Guardar molestia',exact:true}).click(); await page.getByRole('heading',{name:`Rodilla · ${today}`,exact:true}).waitFor();
   failWrite=true; await page.goto(base+'/training?view=exercises'); await page.getByLabel('Nombre del ejercicio',{exact:true}).first().fill('Borrador conservado'); await page.getByRole('button',{name:'Crear ejercicio',exact:true}).click(); await page.locator('main [role=alert]').waitFor(); assert.equal(await page.getByLabel('Nombre del ejercicio',{exact:true}).first().inputValue(),'Borrador conservado'); failWrite=false;
   failRead=true; await page.goto(base+'/training'); await page.locator('main [role=alert]').waitFor(); failRead=false;
-  const paths=['/','/habits','/check-in','/journal','/goals','/profile','/training','/training?view=exercises','/training?view=plans','/training?view=history','/training?view=health',sessionUrl.replace(base,''),exerciseUrl.replace(base,'')];
+  const paths=['/','/menu','/habits','/check-in','/journal','/goals','/profile','/training','/training?view=exercises','/training?view=plans','/training?view=history','/training?view=health',sessionUrl.replace(base,''),exerciseUrl.replace(base,'')];
   for(const width of [360,390,768,800,930,1280]){
     await page.setViewportSize({width,height:900});
     for(const path of paths){ await page.goto(base+path); await page.locator('h1').waitFor(); assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`overflow ${width} ${path}`); const nav=page.getByRole('navigation',{name:'Navegación principal',exact:true}); assert.equal(await nav.isVisible(),true); const box=await nav.boundingBox(); if(width<=800)assert.ok(box.y>500,`menú móvil ${width}`); else assert.ok(box.x<250,`menú escritorio ${width}`);
       const buttons=page.locator('form button[type=submit]:visible'); if(await buttons.count()){const button=buttons.last();await button.scrollIntoViewIfNeeded();const b=await button.boundingBox();assert.ok(b.y>=0 && b.y+b.height<=(width<=800?box.y:900)+2,`botón tapado ${width} ${path}`);}
+    }
+    await page.goto(base+'/');
+    const mainNav=page.getByRole('navigation',{name:'Navegación principal',exact:true});
+    if(width<=800){
+      assert.equal(await mainNav.getByRole('link').count(),5,'cinco accesos principales móviles');
+      await mainNav.getByRole('link',{name:'Más'}).click();
+      await page.waitForURL(/\/menu$/);
+      await page.getByRole('link',{name:'Mi diario'}).click();
+      await page.waitForURL(/\/journal$/);
+    } else {
+      await mainNav.getByRole('link',{name:'Mi diario'}).click();
+      await page.waitForURL(/\/journal$/);
+      await mainNav.getByRole('link',{name:'Entrenamiento',exact:true}).click();
+      await page.waitForURL(/\/training$/);
+      assert.equal(await mainNav.getByRole('link',{name:'Ejercicios'}).isVisible(),true);
     }
     await page.goto(base+'/training'); await page.screenshot({path:join(output,`training-${width}.png`),fullPage:true});
   }

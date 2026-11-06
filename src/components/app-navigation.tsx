@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Icon, type IconName } from "@/components/ui/icon";
 
-export type AppSection = "today" | "habits" | "check-in" | "journal" | "goals" | "training" | "profile" | "menu";
+export type AppSection = "today" | "habits" | "check-in" | "journal" | "goals" | "training" | "profile" | "menu" | "study";
+export type StudyView = "overview" | "subjects" | "assignments" | "exams" | "sessions";
 export type TrainingView = "week" | "exercises" | "plans" | "history" | "health";
 
 type NavItem = { key: AppSection; title: string; href: string; icon: IconName };
@@ -16,6 +17,9 @@ const groups: { heading: string; items: NavItem[] }[] = [
     { key: "goals", title: "Objetivos", href: "/goals", icon: "target" },
     { key: "training", title: "Entrenamiento", href: "/training", icon: "activity" },
   ] },
+  { heading: "UNIVERSIDAD", items: [
+    { key: "study", title: "Estudio", href: "/study", icon: "book" },
+  ] },
   { heading: "CUENTA", items: [
     { key: "profile", title: "Mi perfil", href: "/profile", icon: "user" },
   ] },
@@ -27,9 +31,16 @@ export const trainingLinks: { view: TrainingView; title: string; href: string }[
   { view: "history", title: "Historial", href: "/training?view=history" },
   { view: "health", title: "Medidas y molestias", href: "/training?view=health" },
 ];
+export const studyLinks: { view: StudyView; title: string; href: string }[] = [
+  { view: "overview", title: "Resumen", href: "/study" },
+  { view: "subjects", title: "Materias", href: "/study?view=subjects" },
+  { view: "assignments", title: "Tareas", href: "/study?view=assignments" },
+  { view: "exams", title: "Exámenes", href: "/study?view=exams" },
+  { view: "sessions", title: "Sesiones", href: "/study?view=sessions" },
+];
 export const allDestinations = groups.flatMap(group => group.items);
 
-export function DesktopNavigation({ active, trainingView }: { active: AppSection; trainingView?: TrainingView }) {
+export function DesktopNavigation({ active, trainingView, studyView }: { active: AppSection; trainingView?: TrainingView; studyView?: StudyView }) {
   return <nav className="desktop-nav" aria-label="Navegación principal">
     {groups.map(group => <div className="nav-group" key={group.heading}>
       <p className="nav-caption">{group.heading}</p>
@@ -38,6 +49,12 @@ export function DesktopNavigation({ active, trainingView }: { active: AppSection
           className={active === item.key ? "nav-item selected" : "nav-item"}>
           <Icon name={item.icon} /><span>{item.title}</span>
         </Link>
+        {item.key === "study" &&
+          <div className="sidebar-subnav" aria-label="Apartados de estudio">
+            {studyLinks.map(sub => <Link href={sub.href} key={sub.view}
+              className={active === "study" && studyView === sub.view ? "sidebar-subitem selected-subitem" : "sidebar-subitem"}
+              aria-current={active === "study" && studyView === sub.view ? "page" : undefined}>{sub.title}</Link>)}
+          </div>}
         {item.key === "training" &&
           <div className="sidebar-subnav" aria-label="Apartados de entrenamiento">
             {trainingLinks.map(sub => <Link href={sub.href} key={sub.view}
@@ -58,7 +75,7 @@ const mobileItems: NavItem[] = [
 ];
 
 export function MobileNavigation({ active }: { active: AppSection }) {
-  const selected = active === "check-in" || active === "journal" || active === "profile" ? "menu" : active;
+  const selected = active === "check-in" || active === "journal" || active === "profile" || active === "study" ? "menu" : active;
   return <nav className="mobile-nav" aria-label="Navegación principal">
     {mobileItems.map(item => <Link key={item.key} href={item.href}
       className={selected === item.key ? "nav-item selected" : "nav-item"}

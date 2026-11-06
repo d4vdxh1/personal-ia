@@ -45,7 +45,7 @@ const server = createServer((req, res) => {
         const sql=table ? `select * from public.${ident(name)}(${args.map((_,i)=>'$'+(i+1)).join(',')})` : `select public.${ident(name)}(${args.map((_,i)=>'$'+(i+1)).join(',')}) as value`;
         const rows=(await db.query(sql,args)).rows; return table ? rows.map(normalize) : rows[0].value;
       }
-      assert.ok(['profiles','habits','habit_entries','daily_checkins','journal_entries','goals','training_exercises','training_plans','training_plan_items','training_schedule','training_sessions','training_sets','training_metrics','training_symptoms'].includes(name));
+      assert.ok(['profiles','habits','habit_entries','daily_checkins','journal_entries','goals','training_exercises','training_plans','training_plan_items','training_schedule','training_sessions','training_sets','training_metrics','training_symptoms','study_subjects','study_assignments','study_exams','study_sessions'].includes(name));
       const args=[], where=[];
       for (const [field, value] of url.searchParams) {
         if (['select','order','limit','offset','on_conflict'].includes(field)) continue;
@@ -109,7 +109,29 @@ try {
   await page.goto(base+'/training?view=health'); await page.getByLabel('Peso corporal (kg)',{exact:true}).fill('70'); await page.getByRole('button',{name:'Guardar medidas',exact:true}).click(); await page.getByText('Peso: 70 kg',{exact:false}).waitFor(); await page.getByLabel('Zona o molestia',{exact:true}).fill('Rodilla'); await page.getByLabel('Hubo bloqueo',{exact:true}).check(); await page.getByRole('button',{name:'Guardar molestia',exact:true}).click(); await page.getByRole('heading',{name:`Rodilla · ${today}`,exact:true}).waitFor();
   failWrite=true; await page.goto(base+'/training?view=exercises'); await page.getByLabel('Nombre del ejercicio',{exact:true}).first().fill('Borrador conservado'); await page.getByRole('button',{name:'Crear ejercicio',exact:true}).click(); await page.locator('main [role=alert]').waitFor(); assert.equal(await page.getByLabel('Nombre del ejercicio',{exact:true}).first().inputValue(),'Borrador conservado'); failWrite=false;
   failRead=true; await page.goto(base+'/training'); await page.locator('main [role=alert]').waitFor(); failRead=false;
-  const paths=['/','/menu','/habits','/check-in','/journal','/goals','/profile','/training','/training?view=exercises','/training?view=plans','/training?view=history','/training?view=health',sessionUrl.replace(base,''),exerciseUrl.replace(base,'')];
+  // University: real SQL CRUD with owner isolation and cross-table FK constraints.
+  await page.goto(base+'/study?view=subjects');
+  await page.getByLabel('Nombre de la materia').fill('Ingeniería del Software');
+  await page.getByRole('button',{name:'Registrar',exact:true}).click();
+  await page.getByRole('heading',{name:'Ingeniería del Software',exact:true}).waitFor();
+  await page.goto(base+'/study?view=assignments');
+  await page.getByLabel('Materia',{exact:true}).first().selectOption({label:'Ingeniería del Software'});
+  await page.getByLabel('Título de la tarea').fill('Trabajo final');
+  await page.getByRole('button',{name:'Registrar',exact:true}).click();
+  await page.getByRole('heading',{name:'Trabajo final',exact:true}).waitFor();
+  await page.goto(base+'/study?view=exams');
+  await page.getByLabel('Materia',{exact:true}).first().selectOption({label:'Ingeniería del Software'});
+  await page.getByLabel('Nombre del examen').fill('Parcial');
+  await page.getByRole('button',{name:'Registrar',exact:true}).click();
+  await page.getByRole('heading',{name:'Parcial',exact:true}).waitFor();
+  await page.goto(base+'/study?view=sessions');
+  await page.getByLabel('Materia',{exact:true}).first().selectOption({label:'Ingeniería del Software'});
+  await page.getByLabel('Tema estudiado').fill('Arquitectura de software');
+  await page.getByRole('button',{name:'Registrar',exact:true}).click();
+  await page.getByRole('heading',{name:'Arquitectura de software',exact:true}).waitFor();
+  await page.goto(base+'/study');
+  await page.getByText('Trabajo final',{exact:true}).waitFor();
+  const paths=['/','/menu','/study','/study?view=subjects','/study?view=assignments','/study?view=exams','/study?view=sessions','/habits','/check-in','/journal','/goals','/profile','/training','/training?view=exercises','/training?view=plans','/training?view=history','/training?view=health',sessionUrl.replace(base,''),exerciseUrl.replace(base,'')];
   for(const width of [360,390,768,800,930,1280]){
     await page.setViewportSize({width,height:900});
     for(const path of paths){ await page.goto(base+path); await page.locator('h1').waitFor(); assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`overflow ${width} ${path}`); const nav=page.getByRole('navigation',{name:'Navegación principal',exact:true}); assert.equal(await nav.isVisible(),true); const box=await nav.boundingBox(); if(width<=800)assert.ok(box.y>500,`menú móvil ${width}`); else assert.ok(box.x<250,`menú escritorio ${width}`);
@@ -129,7 +151,7 @@ try {
       await page.waitForURL(/\/journal$/);
       await mainNav.getByRole('link',{name:'Entrenamiento',exact:true}).click();
       await page.waitForURL(/\/training$/);
-      assert.equal(await mainNav.getByRole('link',{name:'Ejercicios'}).isVisible(),true);
+      await mainNav.getByRole('link',{name:'Ejercicios'}).waitFor({state:'visible'}); // streamed page may arrive after URL changes
     }
     await page.goto(base+'/training'); await page.screenshot({path:join(output,`training-${width}.png`),fullPage:true});
   }

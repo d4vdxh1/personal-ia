@@ -2,10 +2,10 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { LogoutForm } from "@/components/auth/logout-form";
 import { Icon } from "@/components/ui/icon";
-import { DesktopNavigation, MobileNavigation, type AppSection, type TrainingView } from "@/components/app-navigation";
+import { DesktopNavigation, MobileNavigation, type AppSection, type TrainingView, type StudyView } from "@/components/app-navigation";
 
 export function TrackingShell({
-  title, dateLabel, copy, displayName, active, trainingView, children,
+  title, dateLabel, copy, displayName, active, trainingView, studyView, children,
 }: {
   title: string;
   dateLabel: string;
@@ -13,6 +13,7 @@ export function TrackingShell({
   displayName: string;
   active: AppSection;
   trainingView?: TrainingView;
+  studyView?: StudyView;
   children: ReactNode;
 }) {
   return <>
@@ -24,7 +25,7 @@ export function TrackingShell({
           <span className="brand-mark"><Icon name="activity" /></span>
           <span>Día a Día<small>Un paso más</small></span>
         </Link>
-        <DesktopNavigation active={active} trainingView={trainingView} />
+        <DesktopNavigation active={active} trainingView={trainingView} studyView={studyView} />
         <div className="sidebar-note">
           <span className="small-leaf">✧</span>
           <p>Un poco de claridad.<br />Un paso a la vez.</p>

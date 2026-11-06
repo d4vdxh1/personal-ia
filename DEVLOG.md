@@ -478,3 +478,30 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - `src/app/training/page.tsx` comunica la vista activa al cargador de datos.
 - `src/app/loading.tsx` y estilos nuevos: indicador de carga accesible mientras responde Next.js.
 - Antes de producción: ejecutar lint, suites, build, typecheck y Playwright; contrastar tiempos de red reales con DevTools y revisar que ninguna pestaña pierda información.
+
+
+## 2026-11-06 — Inicio de Fase 3 Universidad y Estudio
+
+- PR #3 fusionado en `main` (`30b293b`), CI previo aprobado.
+- PR #4 iniciado desde `main` en `feat/university-phase3`.
+- Migración incremental de 4 tablas, índices, políticas RLS CRUD por dueño y FK de propietario.
+- Implementados validadores, operaciones de servidor, consultas por vista, formularios, listados, calendario de entregas y resumen en Mi Día.
+- Navegación de escritorio y celular enlazada; diseño claro verde coherente con rediseño anterior.
+- Pruebas SQL en `scripts/test-study-db.mjs` y recorrido Playwright en `scripts/test-browser.mjs`.
+- Pendientes: verificar CI final, aplicar migración después de revisar historial, registrar resultado y validar Vercel autenticado.
+
+
+## 2026-11-06 — Migración de Estudio aplicada y verificada
+
+- Supabase MCP aplicó la migración incremental como `20261106141453_study` y se alineó el nombre del archivo SQL versionado.
+- Confirmadas las cuatro tablas `study_*`, todas con RLS activo, cuatro políticas por tabla, lectura denegada a `anon` y lectura permitida a `authenticated` condicionada por políticas.
+- La validación de seguridad detectó avisos previos sobre `public.rls_auto_enable()` (EXECUTE para roles de API) y protección de contraseñas filtradas desactivada; requieren una revisión separada.
+- La primera ronda completa de CI aprobó, incluido Playwright. Volver a pasar CI al modificar nombres y documentación antes de fusionar PR #4.
+
+
+## 2026-11-06 — Migración académica en Supabase
+
+- La migración de Estudio fue aplicada como `20261106141453_study`; el archivo se alineó con el historial remoto.
+- Las tablas de materias, tareas, exámenes y sesiones tienen RLS activo y cuatro políticas por tabla.
+- Se confirmó ausencia de permisos de lectura para usuarios anónimos.
+- Queda por confirmar CI del último commit y posteriormente el despliegue de la Fase 3.

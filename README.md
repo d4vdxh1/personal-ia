@@ -159,3 +159,10 @@ GitHub Actions ejecuta estos controles sin secretos. No confundir el Auth simula
 Migración incremental: `supabase/migrations/20261106031833_training.sql`, aplicada al proyecto existente. No repetirla ni repetir la inicial. `supabase/tests/training_remote_rollback.sql` verifica con fixtures transaccionales y roles PostgreSQL; siempre termina en rollback. Nunca ejecutar `supabase/tests/bootstrap.sql` en Supabase.
 
 La auditoría de dependencias tras actualizar y aplicar correcciones compatibles no reportó críticas/altas; quedaron ocho moderadas de desarrollo relacionadas con minimatch/ESLint. No se aplicó downgrade forzado.
+
+
+## Fase 3 — Universidad y Estudio
+
+El módulo `/study` incorpora materias, tareas con prioridades y fechas límite, exámenes y sesiones de estudio con duración y tema. Cada registro pertenece al usuario autenticado; los formularios guardan a través de acciones del servidor. La barra lateral y el menú móvil integran estos apartados. Mi Día muestra tareas incompletas y próximos exámenes, utilizando registros reales.
+
+La migración incremental `supabase/migrations/20261106141453_study.sql` ya fue aplicada una vez en el proyecto personal-ia de Supabase y está alineada con el historial remoto. No volver a ejecutarla. No repetir las migraciones iniciales ni de entrenamiento. El alcance y estado del despliegue figuran en PROJECT_STATUS.md.

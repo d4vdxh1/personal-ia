@@ -136,3 +136,26 @@
 @media (prefers-reduced-motion: reduce) {
   .sidebar-subitem, .journal-entry summary, .directory-link { transition: none !important; }
 }
+
+/* Fast, accessible visual feedback while dynamic routes fetch server data. */
+.route-loading {
+  min-height: calc(100dvh - 80px);
+  margin-left: 244px;
+  padding: 75px clamp(24px, 4vw, 55px);
+  color: #42614c;
+}
+.loading-header { max-width: 620px; margin-bottom: 30px; }
+.loading-bar { background: #e8f0ea; border-radius: 7px; }
+.loading-title { width: min(58%, 320px); height: 33px; margin-bottom: 14px; }
+.loading-subtitle { width: min(80%, 460px); height: 13px; }
+.loading-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; max-width: 1150px; }
+.loading-card { background: #fff; border: 1px solid #dce7df; border-radius: 15px; padding: 27px; min-height: 210px; }
+.loading-card-title { width: 50%; height: 20px; margin-bottom: 30px; }
+.loading-line { width: 95%; height: 12px; margin-bottom: 21px; }
+.loading-line-short { width: 60%; height: 12px; margin-bottom: 21px; }
+.loading-message { display: inline-block; margin-top: 24px; font-size: 13px; font-weight: 650; }
+@media (min-width: 801px) and (max-width: 1190px) { .route-loading { margin-left: 212px; } }
+@media (max-width: 800px) {
+  .route-loading { margin-left: 0; padding: 46px 20px 110px; }
+  .loading-grid { grid-template-columns: 1fr; }
+}

@@ -134,7 +134,9 @@ try {
   await page.goto(base+'/assistant');
   await page.getByRole('heading',{name:'¿En qué te puedo ayudar hoy?'}).waitFor();
   assert.equal(await page.getByLabel('Tu pregunta').isDisabled(),true,'assistant requires a configured Gemini key');
-  assert.equal(await page.getByRole('link',{name:'Asistente IA'}).count()>0,true,'assistant is discoverable');
+  await page.getByRole('link',{name:'Más',exact:true}).click();
+  await page.waitForURL(/\/menu$/);
+  await page.getByRole('link',{name:'Asistente IA',exact:true}).waitFor({state:'visible'});
   assert.equal((await page.request.post(base+'/api/assistant',{
     headers: {'Content-Type':'application/json'},
     data: {message:'Qué tengo hoy?'}

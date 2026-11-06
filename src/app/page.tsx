@@ -62,7 +62,7 @@ export default async function Home() {
       <section className="day-hero" aria-label="Tu resumen de hoy">
         <div className="hero-content">
           <p className="hero-kicker">TU ESPACIO PERSONAL</p>
-          <h1>Hacé que cada día <span>cuente.</span></h1>
+          <h2>Hacé que cada día <span>cuente.</span></h2>
           <p className="hero-subtitle">Organizá tus hábitos, seguí tu entrenamiento y registrá tus avances. Todo lo importante, en un mismo lugar.</p>
           <div className="hero-actions">
             <Link className="hero-primary" href="/habits">Ver mis hábitos <Icon name="arrow" /></Link>
@@ -113,7 +113,7 @@ export default async function Home() {
             </div>
           </div>
           <footer className="panel-actions">
-            <Link href="/check-in" className="panel-action-primary">{checkinData.checkin ? "Actualizar check-in" : "Registrar check-in"}</Link>
+            <Link href="/check-in" className="panel-action-primary">{checkinData.error ? "Abrir check-in" : checkinData.checkin ? "Actualizar check-in" : "Registrar check-in"}</Link>
             <Link href="/training" className="panel-action-secondary">Ver entrenamiento</Link>
           </footer>
         </section>

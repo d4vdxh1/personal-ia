@@ -13,7 +13,7 @@ export default async function TrainingPage({ searchParams }: { searchParams: Pro
   const { user, profile } = await getAccount(); const params = await searchParams;
   const view = params.view && params.view in tabs ? params.view as keyof typeof tabs : "week";
   const page = journalPage(params.page); const { date: today } = getBuenosAiresToday();
-  const client = await createClient(); const data = await loadTraining(client, user.id, page, today);
+  const client = await createClient(); const data = await loadTraining(client, user.id, page, today, view);
   const progress = view === "history" ? await client.rpc("training_progress") : { data: [], error: null };
   const weeks = Array.from({ length: 7 }, (_, index) => { const d = new Date(`${today}T12:00:00Z`); d.setUTCDate(d.getUTCDate() + index); return d.toISOString().slice(0, 10); });
   return <TrackingShell title="Tu entrenamiento" dateLabel={today} active="training" trainingView={view} displayName={profile?.display_name.trim() || user.email || "?"} copy="Planificá a tu ritmo y guardá lo que hiciste.">

@@ -154,3 +154,11 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - PR #5 fusionado (`79a27ac`), CI #42243871582 aprobado, migración `20261106152923_ai_usage` aplicada una vez; el acceso a Gemini es exclusivamente de lectura en esta versión.
 - **Fase 4B pendiente:** agregar acciones con verificación de dueño, validación de argumentos, confirmación previa y auditoría; priorizar marcar hábitos y registrar check-ins/sesiones de estudio. Tareas generales y recordatorios requieren fases posteriores.
 - Pendientes transversales: avisos Supabase sobre `public.rls_auto_enable()` y contraseñas filtradas, pruebas de aislamiento con dos cuentas reales, benchmarks, Web Analytics, observabilidad y controles del gasto del proveedor.
+
+
+## Acceso público — PR #6 (en desarrollo, no publicado)
+
+- Rama `feat/public-signup-google-auth` y PR #6 en borrador: pantalla `/signup`, email/password con confirmación, inicio Google OAuth PKCE, callback seguro, recuperación y cambio de contraseña.
+- El proxy deja públicas solo las rutas de autenticación, manteniendo privadas las rutas de seguimiento, Estudio, Entrenamiento y Asistente. El esquema ya contempla `handle_new_user` para crear un perfil con `user_id`; falta comprobar con cuentas reales nuevas.
+- El PR requiere CI, configuración de Supabase Auth y Google Cloud OAuth, entrega real de correos, pruebas con dos cuentas y revisión antiabuso antes de publicarse. No se añadieron migraciones ni se alteraron datos.
+- Guía detallada: [docs/REGISTRO_PUBLICO.md](docs/REGISTRO_PUBLICO.md). No confundir interfaz preparada con proveedor Google activado.

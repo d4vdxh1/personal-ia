@@ -553,3 +553,12 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - Se mantienen como evidencia técnica CI #42243871582 aprobado, PR #5 fusionado en `main` (`79a27ac`), migración `20261106152923_ai_usage` y despliegue exitoso del código.
 - **Siguiente trabajo:** Fase 4B, acciones de escritura confirmadas, validadas y auditadas. No se habilitaron recordatorios, Calendar, voz ni tareas generales.
 - Actualizados `PROJECT_STATUS.md`, `README.md`, `docs/PLAN_MAESTRO.md`, `docs/FASE_4_IA_V1.md` y `AGENTS.md` para cerrar estados de «API key pendiente».
+
+
+## 2026-11-06 — Inicio del registro público y Google OAuth
+
+- PR #6 en borrador desde `feat/public-signup-google-auth`; no fusionado ni publicado.
+- Nuevas pantallas de cuenta y recuperación, registro email con confirmación y acceso Google con intercambio de código PKCE en el servidor.
+- Proxy ajustado para permitir solo las rutas de acceso público; resto de la app mantiene autenticación y RLS.
+- Se conserva el diseño blanco/verde y el login antiguo con correo/contraseña. Pruebas de navegación sin sesión añadidas.
+- Manual de configuración y seguridad: `docs/REGISTRO_PUBLICO.md`. Pendientes activar Google en Cloud/Supabase, SMTP/correo, protección antiabuso, completar CI y comprobar con dos cuentas reales.

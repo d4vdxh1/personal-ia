@@ -94,6 +94,20 @@ try {
   browser=await chromium.launch({headless:true,...(process.env.BROWSER_CHANNEL?{channel:process.env.BROWSER_CHANNEL}:{})});
   const page=await browser.newPage({viewport:{width:390,height:844}}); page.setDefaultTimeout(30000); const errors=[]; page.on('pageerror',e=>errors.push(e.message));
   console.log('Browser: servidor listo');
+  // Public OAuth branding pages must be reachable without a session, including on mobile.
+  for (const [publicPath, heading] of [
+    ['/welcome','Hacé que cada día cuente.'],
+    ['/privacy','Política de privacidad'],
+    ['/terms','Condiciones del servicio'],
+  ]) {
+    await page.goto(base + publicPath);
+    await page.getByRole('heading',{name:heading,exact:true}).waitFor();
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),true,'public page mobile overflow '+publicPath);
+    assert.equal(await page.getByRole('link',{name:'Iniciar sesión',exact:true}).count() > 0,true);
+  }
+  await page.goto(base+'/welcome');
+  await page.getByRole('link',{name:'Leer la política de privacidad'}).click();
+  await page.waitForURL(/\/privacy$/);
   for (const path of ['/signup','/forgot-password']) {
      const response = await page.request.get(base+path,{maxRedirects:0});
      assert.equal(response.status(),200,'public auth route '+path);

@@ -5,3 +5,8 @@
 .reminder-actions button{min-height:44px;cursor:pointer}
 .reminder-history-title{margin-top:26px;margin-bottom:10px}
 @media(max-width:600px){.reminder-actions form{flex:1}.reminder-actions button{width:100%}}
+
+.recurrence-weekdays{display:flex;gap:10px;flex-wrap:wrap;border:0;padding:8px 0;margin:0 0 12px}
+.recurrence-weekdays legend{font-size:13px;margin-bottom:8px}
+.recurrence-weekdays label{display:inline-flex;gap:5px;align-items:center;font-size:13px;min-height:40px}
+.recurrence-weekdays input{width:16px;height:16px}

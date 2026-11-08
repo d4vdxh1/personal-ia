@@ -192,3 +192,9 @@ La migración incremental está en la rama. El historial del Supabase estable se
 - Aplicada en el Supabase existente `personal-ia` como `20261108023553_ai_habit_actions`, con autorización explícita para actualizar la base compartida con producción. Archivo SQL y referencias alineados al historial remoto.
 - Comprobación SQL transaccional con dos identidades y rollback aprobada para propuesta sin cumplimiento automático, cancelación, rechazo de cuenta ajena, confirmación, auditoría y repetición rechazada. No sustituye la prueba con dos sesiones reales.
 - El código continúa en el PR #8 en borrador. El usuario puede probar desde local con la rama 4B.1 y la misma base. Pendiente su aceptación funcional del recorrido con Gemini.
+
+## 2026-11-07 — Aceptación funcional de 4B.1
+
+El usuario confirmó «funciona» tras aplicar la migración y repetir el pedido desde localhost con Gemini. Se registra 4B.1 como aceptada funcionalmente por el usuario. La verificación SQL con dos identidades se conserva con su alcance, y queda pendiente la comprobación independiente del nuevo flujo con dos sesiones reales.
+
+La migración `20261108023553_ai_habit_actions` está aplicada. El código está en el PR #8. El próximo paso de entrega es integrar ese PR y verificar el despliegue y el recorrido publicado. Después sigue 4B.2, registro de check-in diario con validación de campos y rangos, vista previa, confirmación explícita de sobrescrituras y auditoría mínima. SMTP permanece en su pendiente independiente.

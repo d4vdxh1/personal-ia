@@ -1594,3 +1594,9 @@ Gemini genera la explicación.
 `PROJECT_STATUS.md` define **dónde está ahora**.  
 `DEVLOG.md` explica **cómo llegó hasta ahí**.
 
+
+## 2026-11-07 — Aceptación funcional de 4B.1
+
+El usuario confirmó «funciona» tras aplicar la migración y repetir el pedido desde localhost con Gemini. Se registra 4B.1 como aceptada funcionalmente por el usuario. La verificación SQL con dos identidades se conserva con su alcance, y queda pendiente la comprobación independiente del nuevo flujo con dos sesiones reales.
+
+La migración `20261108023553_ai_habit_actions` está aplicada. El código está en el PR #8. El próximo paso de entrega es integrar ese PR y verificar el despliegue y el recorrido publicado. Después sigue 4B.2, registro de check-in diario con validación de campos y rangos, vista previa, confirmación explícita de sobrescrituras y auditoría mínima. SMTP permanece en su pendiente independiente.

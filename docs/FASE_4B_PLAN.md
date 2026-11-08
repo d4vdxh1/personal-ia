@@ -44,3 +44,9 @@ No depende de SMTP. No incorpora recordatorios, tareas generales, Google Calenda
 ### Migración remota aplicada
 
 El 7/11/2026 el usuario autorizó aplicar la migración en el Supabase actual compartido con producción. Quedó registrada como `20261108023553_ai_habit_actions` y se comprobó con SQL transaccional bajo dos identidades. El código del PR #8 ya puede probarse desde localhost conectado a esa base. Evitar repetir la migración. Falta la aceptación del recorrido completo del usuario con Gemini.
+
+## 2026-11-07 — Aceptación funcional de 4B.1
+
+El usuario confirmó «funciona» tras aplicar la migración y repetir el pedido desde localhost con Gemini. Se registra 4B.1 como aceptada funcionalmente por el usuario. La verificación SQL con dos identidades se conserva con su alcance, y queda pendiente la comprobación independiente del nuevo flujo con dos sesiones reales.
+
+La migración `20261108023553_ai_habit_actions` está aplicada. El código está en el PR #8. El próximo paso de entrega es integrar ese PR y verificar el despliegue y el recorrido publicado. Después sigue 4B.2, registro de check-in diario con validación de campos y rangos, vista previa, confirmación explícita de sobrescrituras y auditoría mínima. SMTP permanece en su pendiente independiente.

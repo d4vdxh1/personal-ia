@@ -24,8 +24,8 @@ Deno.serve(async request=>{
   if(!key){
     try {
       const all=JSON.parse(Deno.env.get("SUPABASE_SECRET_KEYS")??"{}") as Record<string,string>;
-      key=all.default??null;
-    }catch{key=null;}
+      key=all.default??undefined;
+    }catch{key=undefined;}
   }
   if(!url||!key) return new Response("Worker credentials unavailable",{status:503});
   const client=createClient(url,key,{auth:{autoRefreshToken:false,persistSession:false}});

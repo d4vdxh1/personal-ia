@@ -26,3 +26,11 @@ CI, pruebas de RLS entre dos cuentas, cifrado/tamper/owner mismatch y datos inv�
 ## Posterior
 
 5B.2 creación de eventos con aprobación y sincronización selectiva, deduplicación y revocación. Implica scopes de escritura adicionales y nueva revisión de seguridad.
+
+## 5B.2 — Exportación selectiva en revisión
+
+Se implementa la autorización incremental para crear eventos (`calendar.events`), exportación manual de un recordatorio individual al calendario principal, ID de evento determinista, comprobación del 409 con lectura autenticada y tabla de vínculos con RLS. Sin modificación ni borrado de eventos Google; no hay sincronización bidireccional ni recurrencias importadas. Requiere `GOOGLE_CALENDAR_WRITE_ENABLED=true` y credenciales OAuth antes de poder probarlo. Ver [guía específica](FASE_5B2_EXPORT.md).
+
+## Estado actualizado 2026-11-08
+
+5B.1 (PR #16) está integrado y desplegado con modo de solo lectura, deshabilitado funcionalmente mientras falten credenciales Google Cloud. 5B.2 (PR #18) prepara exportación manual con permiso incremental, ID estable y comprobación de duplicados. Migraciones ya aplicadas: `20261108185959_google_calendar_connections` y `20261108194807_calendar_event_export`. No confundir código instalado con conexión Google OAuth real; la puesta en marcha necesita configurar Google Cloud y ejecutar pruebas reales de autorización, visualización, creación, reintento y revocación. Sin sincronización bidireccional.

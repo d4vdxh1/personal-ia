@@ -673,3 +673,11 @@ Se comprobó que el historial remoto de Supabase llega hasta `20261108025732_ai_
 ## 2026-11-08 — Inicio 5B: Google Calendar read-only
 
 El PR #15 de 5A.3 se fusionó con CI aprobado y la migración `20261108184507_reminder_recurrences` quedó aplicada. Se inició la conexión Calendar con OAuth 2.0 Web separado del login Google, scope mínimo `calendar.readonly`, cookie state HttpOnly vinculada a la cuenta, token refresh cifrado con AES-256-GCM, datos bajo RLS, lista de eventos a 14 días y desconexión/revocación. **Pendiente:** cliente OAuth Google Cloud y prueba real end-to-end; la app debe mostrar "No configurado" mientras falte.
+
+## 2026-11-08 — 5A.3, 5B y 5C: verificación y continuidad
+
+- En `main` PR #15 recurrencias (`a43e83c`), PR #16 Calendar readonly (`0b39a00`) y PR #17 Gemini recordatorios (`9cd9c1f`) integrados. Migraciones respectivas `20261108184507`, `20261108185959`, `20261108191759` aplicadas; CI de PR #17 exitoso y Vercel Ready.
+- Se verificaron RLS/seguridad SQL con identidades temporales y rollback para recurrencias y propuestas Gemini; sin escrituras permanentes de prueba.
+- PR #18 exportación selectiva de Calendar: implementación con permiso OAuth adicional, exportación única y verificación de conflictos 409; migración incremental `20261108194807` aplicada, RLS verificada con rollback. CI de implementación aprobado antes de alinear versión de archivo.
+- **Dependencia externa:** no están configurados el cliente OAuth Google Cloud ni secreto/cifrado de Calendar en Vercel. No se publican tokens; integración real sin activar ni sincronización bidireccional.
+- Pendientes de aceptación con usuario: serie recurrente real, recordatorio Gemini con confirmación y OAuth Calendar cuando configure credenciales.

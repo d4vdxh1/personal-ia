@@ -1,5 +1,6 @@
 import "server-only";
 export const CALENDAR_SCOPE="https://www.googleapis.com/auth/calendar.readonly";
+export const CALENDAR_EVENTS_SCOPE="https://www.googleapis.com/auth/calendar.events";
 export function calendarConfig(){
   const clientId=process.env.GOOGLE_CALENDAR_CLIENT_ID;
   const clientSecret=process.env.GOOGLE_CALENDAR_CLIENT_SECRET;

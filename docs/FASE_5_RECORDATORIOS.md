@@ -43,3 +43,10 @@ Véase [FASE_5A3_RECURRENCIAS.md](FASE_5A3_RECURRENCIAS.md): series, materializa
 ## Fase 5B.1 — Primera entrega en revisión
 
 Se preparó OAuth server-to-server independiente de Supabase login, Google Calendar **solo lectura**, tokens refresh cifrados, revocación y pruebas. La pantalla muestra configuración pendiente si faltan las credenciales del cliente OAuth. No confundir la existencia del código con una conexión real habilitada. Ver `docs/FASE_5B_CALENDAR.md`.
+
+## Actualización 2026-11-08 — 5A.3, 5B y 5C
+
+- 5A.3: PR #15 integrado, migración `20261108184507_reminder_recurrences` aplicada y Vercel Ready; seguridad RLS de series probada en Supabase con dos identidades y rollback. Reglas diaria, semanal, mensual; cancelación y pausa sin duplicaciones del cron. Pendiente aceptación funcional con una serie real del usuario.
+- 5B.1: PR #16 integrado, OAuth Google Calendar de solo lectura y cifrado de refresh tokens; migración `20261108185959_google_calendar_connections` aplicada, pero **credenciales Google Cloud aún no configuradas**.
+- 5B.2: PR #18 prepara exportación manual de recordatorios individuales. Migración `20261108194807_calendar_event_export` aplicada y verificada; `GOOGLE_CALENDAR_WRITE_ENABLED` desactivado por defecto. Sin prueba OAuth real ni sincronización bidireccional.
+- 5C: PR #17 integrado, migración `20261108191759_ai_reminder_actions` aplicada, RLS, auditoría y confirmación probadas con SQL rollback. El flujo con Gemini en la cuenta real del usuario debe validarse tras publicación.

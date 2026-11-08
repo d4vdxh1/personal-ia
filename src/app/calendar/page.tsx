@@ -10,6 +10,11 @@ export default async function CalendarPage(){
   const {user,profile}=await getAccount();
   const client=await createClient();
   const result=await loadGoogleEvents(client,user.id);
+  const writeEnabled=process.env.GOOGLE_CALENDAR_WRITE_ENABLED==="true";
+  const connection=writeEnabled && result.status!=="unconfigured" && result.status!=="disconnected"
+    ? await client.from("google_calendar_connections").select("can_write").eq("user_id",user.id).maybeSingle()
+    : null;
+  const canWrite=Boolean(connection?.data?.can_write);
   return <TrackingShell title="Google Calendar" active="calendar" dateLabel="INTEGRACIONES"
     copy="Consultá tus próximos eventos con permiso explícito y sin copiarlos a tus recordatorios."
     displayName={profile?.display_name.trim()||user.email||"Usuario"}>
@@ -23,6 +28,9 @@ export default async function CalendarPage(){
         {result.status==="connected" && <p role="status">Calendario conectado · próximos 14 días.</p>}
         {result.status==="reconnect" && <p role="alert">Google necesita que autorices nuevamente la conexión.</p>}
         {result.status==="unavailable" && <p role="alert">No fue posible consultar Google Calendar. Tus recordatorios no se modificaron.</p>}
+        {writeEnabled && result.status==="connected" && (canWrite
+          ? <p role="status">Permiso adicional para exportar recordatorios concedido. Elegí los eventos desde Recordatorios.</p>
+          : <Link className="secondary-button" href="/api/calendar/connect?mode=write">Autorizar creación de eventos</Link>)}
         <div className="reminder-actions">
           <Link href="/api/calendar/connect" className="secondary-button">Autorizar nuevamente</Link>
           <form action={disconnectGoogleCalendar}><button className="secondary-button">Desconectar Calendar</button></form>
@@ -39,7 +47,7 @@ export default async function CalendarPage(){
        </>}
     </section>
     <section className="card reminder-notice" role="note"><strong>Solo lectura en 5B.1</strong>
-      <p>No agregamos automáticamente eventos a Día a Día. La creación y sincronización de eventos necesitarán una autorización adicional antes de implementarse.</p>
+      <p>No agregamos automáticamente eventos a Día a Día. La exportación de recordatorios necesita autorización adicional y una acción explícita. No hay sincronización bidireccional.</p>
     </section>
   </TrackingShell>;
 }

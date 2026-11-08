@@ -153,9 +153,9 @@ Las pruebas de base de datos usan PostgreSQL de prueba y las pruebas de navegado
 | 4A y 4B — Gemini | Consultas y acciones de hábitos, check-in y estudio con confirmación, publicadas |
 | 5A.1 — Recordatorios | Gestión manual publicada |
 | 5A.2 — Web Push | Publicada; recepción confirmada por el usuario en celular y Chrome/Windows; Brave configurado y funcionando según su reporte |
-| **5A.3 — Recurrencias** | Siguiente implementación propuesta |
-| 5B — Google Calendar | OAuth y consulta solo lectura en implementación; necesita credenciales Google Cloud para activarse |
-| 5C — Crear recordatorios con Gemini | Pendiente: propuestas estructuradas y confirmación humana |
+| **5A.3 — Recurrencias** | Publicada: diario, semanal y mensual |
+| **5B — Google Calendar** | 5B.1 consulta en producción sin configurar OAuth; 5B.2 exportación manual implementada, activación pendiente de Google Cloud |
+| **5C — Crear recordatorios con Gemini** | Publicada, con confirmación, auditoría y CI; prueba real del usuario pendiente |
 | Analítica avanzada, voz y finanzas | Fases posteriores |
 
 Las notificaciones son de **mejor esfuerzo**, necesitan permisos individuales por dispositivo y no garantizan entrega exactamente al minuto. El éxito en dispositivos reales no sustituye las pruebas de seguridad con dos sesiones independientes.
@@ -168,6 +168,7 @@ Las notificaciones son de **mejor esfuerzo**, necesitan permisos individuales po
 - **[Historial de desarrollo](DEVLOG.md)** — decisiones, cambios y verificaciones.
 - **[Plan de la Fase 4B](docs/FASE_4B_PLAN.md)** — acciones confirmadas por IA, validación y auditoría.
 - **[Fase 5](docs/FASE_5_RECORDATORIOS.md)** y **[Web Push](docs/FASE_5A2_PUSH.md)** — estado actual, arquitectura y operaciones.
+- **[Roadmap verificado](docs/ROADMAP_ESTADO_2026-11-08.md)** — fases completadas, bloqueos externos y prioridades siguientes.
 - **[Entrenamiento](docs/ENTRENAMIENTO.md)** · **[Universidad y Estudio](docs/FASE_3_ESTUDIO.md)** · **[Asistente IA](docs/FASE_4_IA_V1.md)**
 
 ---

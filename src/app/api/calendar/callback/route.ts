@@ -2,7 +2,7 @@ import { timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { NextRequest,NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { calendarConfig,CALENDAR_SCOPE } from "@/lib/calendar/config";
+import { calendarConfig,CALENDAR_SCOPE,CALENDAR_EVENTS_SCOPE } from "@/lib/calendar/config";
 import { encryptCalendarToken } from "@/lib/calendar/crypto";
 export const runtime="nodejs";
 export const dynamic="force-dynamic";
@@ -21,7 +21,7 @@ export async function GET(request:NextRequest){
   if(!stateCookie||!supplied||!code||code.length>4096||supplied.length>128)return redirect(request,"invalid");
   const expected=stateCookie.split(".");
   const lhs=Buffer.from(expected[0]??""),rhs=Buffer.from(supplied);
-  if(expected.length!==2||expected[1]!==auth.user.id||lhs.length!==rhs.length||
+  if(expected.length!==3||expected[1]!==auth.user.id||!["read","write"].includes(expected[2])||lhs.length!==rhs.length||
      !timingSafeEqual(lhs,rhs))return redirect(request,"invalid");
   try{
     const response=await fetch("https://oauth2.googleapis.com/token",{
@@ -33,10 +33,12 @@ export async function GET(request:NextRequest){
     if(!response.ok)return redirect(request,"google");
     const token=await response.json() as {refresh_token?:unknown;scope?:unknown};
     if(typeof token.refresh_token!=="string"||typeof token.scope!=="string"||
-       !token.scope.split(" ").includes(CALENDAR_SCOPE))return redirect(request,"scope");
+       !token.scope.split(" ").includes(CALENDAR_SCOPE)||
+       (expected[2]==="write"&&!token.scope.split(" ").includes(CALENDAR_EVENTS_SCOPE)))return redirect(request,"scope");
     const encrypted=encryptCalendarToken(token.refresh_token,auth.user.id,config.tokenKey);
     const result=await client.from("google_calendar_connections")
-      .upsert({user_id:auth.user.id,refresh_token_encrypted:encrypted,calendar_id:"primary"},{onConflict:"user_id"})
+      .upsert({user_id:auth.user.id,refresh_token_encrypted:encrypted,calendar_id:"primary",
+        can_write:expected[2]==="write"&&token.scope.split(" ").includes(CALENDAR_EVENTS_SCOPE)},{onConflict:"user_id"})
       .select("user_id").maybeSingle();
     if(result.error||!result.data)return redirect(request,"storage");
     return redirect(request,"connected");

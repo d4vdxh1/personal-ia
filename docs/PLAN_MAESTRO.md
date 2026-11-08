@@ -1632,3 +1632,11 @@ Fase 5A.1 en rama `feat/fase-5a-recordatorios`: recordatorios manuales con base 
 - **5B — Calendar:** nueva autorización OAuth Google Calendar con scopes mínimos; lectura/sincronización selectiva, almacenamiento seguro de tokens, revocación y prevención de eventos duplicados. El OAuth del login NO autoriza Calendar por sí mismo.
 - **5C — Gemini:** proponer recordatorios estructurados y solicitar confirmación humana; el cron ejecuta los avisos, no Gemini.
 - **Deuda técnica transversal:** E2E autenticado entre dos cuentas, observabilidad, mejoras de zona horaria, avisos previos de seguridad Supabase, y SMTP pospuesto sin bloquear fase 5.
+
+## Seguimiento actualizado 2026-11-08 — cierre técnico de Fase 5
+
+- 5A.3 recurrencias: PR #15 fusionado y migración `20261108184507` aplicada; faltan pruebas funcionales de una serie real por parte del usuario.
+- 5B.1 Calendar readonly: PR #16 fusionado y migración `20261108185959` aplicada; cliente OAuth de Google Cloud pendiente. No hay integración real activa.
+- 5B.2 exportación selectiva manual: PR #18 y migración `${newVer}` preparados; Google Cloud y `GOOGLE_CALENDAR_WRITE_ENABLED` pendientes; no es sincronización bidireccional.
+- 5C recordatorios por Gemini: PR #17 fusionado, migración `20261108191759` aplicada, SQL y CI verificados; aceptación con Gemini real pendiente.
+- Próximos objetivos según capítulos de este plan: **6 Analytics inteligente, 7 voz, 8 finanzas personales, 9 producción estable**. Pendientes transversales: configuración SMTP, pruebas JWT de dos cuentas reales, perfil de zona horaria, Google Calendar OAuth, observabilidad y Web Analytics.

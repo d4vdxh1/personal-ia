@@ -233,3 +233,11 @@ El usuario pidió activar 4B.3 antes de seguir con la Fase 5. Se verificó que l
 ## 2026-11-08 — Fase 5A.1 iniciada en rama
 
 Rama `feat/fase-5a-recordatorios` desde `main@9b0bcd9`: gestión manual de recordatorios futuros, con RLS por propietario, validación del servidor y navegación móvil/escritorio. **No hay notificaciones automáticas ni scheduler**; la migración `20261108035009_reminders.sql` está versionada pero NO aplicada remotamente. Requiere CI, revisión, autorización y pruebas antes de publicar. Ver `docs/FASE_5_RECORDATORIOS.md`.
+
+## 2026-11-08 — Fase 5A.2 en rama aislada
+
+`feat/fase-5a2-push-notifications`: Web Push, Edge Function, cola de entregas y Cron manual diferido. No hay migración aplicada ni despliegue del worker ni cron activo; no confundir con el módulo manual 5A.1 publicado. Ver `docs/FASE_5A2_PUSH.md`.
+
+## 2026-11-08 — Fase 5A.2: activación de infraestructura
+
+Supabase migraciones `20261108043426` y `20261108043654` aplicadas. Vault configurado, worker ACTIVE y prueba HTTP 200 sin suscriptores; cron cada minuto activo. El usuario autorizó publicación y merge PR #13. Falta validar el push real desde un navegador suscrito; revisar resultado CI y Vercel tras merge.

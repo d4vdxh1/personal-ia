@@ -5,7 +5,7 @@ import { spawn } from "node:child_process";
 import { cp, mkdir, symlink, access, writeFile, readFile, readdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { resolve, join } from "node:path";
-import { testAssistantBrowser, testCheckinBrowser, testStudyBrowser } from "./test-assistant-browser.mjs";
+import { testAssistantBrowser, testCheckinBrowser, testStudyBrowser, testReminderBrowser } from "./test-assistant-browser.mjs";
 import { chromium } from "@playwright/test";
 import { createTestDatabase, asUser, alice } from "./test-db.mjs";
 const root = process.cwd(), workspace = resolve(root, ".test-workspace"), output = resolve(root, "test-results");
@@ -241,6 +241,7 @@ try {
     setRevoked: value => { revoked = value; },
     setFailWrite: value => { failWrite = value; },
   });
+  await testReminderBrowser({page,base:assistantBase,db});
   const paths=['/','/reminders','/calendar','/assistant','/menu','/study','/study?view=subjects','/study?view=assignments','/study?view=exams','/study?view=sessions','/habits','/check-in','/journal','/goals','/profile','/training','/training?view=exercises','/training?view=plans','/training?view=history','/training?view=health',sessionUrl.replace(base,''),exerciseUrl.replace(base,'')];
   for(const width of [360,390,768,800,930,1280]){
     await page.setViewportSize({width,height:900});

@@ -57,7 +57,7 @@ const server = createServer((req, res) => {
         if (['select','order','limit','offset','on_conflict'].includes(field)) continue;
         const split=value.indexOf('.'), op=value.slice(0,split), val=value.slice(split+1);
         if (op==='in') { const vals=val.slice(1,-1).split(',').map(v=>v.replaceAll('"','')); where.push(`${ident(field)} in (${vals.map(v=>{args.push(v); return '$'+args.length;}).join(',')})`); }
-        else { assert.ok(['eq','gte'].includes(op)); args.push(val); where.push(`${ident(field)} ${op==='eq'?'=':'>='} $${args.length}`); }
+        else { assert.ok(['eq','gte','lte'].includes(op)); args.push(val); where.push(`${ident(field)} ${op==='eq'?'=':op==='gte'?'>=':'<='} ${args.length}`); }
       }
       const clause=where.length ? ' where '+where.join(' and ') : '';
       let rows;
@@ -242,7 +242,7 @@ try {
     setFailWrite: value => { failWrite = value; },
   });
   await testReminderBrowser({page,base:assistantBase,db});
-  const paths=['/','/reminders','/calendar','/assistant','/menu','/study','/study?view=subjects','/study?view=assignments','/study?view=exams','/study?view=sessions','/habits','/check-in','/journal','/goals','/profile','/training','/training?view=exercises','/training?view=plans','/training?view=history','/training?view=health',sessionUrl.replace(base,''),exerciseUrl.replace(base,'')];
+  const paths=['/','/analytics','/reminders','/calendar','/assistant','/menu','/study','/study?view=subjects','/study?view=assignments','/study?view=exams','/study?view=sessions','/habits','/check-in','/journal','/goals','/profile','/training','/training?view=exercises','/training?view=plans','/training?view=history','/training?view=health',sessionUrl.replace(base,''),exerciseUrl.replace(base,'')];
   for(const width of [360,390,768,800,930,1280]){
     await page.setViewportSize({width,height:900});
     for(const path of paths){ await page.goto(base+path); await page.locator('h1').waitFor(); assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`overflow ${width} ${path}`); const nav=page.getByRole('navigation',{name:'Navegación principal',exact:true}); assert.equal(await nav.isVisible(),true); const box=await nav.boundingBox(); if(width<=800)assert.ok(box.y>500,`menú móvil ${width}`); else assert.ok(box.x<250,`menú escritorio ${width}`);

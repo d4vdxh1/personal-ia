@@ -1,5 +1,5 @@
 "use client";
-import { useActionState,useEffect,useRef } from "react";
+import { useActionState,useEffect,useRef,useState } from "react";
 import { saveReminderSeries,type SeriesActionState } from "@/app/reminders/recurrence-actions";
 import type { ReminderSeries } from "@/lib/reminders/data";
 const initial:SeriesActionState={message:"",error:false,saved:false};
@@ -7,6 +7,7 @@ const days=[["1","Lun"],["2","Mar"],["3","Mié"],["4","Jue"],["5","Vie"],["6","S
 export function RecurrenceForm({series}:{series?:ReminderSeries}) {
   const [state,action,pending]=useActionState(saveReminderSeries,initial);
   const ref=useRef<HTMLFormElement>(null);
+  const [frequency,setFrequency]=useState(series?.frequency??"weekly");
   useEffect(()=>{if(state.saved && !series)ref.current?.reset();},[state.saved,series]);
   return <form action={action} ref={ref} className="study-form">
     {series&&<input type="hidden" name="id" value={series.id}/>}
@@ -18,11 +19,11 @@ export function RecurrenceForm({series}:{series?:ReminderSeries}) {
       <div className="study-field"><label htmlFor={"series-notes-"+(series?.id??"new")}>Notas (opcional)</label>
         <textarea id={"series-notes-"+(series?.id??"new")} name="notes" rows={2} maxLength={1000} defaultValue={series?.notes}/></div>
       <div className="study-field"><label htmlFor={"series-frequency-"+(series?.id??"new")}>Repetición</label>
-        <select id={"series-frequency-"+(series?.id??"new")} name="frequency" defaultValue={series?.frequency??"weekly"}>
+        <select id={"series-frequency-"+(series?.id??"new")} name="frequency" value={frequency} onChange={event=>setFrequency(event.target.value)}>
           <option value="daily">Todos los días</option><option value="weekly">Días seleccionados</option>
           <option value="monthly">Cada mes (día de inicio)</option>
         </select></div>
-      <fieldset className="recurrence-weekdays">
+      <fieldset className="recurrence-weekdays" disabled={frequency!=="weekly"}>
         <legend>Para frecuencia semanal, elegí al menos un día</legend>
         {days.map(([value,label])=><label key={value}>
           <input type="checkbox" name="weekdays" value={value} defaultChecked={series?.weekdays.includes(Number(value))??(value==="1")}/>{label}

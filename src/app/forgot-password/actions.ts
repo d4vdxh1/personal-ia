@@ -2,6 +2,7 @@
 import { createClient } from "@/lib/supabase/server";
 export type RecoveryState={status:"idle"|"error"|"success";message:string};
 export async function requestPasswordReset(_:RecoveryState,form:FormData):Promise<RecoveryState>{
+ if(process.env.EMAIL_RECOVERY_ENABLED!=="true")return {status:"error",message:"La recuperación por correo aún no está habilitada."};
  const email=form.get("email");
  if(typeof email!=="string"||email.length>254||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()))
   return {status:"error",message:"Ingresá un correo electrónico válido."};

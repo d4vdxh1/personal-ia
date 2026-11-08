@@ -598,3 +598,12 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 El usuario confirmó «funciona» tras aplicar la migración y repetir el pedido desde localhost con Gemini. Se registra 4B.1 como aceptada funcionalmente por el usuario. La verificación SQL con dos identidades se conserva con su alcance, y queda pendiente la comprobación independiente del nuevo flujo con dos sesiones reales.
 
 La migración `20261108023553_ai_habit_actions` está aplicada. El código está en el PR #8. El próximo paso de entrega es integrar ese PR y verificar el despliegue y el recorrido publicado. Después sigue 4B.2, registro de check-in diario con validación de campos y rangos, vista previa, confirmación explícita de sobrescrituras y auditoría mínima. SMTP permanece en su pendiente independiente.
+
+## 2026-11-07 — Check-in confirmado desde IA, Fase 4B.2
+
+- Publicado 4B.1 mediante PR #8 (`286e387`), con estado Vercel success comprobado y acceso sin sesión redirigido al login.
+- Nueva rama `feat/fase-4b2-checkin-confirmado`. Herramienta `propose_daily_checkin` con tres escalas obligatorias explícitas y sueño/estrés opcionales. Gemini recibe instrucciones de pedir valores faltantes juntos en otro mensaje. El chat mantiene su funcionamiento sin historial persistente entre consultas.
+- La tarjeta compartida conserva Hábitos y agrega vista previa del check-in, cancelación y casilla de aceptación de actualización. La confirmación usa solo ID, tipo y decisión. Las notas privadas del registro manual se preservan.
+- Migración incremental con dos RPC SECURITY INVOKER, RLS, permisos por columna, caducidad, control de versión y auditoría. Al procesar una propuesta se eliminan los valores del registro de auditoría y se conserva el resultado mínimo.
+- Pasaron lint, suites de lógica y SQL, build, typecheck y navegador con Gemini/Auth simulados. Inspeccionadas capturas a 390 y 1280 px, controles verificados en seis anchos. Prueba con dos conexiones PostgreSQL aprobada para doble envío, dos propuestas y modificación manual concurrente.
+- La aplicación remota de esta nueva migración fue bloqueada por la revisión automática por requerir autorización específica para la base compartida. Se continúa con PR revisable y documentación completa. No se ha ejecutado la migración de check-in remota.

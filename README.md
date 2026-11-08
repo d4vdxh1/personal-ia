@@ -148,11 +148,11 @@ Las pruebas de base de datos usan PostgreSQL de prueba y las pruebas de navegado
 |---|---|
 | Base, seguimiento personal, entrenamiento y estudio | Implementados |
 | **Fase 4A — Asistente Gemini de consulta** | Implementada y validada funcionalmente por el usuario |
-| **Fase 4B — Acciones mediante IA** | 4B.1 de hábitos implementada en rama de revisión |
+| **Fase 4B — Acciones mediante IA** | 4B.1 de hábitos publicada; 4B.2 de check-in en revisión |
 | Recordatorios, Google Calendar y notificaciones | Pendientes |
 | Estadísticas avanzadas, voz y finanzas | Etapas futuras |
 
-Queda validar 4B.1 con Gemini y dos cuentas en un entorno aislado antes de publicarla. Los siguientes incrementos del roadmap son el check-in diario (4B.2) y las sesiones de estudio (4B.3).
+4B.1 está publicada y el usuario confirmó su funcionamiento desde localhost con Gemini. 4B.2 está implementada en rama y requiere aplicar su migración para probar el check-in conversacional. Después sigue 4B.3, sesiones de estudio.
 
 ## Documentación
 

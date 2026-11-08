@@ -3,7 +3,7 @@
 **Última actualización:** 2026-11-07
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
 **Estado general:** Fases 0–3 implementadas y aceptadas funcionalmente; **Fase 4A activada y aceptada por el usuario el 2026-11-06** tras configurar Gemini en Vercel y probar el chat. La confirmación de uso no equivale a una auditoría independiente del proveedor o de aislamiento con dos cuentas reales.
-**Fase actual:** Fase 4A — **cerrada funcionalmente por confirmación del usuario** (PR #5, CI y Supabase verificados; Gemini configurado y probado por el usuario en Vercel). **En revisión en rama:** Fase 4B.1 para marcar un hábito de hoy con confirmación y auditoría. La versión publicada sigue en 4A.
+**Fase actual:** 4B.1 de hábitos publicada mediante PR #8 (`286e387`), con migración aplicada y aceptación funcional del usuario desde localhost. 4B.2 de check-in implementada en la rama `feat/fase-4b2-checkin-confirmado`, con migración pendiente de autorización para la base compartida.
 
 ## Entrega y continuidad del 2026-11-06
 
@@ -198,3 +198,10 @@ La migración incremental está en la rama. El historial del Supabase estable se
 El usuario confirmó «funciona» tras aplicar la migración y repetir el pedido desde localhost con Gemini. Se registra 4B.1 como aceptada funcionalmente por el usuario. La verificación SQL con dos identidades se conserva con su alcance, y queda pendiente la comprobación independiente del nuevo flujo con dos sesiones reales.
 
 La migración `20261108023553_ai_habit_actions` está aplicada. El código está en el PR #8. El próximo paso de entrega es integrar ese PR y verificar el despliegue y el recorrido publicado. Después sigue 4B.2, registro de check-in diario con validación de campos y rangos, vista previa, confirmación explícita de sobrescrituras y auditoría mínima. SMTP permanece en su pendiente independiente.
+
+## 2026-11-07 — Publicación 4B.1 e implementación 4B.2
+
+- PR #8 integrado como `286e387552489e339a766755ea7ab7740140c924`. CI del último commit del PR aprobado y Vercel informó despliegue de producción exitoso. Sin sesión, `/assistant` redirige al login con `private, no-store`. La aceptación del usuario corresponde al recorrido desde localhost.
+- 4B.2 permite proponer un check-in de hoy con energía, estado emocional y satisfacción (1–5), más sueño (0–24) y estrés opcionales. El servidor reutiliza la validación del formulario y rechaza campos adicionales. El chat muestra los valores y requiere aceptar explícitamente la actualización de un registro existente.
+- La migración `20261108024434_ai_checkin_actions.sql` está probada en bases desechables. Su aplicación en el Supabase compartido fue rechazada por la revisión automática por faltar autorización específica de 4B.2. Sigue pendiente. La migración de hábitos ya aplicada conserva su historial.
+- QA local aprobado para lint, lógica, SQL, compilación, tipos y Chromium. Nueva tarjeta verificada a 360/390/768/800/930/1280 px. Dos conexiones PostgreSQL verificaron reintentos y propuestas simultáneas con una modificación manual. Pendiente CI remoto y prueba funcional con Gemini tras autorizar y aplicar la migración.

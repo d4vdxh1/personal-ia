@@ -5,7 +5,7 @@ import { spawn } from "node:child_process";
 import { cp, mkdir, symlink, access, writeFile, readFile, readdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { resolve, join } from "node:path";
-import { testAssistantBrowser } from "./test-assistant-browser.mjs";
+import { testAssistantBrowser, testCheckinBrowser } from "./test-assistant-browser.mjs";
 import { chromium } from "@playwright/test";
 import { createTestDatabase, asUser, alice } from "./test-db.mjs";
 const root = process.cwd(), workspace = resolve(root, ".test-workspace"), output = resolve(root, "test-results");
@@ -20,7 +20,7 @@ await hashFiles(join(root,'src'));
 for(const file of ['package-lock.json','next.config.ts','tsconfig.json','postcss.config.mjs'])hash.update(await readFile(join(root,file)));
 const fingerprint=hash.digest('hex'); let previousBuild; try { previousBuild=JSON.parse(await readFile(join(workspace,'test-build.json'),'utf8'));await access(join(workspace,'.next/BUILD_ID')); } catch {previousBuild=null;}
 const db = await createTestDatabase();
-for (const file of ["20261106152923_ai_usage.sql", "20261108023553_ai_habit_actions.sql"]) {
+for (const file of ["20261106152923_ai_usage.sql", "20261108023553_ai_habit_actions.sql", "20261108024434_ai_checkin_actions.sql"]) {
   await db.exec(await readFile(join(root, "supabase/migrations", file), "utf8"));
 }
 await db.query("insert into auth.users(id) values($1)", [alice]);
@@ -44,7 +44,7 @@ const server = createServer((req, res) => {
     const name=url.pathname.split('/').at(-1);
     const result = await asUser(db, alice, async () => {
       if (url.pathname.includes('/rpc/')) {
-        const names={ reserve_ai_request:[], propose_mark_habit:['p_name'], decide_habit_proposal:['p_id','p_decision'], save_training_plan:['p_id','p_name','p_notes','p_items'],start_training_session:['p_id','p_plan_id','p_schedule_id'],save_training_session:['p_id','p_sets','p_duration','p_rpe','p_notes','p_complete'],training_progress:[],training_exercise_history:['p_exercise','p_page'] };
+        const names={ propose_daily_checkin:['p_values'], decide_checkin_proposal:['p_id','p_decision','p_overwrite'], reserve_ai_request:[], propose_mark_habit:['p_name'], decide_habit_proposal:['p_id','p_decision'], save_training_plan:['p_id','p_name','p_notes','p_items'],start_training_session:['p_id','p_plan_id','p_schedule_id'],save_training_session:['p_id','p_sets','p_duration','p_rpe','p_notes','p_complete'],training_progress:[],training_exercise_history:['p_exercise','p_page'] };
         assert.ok(name in names); const args=names[name].map(k => typeof payload[k]==='object' && payload[k]!==null ? JSON.stringify(payload[k]) : payload[k]);
         const table=name==='training_progress'||name==='training_exercise_history';
         const sql=table ? `select * from public.${ident(name)}(${args.map((_,i)=>'$'+(i+1)).join(',')})` : `select public.${ident(name)}(${args.map((_,i)=>'$'+(i+1)).join(',')}) as value`;
@@ -197,6 +197,11 @@ try {
   const assistantBase='http://localhost:3110';
   await waitForApp(assistantApp, assistantBase);
   await testAssistantBrowser({
+    page, base: assistantBase, db, output,
+    setRevoked: value => { revoked = value; },
+    setFailWrite: value => { failWrite = value; },
+  });
+  await testCheckinBrowser({
     page, base: assistantBase, db, output,
     setRevoked: value => { revoked = value; },
     setFailWrite: value => { failWrite = value; },

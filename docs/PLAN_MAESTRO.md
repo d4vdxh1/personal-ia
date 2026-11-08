@@ -5,7 +5,7 @@
 **Identificador técnico:** `personal-ia`. Se conservan repositorio, carpeta, URL de Vercel y proyecto Supabase actuales.
 
 **Estado:** Plan vigente — v1.7, actualizado el 2026-11-07.
-**Avance:** Fases 0–3 y **Fase 4A de Gemini** implementadas y aceptadas funcionalmente por confirmación del usuario el 2026-11-06. Gemini fue configurado privadamente en Vercel y probado por el usuario. Sin verificación independiente de dos JWT reales. **Fase 4B.1 en revisión en rama**, con confirmación de hábitos. Siguen 4B.2 de check-in y 4B.3 de estudio. Ver PROJECT_STATUS, `docs/CIERRE_FASE_1.md` y `docs/ENTRENAMIENTO.md`.
+**Avance:** Fases 0–3 y **Fase 4A de Gemini** implementadas y aceptadas funcionalmente por confirmación del usuario el 2026-11-06. Gemini fue configurado privadamente en Vercel y probado por el usuario. Sin verificación independiente de dos JWT reales. **Fase 4B.1 publicada** mediante PR #8, con aceptación funcional del usuario. **4B.2 implementada en rama**, con migración pendiente de autorización para la base compartida. Sigue 4B.3 de estudio. Ver PROJECT_STATUS, `docs/CIERRE_FASE_1.md` y `docs/ENTRENAMIENTO.md`.
 **Objetivo:** construir una aplicación web/PWA personal, inteligente y progresiva para organizar rutina, entrenamiento, estudio, hábitos, sueño, objetivos, recordatorios y, más adelante, finanzas personales.
 
 ---
@@ -1600,3 +1600,7 @@ Gemini genera la explicación.
 El usuario confirmó «funciona» tras aplicar la migración y repetir el pedido desde localhost con Gemini. Se registra 4B.1 como aceptada funcionalmente por el usuario. La verificación SQL con dos identidades se conserva con su alcance, y queda pendiente la comprobación independiente del nuevo flujo con dos sesiones reales.
 
 La migración `20261108023553_ai_habit_actions` está aplicada. El código está en el PR #8. El próximo paso de entrega es integrar ese PR y verificar el despliegue y el recorrido publicado. Después sigue 4B.2, registro de check-in diario con validación de campos y rangos, vista previa, confirmación explícita de sobrescrituras y auditoría mínima. SMTP permanece en su pendiente independiente.
+
+## 2026-11-07 — Continuidad de las acciones confirmadas
+
+4B.1 fue integrada mediante PR #8 como `286e387` y Vercel completó su publicación. 4B.2 está implementada en la rama `feat/fase-4b2-checkin-confirmado`, con validación de escalas, vista previa, confirmación explícita de actualizaciones, control de versión y auditoría. Su migración requiere autorización específica para el Supabase compartido. Después de aplicar y aceptar 4B.2 con Gemini corresponde 4B.3, sesiones de estudio. SMTP sigue pendiente de forma independiente.

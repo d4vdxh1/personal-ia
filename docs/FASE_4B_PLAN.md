@@ -1,6 +1,6 @@
 # Fase 4B — Acciones confirmadas del asistente
 
-**Estado al 7/11/2026:** 4B.1 implementada en la rama `feat/fase-4b1-habitos-confirmados`, en revisión. Fase 4A (Gemini de lectura) permanece publicada.
+**Estado al 7/11/2026:** 4B.1 de hábitos publicada por PR #8 y aceptada funcionalmente por el usuario. 4B.2 de check-in está implementada en una nueva rama y requiere aplicar su migración antes de probarse con Gemini.
 
 ## Entrega 4B.1 — Marcar un hábito desde la IA
 
@@ -50,3 +50,19 @@ El 7/11/2026 el usuario autorizó aplicar la migración en el Supabase actual co
 El usuario confirmó «funciona» tras aplicar la migración y repetir el pedido desde localhost con Gemini. Se registra 4B.1 como aceptada funcionalmente por el usuario. La verificación SQL con dos identidades se conserva con su alcance, y queda pendiente la comprobación independiente del nuevo flujo con dos sesiones reales.
 
 La migración `20261108023553_ai_habit_actions` está aplicada. El código está en el PR #8. El próximo paso de entrega es integrar ese PR y verificar el despliegue y el recorrido publicado. Después sigue 4B.2, registro de check-in diario con validación de campos y rangos, vista previa, confirmación explícita de sobrescrituras y auditoría mínima. SMTP permanece en su pendiente independiente.
+
+## Implementación y prueba de 4B.2
+
+`propose_daily_checkin` acepta energía, estado emocional y satisfacción con el día (enteros 1–5). Sueño admite 0–24 horas con dos decimales y estrés admite un entero 1–5. El modelo debe pedir los tres valores obligatorios en un único mensaje cuando falten datos. El servidor reutiliza `parseCheckin` y rechaza notas, fechas, IDs y campos ajenos al contrato.
+
+Ejemplo para probar después de aplicar la migración y arrancar la rama:
+
+> Registrá mi check-in de hoy. Energía 4 de 5, estado emocional 3 de 5, satisfacción con el día 5 de 5. Dormí 7,25 horas.
+
+La tarjeta muestra fecha y valores. Si ya existe un check-in, Confirmar requiere marcar «Confirmo que quiero actualizar estos valores del check-in de hoy». Los campos opcionales omitidos y las notas privadas mantienen sus valores. El servidor verifica otra vez propietario, fecha, caducidad y versión. Si hubo cambios desde la propuesta, se pide una nueva. Cancelar cierra la propuesta.
+
+La migración `20261108024434_ai_checkin_actions.sql` agrega `assistant_private.checkin_actions`, validación SQL y RPC invocadoras. La auditoría conserva propietario, tipo, objetivo, versión, decisión, resultado y tiempos. Las propuestas pendientes almacenan los valores estructurados necesarios hasta procesarse. Al confirmar, cancelar, vencer o fallar durante la decisión, se borran esos valores de la auditoría. La caducidad se comprueba cuando se intenta decidir. La tabla queda fuera de la Data API y con RLS. Hay un máximo de veinte propuestas por cuenta y día.
+
+La revisión automática rechazó aplicar esta migración en el Supabase compartido porque la autorización anterior correspondía a hábitos. Pendiente autorización explícita para 4B.2. Tras aplicarla, cotejar su versión real y alinear el archivo, probar con dos identidades bajo rollback y verificar el recorrido con Gemini antes de integrar el nuevo PR.
+
+QA local aprobado con `npm run lint`, `npm test`, `npm run test:db`, `npm run build`, `npm run typecheck` y `npm run test:browser`. Chromium usa Gemini/Auth simulados y SQL de prueba. Dos conexiones PostgreSQL independientes comprobaron idempotencia, exclusión de propuestas antiguas y actualización manual concurrente. SMTP y 4B.3 continúan pendientes.

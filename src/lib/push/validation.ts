@@ -12,7 +12,7 @@ export function parsePushSubscription(value: unknown): PushInput | null {
   let url: URL;
   try { url = new URL(v.endpoint); } catch { return null; }
   if (url.protocol !== "https:" || url.username || url.password || url.port ||
-      url.hash || !hosts.includes(url.hostname) ||
+      url.hash || url.pathname.length < 2 || !hosts.includes(url.hostname) ||
       url.href !== v.endpoint) return null;
   const keys = v.keys;
   if (!keys || typeof keys !== "object" || Array.isArray(keys)) return null;

@@ -5,6 +5,7 @@ import "./navigation-v2.css";
 import "./study.css";
 import "./reminders.css";
 import "./analytics.css";
+import "./finance.css";
 import "./assistant.css";
 import "./public-pages.css";
 import "./auth-v2.css";

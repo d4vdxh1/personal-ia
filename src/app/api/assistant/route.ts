@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { readAssistantRequest, send } from "@/lib/assistant/request";
 import { isCheckinProposal } from "@/lib/assistant/checkin-proposal";
 import { isStudyProposal } from "@/lib/assistant/study-proposal";
+import { isReminderProposal } from "@/lib/assistant/reminder-proposal";
 import { isHabitProposal } from "@/lib/assistant/habit-proposal";
 import { GeminiProvider, ProviderError, type ModelMessage } from "@/lib/assistant/provider";
 import { runReadTool } from "@/lib/assistant/tools";
@@ -34,8 +35,18 @@ export async function POST(request: NextRequest) {
     const first = await provider.generate(messages, true);
     let text = first.text;
     const remaining = Math.max(0, budget.remaining ?? 0);
-    const writes = first.calls.filter(call => call.name === "propose_mark_habit" || call.name === "propose_daily_checkin" || call.name === "propose_study_session");
+    const writes = first.calls.filter(call => call.name === "propose_mark_habit" || call.name === "propose_daily_checkin" || call.name === "propose_study_session" || call.name === "propose_reminder");
     if (writes.length && first.calls.length !== 1) return send({ answer: "Pedime una sola acción por mensaje.", remaining });
+    const reminderCall = first.calls.find(call => call.name === "propose_reminder");
+    if (reminderCall) {
+      const { data,error }=await client.rpc("propose_ai_reminder",{p_values:reminderCall.values});
+      if(!error&&data?.status==="pending"&&isReminderProposal(data))
+        return send({answer:"Revisá tu recordatorio antes de programarlo.",proposal:data,remaining});
+      if(!error&&data?.status==="limited")return send({error:"Alcanzaste el límite diario de propuestas de recordatorios."},429);
+      if(!error&&data?.status==="invalid")return send({answer:"La fecha, hora o frecuencia no es válida. Indicá cuándo querés recibir el aviso.",remaining});
+      console.error("assistant.reminder.proposal_unavailable",{userId});
+      return send({error:"No pudimos preparar el recordatorio. Volvé a intentar."},503);
+    }
     const studyCall = first.calls.find(call => call.name === "propose_study_session");
     if (studyCall) {
       if (process.env.AI_STUDY_WRITES_ENABLED === "false") {
@@ -81,7 +92,7 @@ export async function POST(request: NextRequest) {
       console.error("assistant.mark_habit.proposal_unavailable", { userId });
       return send({ error: "No pudimos preparar la propuesta. Volvé a intentar." }, 503);
     }
-    const reads = first.calls.filter(call => call.name !== "propose_mark_habit" && call.name !== "propose_daily_checkin" && call.name !== "propose_study_session");
+    const reads = first.calls.filter(call => call.name !== "propose_mark_habit" && call.name !== "propose_daily_checkin" && call.name !== "propose_study_session" && call.name !== "propose_reminder");
     if (reads.length) {
       const results = await Promise.all(reads.map(call => runReadTool(call.name, client, userId)));
       messages.push({ role: "model", parts: first.parts });

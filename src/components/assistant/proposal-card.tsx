@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import { isCheckinProposal, type CheckinProposal } from "@/lib/assistant/checkin-proposal";
 import type { HabitProposal } from "@/lib/assistant/habit-proposal";
 import { isStudyProposal, type StudyProposal } from "@/lib/assistant/study-proposal";
+import { isReminderProposal, type ReminderProposal } from "@/lib/assistant/reminder-proposal";
 
-export function ProposalCard({ proposal }: { proposal: HabitProposal | CheckinProposal | StudyProposal }) {
+export function ProposalCard({ proposal }: { proposal: HabitProposal | CheckinProposal | StudyProposal | ReminderProposal }) {
   const router = useRouter();
   const checkin = isCheckinProposal(proposal) ? proposal : null;
   const study = isStudyProposal(proposal) ? proposal : null;
-  const habit = checkin || study ? null : proposal as HabitProposal;
+  const reminder = isReminderProposal(proposal) ? proposal : null;
+  const habit = checkin || study || reminder ? null : proposal as HabitProposal;
   const [overwrite, setOverwrite] = useState(false);
   const inFlight = useRef(false);
   const [busy, setBusy] = useState(false);
@@ -27,7 +29,7 @@ export function ProposalCard({ proposal }: { proposal: HabitProposal | CheckinPr
       const response = await fetch("/api/assistant/decision", {
         method: "POST", credentials: "same-origin",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: proposal.id, decision, ...(checkin ? { kind: "checkin", overwrite } : study ? { kind: "study" } : {}) }),
+        body: JSON.stringify({ id: proposal.id, decision, ...(checkin ? { kind: "checkin", overwrite } : study ? { kind: "study" } : reminder ? { kind: "reminder" } : {}) }),
       });
       const result = await response.json();
       if (typeof result.message === "string") {
@@ -46,8 +48,8 @@ export function ProposalCard({ proposal }: { proposal: HabitProposal | CheckinPr
     }
   }
 
-  return <section className="assistant-proposal" aria-label={checkin ? "Propuesta de check-in diario" : study ? "Propuesta de sesión de estudio" : "Propuesta para completar un hábito"}>
-    <strong>{checkin ? "Check-in diario" : study ? `Estudio · ${study.subject}` : habit?.name}</strong>
+  return <section className="assistant-proposal" aria-label={checkin ? "Propuesta de check-in diario" : study ? "Propuesta de sesión de estudio" : reminder ? "Propuesta de recordatorio" : "Propuesta para completar un hábito"}>
+    <strong>{checkin ? "Check-in diario" : study ? `Estudio · ${study.subject}` : reminder ? reminder.title : habit?.name}</strong>
     <p><time dateTime={proposal.date}>{date}</time>{habit && " · Marcar como completado"}</p>
     {checkin && <dl className="assistant-proposal-values">
       <div><dt>Energía</dt><dd>{checkin.values.energy}/5</dd></div>
@@ -59,6 +61,13 @@ export function ProposalCard({ proposal }: { proposal: HabitProposal | CheckinPr
     {study && <dl className="assistant-proposal-values">
       <div><dt>Tema</dt><dd>{study.topic}</dd></div>
       <div><dt>Duración</dt><dd>{study.duration_minutes} minutos</dd></div>
+    </dl>}
+    {reminder && <dl className="assistant-proposal-values">
+      <div><dt>Hora</dt><dd>{reminder.time} ({reminder.timezone})</dd></div>
+      <div><dt>Frecuencia</dt><dd>{reminder.frequency==="once"?"Una vez":
+        reminder.frequency==="daily"?"Todos los días":reminder.frequency==="monthly"?"Mensual":
+        "Semanal, días "+reminder.weekdays.join(", ")}</dd></div>
+      {reminder.until_on && <div><dt>Hasta</dt><dd>{reminder.until_on}</dd></div>}
     </dl>}
     {!closed && checkin?.overwrite && <label className="assistant-overwrite">
       <input type="checkbox" checked={overwrite} onChange={event => setOverwrite(event.target.checked)} />

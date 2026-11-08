@@ -19,18 +19,20 @@ export async function POST(request: NextRequest) {
   const { id, decision } = body;
   const checkin = body.kind === "checkin";
   const study = body.kind === "study";
+  const reminder = body.kind === "reminder";
   if (study && process.env.AI_STUDY_WRITES_ENABLED === "false") {
     return send({ error: "El registro de estudio desde Gemini todavía no está habilitado." }, 503);
   }
   const validShape = checkin
     ? Object.keys(body).length === 4 && typeof body.overwrite === "boolean"
-    : study ? Object.keys(body).length === 3 : Object.keys(body).length === 2;
+    : study || reminder ? Object.keys(body).length === 3 : Object.keys(body).length === 2;
   if (!validShape || typeof id !== "string" || !proposalId.test(id) ||
       (decision !== "confirm" && decision !== "cancel")) return send({ error: "Decisión inválida." }, 400);
 
   const { data, error } = checkin
     ? await client.rpc("decide_checkin_proposal", { p_id: id, p_decision: decision, p_overwrite: body.overwrite })
     : study ? await client.rpc("decide_study_proposal", { p_id: id, p_decision: decision })
+    : reminder ? await client.rpc("decide_ai_reminder", { p_id: id, p_decision: decision })
     : await client.rpc("decide_habit_proposal", { p_id: id, p_decision: decision });
   if (!error && data?.status === "needs_confirmation") {
     return send({ error: "Confirmá que querés actualizar el check-in existente." }, 409);
@@ -39,11 +41,11 @@ export async function POST(request: NextRequest) {
   const replay = data?.status === "consumed";
   const result = replay ? data.outcome : data?.status;
   if (error || typeof result !== "string" || !Object.hasOwn(outcomes, result)) {
-    console.error("assistant.decision_unavailable", { userId, proposalId: id, kind: checkin ? "checkin" : study ? "study" : "habit" });
+    console.error("assistant.decision_unavailable", { userId, proposalId: id, kind: checkin ? "checkin" : study ? "study" : reminder ? "reminder" : "habit" });
     return send({ error: "No pudimos comprobar el resultado. Volvé a intentar con esta propuesta." }, 503);
   }
   if (result === "confirmed" || result === "already_done") {
-    revalidatePath(checkin ? "/check-in" : study ? "/study" : "/habits");
+    revalidatePath(checkin ? "/check-in" : study ? "/study" : reminder ? "/reminders" : "/habits");
     revalidatePath("/");
   }
   const checkinOutcomes = {
@@ -56,7 +58,12 @@ export async function POST(request: NextRequest) {
     stale: "La materia cambió o fue archivada. Pedí una nueva propuesta.",
     failed: "No se pudo guardar la sesión de estudio. Podés pedir otra propuesta.",
   };
-  const messages = study ? studyOutcomes : checkin ? checkinOutcomes : outcomes;
+  const reminderOutcomes = {
+    ...outcomes,confirmed:"Recordatorio programado.",
+    stale:"La hora del recordatorio ya pasó. Pedí una nueva propuesta.",
+    failed:"No se pudo guardar el recordatorio. Podés pedir una propuesta nueva.",
+  };
+  const messages = reminder ? reminderOutcomes : study ? studyOutcomes : checkin ? checkinOutcomes : outcomes;
   const message = messages[result as keyof typeof outcomes];
   const status = replay ? 409 : result === "failed" ? 500 : result === "expired" ? 410 :
     result === "stale" || result === "already_done" ? 409 : 200;

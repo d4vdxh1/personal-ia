@@ -5,7 +5,7 @@ const db=await createTestDatabase(false);
 const q=async(sql,args=[]) => (await db.query(sql,args)).rows;
 try {
  await db.exec("create role service_role nologin;create schema vault;create table vault.decrypted_secrets(name text,decrypted_secret text);");
- for(const name of ["20261108035009_reminders.sql","20261108043426_push_notifications.sql","20261108052000_reminder_recurrences.sql"])
+ for(const name of ["20261108035009_reminders.sql","20261108043426_push_notifications.sql","20261108184507_reminder_recurrences.sql"])
    await db.exec(await readFile("supabase/migrations/"+name,"utf8"));
  await q("insert into auth.users(id) values ($1),($2)",[alice,bob]);
  for(const tbl of ["public.reminder_series","public.reminders"])

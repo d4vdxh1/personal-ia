@@ -681,3 +681,13 @@ El PR #15 de 5A.3 se fusionó con CI aprobado y la migración `20261108184507_re
 - PR #18 exportación selectiva de Calendar: implementación con permiso OAuth adicional, exportación única y verificación de conflictos 409; migración incremental `20261108194807` aplicada, RLS verificada con rollback. CI de implementación aprobado antes de alinear versión de archivo.
 - **Dependencia externa:** no están configurados el cliente OAuth Google Cloud ni secreto/cifrado de Calendar en Vercel. No se publican tokens; integración real sin activar ni sincronización bidireccional.
 - Pendientes de aceptación con usuario: serie recurrente real, recordatorio Gemini con confirmación y OAuth Calendar cuando configure credenciales.
+
+## 2026-11-08 — Validación Fase 5 e inicio 6A (rama sin publicación)
+
+- Usuario confirmó pruebas reales satisfactorias de notificaciones, recurrencias y recordatorios Gemini; no afirma E2E independiente de dos JWT.
+- 5A.3 UX: opción A, una próxima ocurrencia pendiente por serie en lista y fechas adicionales agrupadas, sin alterar Cron/RLS/materialización.
+- 6A: vista `/analytics` con resumen de siete días basado en registros de Supabase, agregado en servidor, sin IA, migración ni costos adicionales del modelo.
+- Pruebas agregadas para agrupación de recurrencias y resumen 6A, navegador responsive preparado.
+- Google Calendar queda pendiente; no se activaron scopes, flags o secretos de Google. El estilo general seguirá provisional hasta el rediseño posterior al MVP.
+- Revisar CI/preview/aceptación antes de fusionar y desplegar.
+

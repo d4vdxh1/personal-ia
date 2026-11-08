@@ -256,3 +256,39 @@ export async function testStudyBrowser({ page, base, db, output, setRevoked, set
   assert.equal(first.date, next.date);
   console.log("PASS: estudio chat/tarjeta, sin ejecución automática, cancelación, validación, confirmación, reintento y seis anchos.");
 }
+
+export async function testReminderBrowser({page,base,db}) {
+  const endpoint=base+"/api/assistant",headers={origin:base};
+  const cooldown=()=>db.exec("update public.ai_daily_usage set last_request_at=now()-interval '6 seconds'");
+  const card=page.getByRole("region",{name:"Propuesta de recordatorio"}).last();
+  async function ask(message){
+    await cooldown();
+    const response=await page.request.post(endpoint,{headers,data:{message}});
+    assert.equal(response.status(),200);
+    const result=await response.json();
+    assert.equal(result.proposal?.kind,"reminder");
+    return result.proposal;
+  }
+  const before=(await db.query("select count(*)::int n from public.reminders")).rows[0].n;
+  const first=await ask("Recordatorio válido");
+  assert.equal((await db.query("select count(*)::int n from public.reminders")).rows[0].n,before,"proposal must never write");
+  assert.equal((await page.request.post(endpoint+"/decision",{headers,data:{kind:"reminder",id:first.id,decision:"cancel"}})).status(),200);
+  assert.equal((await db.query("select count(*)::int n from public.reminders")).rows[0].n,before);
+  const second=await ask("Recordatorio válido");
+  assert.equal((await page.request.post(endpoint+"/decision",{headers,data:{kind:"reminder",id:second.id,decision:"confirm",title:"forged"}})).status(),400);
+  await page.goto(base+"/assistant");
+  await page.getByRole("checkbox").check();
+  await cooldown();
+  await page.getByLabel("Tu pregunta").fill("Recordatorio recurrente");
+  const response=page.waitForResponse(x=>x.url()===endpoint);
+  await page.getByRole("button",{name:"Enviar",exact:true}).click();
+  const weekly=(await (await response).json()).proposal;
+  assert.equal(weekly.frequency,"weekly");
+  await card.getByRole("button",{name:"Confirmar"}).click();
+  await card.getByText("Recordatorio programado.").waitFor();
+  const count=(await db.query("select count(*)::int n from public.reminder_series where title='Leer'")).rows[0].n;
+  assert.equal(count,1);
+  const replay=await page.request.post(endpoint+"/decision",{headers,data:{kind:"reminder",id:weekly.id,decision:"confirm"}});
+  assert.equal(replay.status(),409);
+  console.log("PASS: reminder Gemini proposal without write, cancel, forged payload, recurring confirmation and replay.");
+}

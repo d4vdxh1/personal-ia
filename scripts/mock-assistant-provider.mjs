@@ -17,7 +17,14 @@ globalThis.fetch = async (input, init) => {
   } else {
     const declared = body.tools[0].functionDeclarations.map(tool => tool.name);
     assert.ok(declared.includes(name) && !declared.includes("decide_habit_proposal"));
-    if (text === "Estudio válido") parts = [call("propose_study_session", { subject_name: "Ingeniería del Software", topic: "Repaso de arquitectura con IA", duration_minutes: 45 })];
+    if (text === "Recordatorio válido") {
+      const future = new Date(Date.now()+5*86400000);
+      const date = new Intl.DateTimeFormat("en-CA",{timeZone:"America/Asuncion",year:"numeric",month:"2-digit",day:"2-digit"}).format(future);
+      parts = [call("propose_reminder",{title:"Repasar Cálculo",time:"19:00",date,frequency:"once"})];
+    }
+    else if (text === "Recordatorio recurrente") parts = [call("propose_reminder",{title:"Leer",time:"19:00",frequency:"weekly",weekdays:[1,3]})];
+    else if (text === "Recordatorio inválido") parts = [call("propose_reminder",{title:"Repasar",time:"19:00",frequency:"once",user_id:"ajeno"})];
+    else if (text === "Estudio válido") parts = [call("propose_study_session", { subject_name: "Ingeniería del Software", topic: "Repaso de arquitectura con IA", duration_minutes: 45 })];
     else if (text === "Estudio incompleto") parts = [call("propose_study_session", { subject_name: "Ingeniería del Software", duration_minutes: 45 })];
     else if (text === "Estudio con ID") parts = [call("propose_study_session", { subject_name: "Ingeniería del Software", topic: "Arquitectura", duration_minutes: 45, user_id: "foreign" })];
     else if (text.startsWith("Check-in válido")) parts = [call("propose_daily_checkin", { energy: 4, emotional_state: 3, life_rating: 5, sleep_hours: 7.25 })];

@@ -36,6 +36,7 @@ assert.equal(study.isStudyProposal({
 const { GeminiProvider } = load("src/lib/assistant/provider.ts", {
   "server-only": {}, "./checkin-proposal": { parseCheckinValues: () => null },
   "./study-proposal": study,
+  "./reminder-proposal": { parseReminderValues: () => null },
   "./tools": { READ_TOOLS: [], isReadToolName: () => false },
 });
 const turn = parts => new GeminiProvider("test", async (url, request) => {

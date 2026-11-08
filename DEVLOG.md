@@ -669,3 +669,7 @@ Se comprobó que el historial remoto de Supabase llega hasta `20261108025732_ai_
 - **Pruebas reales reportadas por el usuario:** recepción de recordatorio en celular y en Chrome/Windows. Brave mostró inicialmente `Registration failed - push service error`, anterior al POST de suscripción; después de ajustar la configuración del servicio push, el usuario indicó que quedó solucionado. No se atribuye captura independiente de recepción en Brave.
 - Se considera **5A.2 aceptada funcionalmente**. Persisten las limitaciones Web Push de mejor esfuerzo y pruebas E2E con dos usuarios autenticados distintos; no prometer puntualidad exacta.
 - Próximos incrementos: 5A.3 recurrencias, 5B Google Calendar OAuth y sincronización selectiva, 5C Gemini con confirmación de recordatorios.
+
+## 2026-11-08 — Inicio 5B: Google Calendar read-only
+
+El PR #15 de 5A.3 se fusionó con CI aprobado y la migración `20261108184507_reminder_recurrences` quedó aplicada. Se inició la conexión Calendar con OAuth 2.0 Web separado del login Google, scope mínimo `calendar.readonly`, cookie state HttpOnly vinculada a la cuenta, token refresh cifrado con AES-256-GCM, datos bajo RLS, lista de eventos a 14 días y desconexión/revocación. **Pendiente:** cliente OAuth Google Cloud y prueba real end-to-end; la app debe mostrar "No configurado" mientras falte.

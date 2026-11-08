@@ -154,7 +154,7 @@ Las pruebas de base de datos usan PostgreSQL de prueba y las pruebas de navegado
 | 5A.1 — Recordatorios | Gestión manual publicada |
 | 5A.2 — Web Push | Publicada; recepción confirmada por el usuario en celular y Chrome/Windows; Brave configurado y funcionando según su reporte |
 | **5A.3 — Recurrencias** | Siguiente implementación propuesta |
-| 5B — Google Calendar | Pendiente: OAuth Calendar separado del login Google y sincronización selectiva |
+| 5B — Google Calendar | OAuth y consulta solo lectura en implementación; necesita credenciales Google Cloud para activarse |
 | 5C — Crear recordatorios con Gemini | Pendiente: propuestas estructuradas y confirmación humana |
 | Analítica avanzada, voz y finanzas | Fases posteriores |
 

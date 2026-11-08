@@ -245,3 +245,9 @@ Rama `feat/fase-5a-recordatorios` desde `main@9b0bcd9`: gestión manual de recor
 ## 2026-11-08 — Fase 5A.2: activación de infraestructura
 
 Supabase migraciones `20261108043426` y `20261108043654` aplicadas. Vault configurado, worker ACTIVE y prueba HTTP 200 sin suscriptores; cron cada minuto activo. El usuario autorizó publicación y merge PR #13. Falta validar el push real desde un navegador suscrito; revisar resultado CI y Vercel tras merge.
+
+## 2026-11-08 — Fase 5A.3 integrada y Fase 5B iniciada
+
+- 5A.3 recurrencias integrada PR #15 (`a43e83c`), migración `20261108184507_reminder_recurrences` aplicada y CI aprobado.
+- Fase 5B.1 en rama `feat/fase-5b-google-calendar`: Google Calendar OAuth separado, pantalla de lectura y tokens cifrados en BD. Falta cliente OAuth Google Calendar; aún no se validó con una cuenta Google real.
+- No habilitar credenciales Google Calendar ficticias ni solicitar acceso de escritura antes de revisar el MVP de solo lectura.

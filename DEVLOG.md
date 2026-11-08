@@ -569,3 +569,11 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - Google OAuth verificado por el usuario en localhost; dos cuentas separadas sin registros compartidos.
 - PR #6 preparado para integrar Google OAuth y páginas públicas, con formularios/Server Actions de registro y recuperación email desactivados por defecto hasta SMTP.
 - Mantener login email/contraseña existente. Pendientes: callback real en Vercel, SMTP/plantillas, CAPTCHA y alertas de gasto del proveedor Gemini.
+
+
+## 2026-11-07 — Registro por email aplazado y planificación 4B
+
+- Nuevo login con Google publicado en Vercel tras PR #6 (`4636ba9`) y confirmado visualmente por el usuario. Prueba con dos cuentas diferentes realizada en localhost por el usuario.
+- Analizado correo de Supabase Auth recibido en AgendaV: no es evidencia de SMTP abierto al público para este proyecto; no tenemos acceso al panel ni a su configuración.
+- Se posponen SMTP, alta por correo, recuperación y plantillas SSR, preservando Google OAuth y cuentas preexistentes. También quedan controles de CAPTCHA/rate limit y alertas de consumo.
+- Se documenta Fase 4B.1 en `docs/FASE_4B_PLAN.md`; ninguna escritura mediante IA está activada.

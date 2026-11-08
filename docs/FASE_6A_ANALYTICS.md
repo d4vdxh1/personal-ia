@@ -1,6 +1,6 @@
 # Fase 6A — Estadísticas de MVP (interfaz provisional)
 
-**Estado:** validación del usuario y gráfico de líneas incorporado a la rama `feat/fase-6a-analytics-recurrencias-mvp`; pendiente de CI, revisión y aceptación en cuenta autenticada. La Fase 6B (comparaciones semanales/mensuales) y 6C (revisión inteligente con Gemini) todavía no están implementadas.
+**Estado:** publicada en `main`, PR #19, commit `2c9e664`, CI y Vercel producción READY. La Fase 6B y 6C están en revisión mediante PR separada. La UX/UI continúa provisional para el MVP.
 
 ## Alcance funcional
 

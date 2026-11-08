@@ -7,7 +7,7 @@ export type Reminder = {
 export async function loadReminders(client: SupabaseClient, userId: string) {
   const { data, error } = await client.from("reminders")
     .select("id,title,notes,scheduled_at,status,series_id").eq("user_id",userId)
-    .order("scheduled_at",{ascending:true}).limit(100);
+    .order("scheduled_at",{ascending:true}).limit(500);
   return { reminders: (data ?? []) as Reminder[], error: Boolean(error) };
 }
 

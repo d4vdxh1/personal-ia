@@ -185,3 +185,74 @@ export async function testCheckinBrowser({ page, base, db, output, setRevoked, s
   assert.equal(fresh.date, update.date);
   console.log("PASS: check-in chat, preview, cancellation, creation, explicit overwrite, notes, session/retry and six widths.");
 }
+
+export async function testStudyBrowser({ page, base, db, output, setRevoked, setFailWrite }) {
+  const endpoint = base + "/api/assistant";
+  const headers = { origin: base };
+  const card = page.getByRole("region", { name: "Propuesta de sesión de estudio" }).last();
+  const cooldown = () => db.exec("update public.ai_daily_usage set last_request_at=now()-interval '6 seconds'");
+  const count = async () => (await db.query("select count(*)::int n from public.study_sessions where user_id=$1", [alice])).rows[0].n;
+  async function requestCard() {
+    await cooldown();
+    await page.getByLabel("Tu pregunta").fill("Estudio válido");
+    const response = page.waitForResponse(r => r.url() === endpoint);
+    await page.getByRole("button", { name: "Enviar", exact: true }).click();
+    const data = await (await response).json();
+    assert.equal(data.proposal.kind, "study");
+    assert.equal(data.proposal.duration_minutes, 45);
+    assert.equal(data.proposal.subject, "Ingeniería del Software");
+    await card.getByRole("button", { name: "Confirmar" }).waitFor();
+    return data.proposal;
+  }
+  await page.goto(base + "/assistant");
+  await page.getByRole("checkbox").check();
+  for (const text of ["Estudio incompleto", "Estudio con ID"]) {
+    await cooldown();
+    assert.equal((await page.request.post(endpoint, { headers, data: { message: text } })).status(), 502);
+  }
+  const before = await count();
+  const first = await requestCard();
+  assert.equal(await count(), before);
+  await card.getByRole("button", { name: "Cancelar" }).click();
+  await card.getByText("Propuesta cancelada.").waitFor();
+  assert.equal(await count(), before);
+  const next = await requestCard();
+  for (const invalid of [{ id: next.id, decision: "confirm", kind: "study", user_id: alice },
+    { id: next.id, decision: "confirm", kind: "study", duration_minutes: 5 }]) {
+    assert.equal((await page.request.post(endpoint + "/decision", { headers, data: invalid })).status(), 400);
+  }
+  const decision = { id: next.id, decision: "confirm", kind: "study" };
+  assert.equal((await page.request.post(endpoint + "/decision", { headers: { origin: "https://foreign.example" }, data: decision })).status(), 403);
+  for (const width of [360, 390, 768, 800, 930, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    for (const label of ["Confirmar", "Cancelar"]) {
+      const button = card.getByRole("button", { name: label });
+      await button.scrollIntoViewIfNeeded();
+      const rect = await button.boundingBox();
+      assert.ok(rect.height >= 44 && rect.width >= 44);
+    }
+    if (width === 390 || width === 1280) await page.screenshot({ path: join(output, "study-proposal-" + width + ".png") });
+  }
+  setRevoked(true);
+  assert.equal((await page.request.post(endpoint + "/decision", { headers, data: decision })).status(), 401);
+  setRevoked(false);
+  setFailWrite(true);
+  await card.getByRole("button", { name: "Confirmar" }).click();
+  await card.getByText(/No pudimos comprobar el resultado/).waitFor();
+  setFailWrite(false);
+  await card.getByRole("button", { name: "Confirmar" }).click();
+  await card.getByText("Sesión de estudio registrada.").waitFor();
+  assert.equal(await count(), before+1);
+  const row = (await db.query("select s.topic,s.duration_minutes,x.name from public.study_sessions s join public.study_subjects x on x.id=s.subject_id where s.user_id=$1 order by s.created_at desc limit 1",[alice])).rows[0];
+  assert.equal(row.topic, "Arquitectura de software");
+  assert.equal(row.duration_minutes, 45);
+  assert.equal(row.name, "Ingeniería del Software");
+  const replay = await page.request.post(endpoint + "/decision", { headers, data: decision });
+  assert.equal(replay.status(), 409);
+  assert.equal((await replay.json()).result, "confirmed");
+  await page.goto(base + "/study?view=sessions");
+  await page.getByRole("heading", { name: "Arquitectura de software", exact: true }).waitFor();
+  assert.equal(first.date, next.date);
+  console.log("PASS: estudio chat/tarjeta, sin ejecución automática, cancelación, validación, confirmación, reintento y seis anchos.");
+}

@@ -653,3 +653,11 @@ Se comprobó que el historial remoto de Supabase llega hasta `20261108025732_ai_
 - Cola privada y RPC service-role con reclamación por lotes, bloqueo de filas, expiración y reintentos.
 - Worker Deno VAPID y runbook Cron/Vault exclusivamente manual; no se publicaron migraciones ni secretos.
 - Pruebas nuevas: validación y aislamiento PostgreSQL. El resultado final de CI debe comprobarse antes de fusionar.
+
+## 2026-11-08 — Infraestructura de envío push en Supabase
+
+- La migración original del PR se alineó con el número de versión asignado por Supabase `20261108043426`.
+- Se instalaron pg_cron y pg_net como migración `20261108043654`, versionada también en Git.
+- Supabase Vault almacena URLs, autenticación cron y VAPID; Edge Function `push-dispatch` desplegada y testeada con HTTP 200, sin suscripciones.
+- Cron job `dia-a-dia-push-dispatch` creado, cada minuto. Vercel recibió clave pública y bandera de disponibilidad.
+- CI, merge, deploy y prueba de dispositivo quedan sujetos a verificación; un HTTP 200 vacío no significa recepción real.

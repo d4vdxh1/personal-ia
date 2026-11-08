@@ -34,3 +34,6 @@ select cron.schedule(
 -- select cron.unschedule('dia-a-dia-push-dispatch');
 -- Verificar ejecuciones:
 -- select * from cron.job_run_details order by start_time desc limit 20;
+
+-- Estado 2026-11-08: el job `dia-a-dia-push-dispatch` YA se creó y habilitó en producción.
+-- Este archivo queda como runbook para mantenimiento; no volver a ejecutarlo sin comprobar cron.job.

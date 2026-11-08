@@ -31,3 +31,7 @@
 ## Fase 5A.2 (rama PR pendiente)
 
 Se prepararon service worker, consentimiento, suscripciones por usuario con RLS, cola privada, reclamación con bloqueo, worker de Supabase Edge Functions y runbook manual de Cron+Vault. **Nada de 5A.2 está activado en producción**; falta aprobar migración, generar secretos VAPID, desplegar Edge Function y habilitar cron. Ver `docs/FASE_5A2_PUSH.md`.
+
+## 2026-11-08 — Actualización 5A.2
+
+Web Push implementado, Vault y worker desplegados, cron activo. La prueba básica del worker devolvió HTTP 200 sin suscriptores; pendiente validar la entrega final en un móvil con permisos concedidos. La aplicación debe mantener una comunicación honesta entre programado, enviado y recibido.

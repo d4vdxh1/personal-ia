@@ -29,3 +29,13 @@ No integra todavía Gemini ni Google Calendar, no introduce notificaciones por c
 ## Estado en producción
 
 La pantalla utiliza `PUSH_DELIVERY_ENABLED=false` por defecto y muestra claramente que los avisos no se envían hasta activar el backend. Tras validar el worker, Vault y cron, establecer `PUSH_DELIVERY_ENABLED=true` (solo servidor) en Vercel antes del despliegue aprobado. La clave VAPID pública por sí sola no prueba que se estén enviando avisos.
+
+## Publicación autorizada — 2026-11-08
+
+- Migración Supabase `20261108043426_push_notifications` aplicada y verificada (RLS y RPC exclusivas service_role).
+- Migración Supabase `20261108043654_push_scheduler_extensions` aplicada: pg_cron y pg_net instalados.
+- Cinco secretos protegidos en Vault; VAPID pública configurada en Vercel; claves privadas nunca en GitHub.
+- Edge Function `push-dispatch` versión 1 ACTIVE, invocación autorizada de prueba HTTP 200 (0 destinatarios).
+- Cron `dia-a-dia-push-dispatch` creado y activo cada minuto, referencia secretos mediante Vault.
+- `PUSH_DELIVERY_ENABLED=true` configurado en producción Vercel; requiere deploy de `main` actualizado.
+- **Pendiente**: verificar el despliegue final y la recepción Web Push con un dispositivo real suscrito. No afirmar entrega real antes de esa prueba.

@@ -184,3 +184,7 @@ Se inició la gestión manual de recordatorios en rama, con validación y permis
 ### Fase 5A.2 en revisión — Web Push
 
 Código de notificaciones push en rama separada. La gestión de recordatorios manuales sigue operativa, pero **los avisos automáticos no se envían aún**. La infraestructura Web Push requiere migración, configuración VAPID y cron bajo autorización. Ver `docs/FASE_5A2_PUSH.md`.
+
+### Web Push — Fase 5A.2
+
+Backend push con suscripciones protegidas, Edge Function y programador Supabase Cron. La infraestructura se activó el 8/11/2026, pero las notificaciones requieren habilitar permisos desde un dispositivo y verificar su recepción. Ver `docs/FASE_5A2_PUSH.md` y la pantalla `/reminders`.

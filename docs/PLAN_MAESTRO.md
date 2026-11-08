@@ -329,7 +329,7 @@ La conversación debe soportar texto primero y voz en una fase posterior.
 
 # 6. Módulo futuro: Finanzas personales
 
-No implementar en el MVP.
+**Decisión actualizada (2026-11-08):** priorizar este módulo antes de Voz. Iniciar 8A con movimientos manuales en guaraníes (PYG), sin conectar cuentas bancarias, tras validación de RLS y aprobación de migración. Voz queda para después de Finanzas. La interfaz visual sigue provisional.
 
 ## Funciones futuras
 

@@ -42,6 +42,7 @@ El enfoque es simple: **menos fricción para planificar y más claridad para ava
 | **Asistente IA** | Consultar datos y confirmar desde Gemini hábitos, check-in y sesiones de estudio. |
 | **Recordatorios y notificaciones** | Guardar recordatorios y recibir Web Push en dispositivos autorizados. |
 | **Estadísticas** | Gráficos reales, tendencias y comparación de 7/30 días; revisión opcional con Gemini previo consentimiento, usando totales y promedios. |
+| **Finanzas (Fase 8A en desarrollo)** | Registro manual PYG de ingresos y gastos, categorías y resumen mensual. En rama, aún sin migrar ni publicar. |
 
 ### Asistente personal con Gemini
 

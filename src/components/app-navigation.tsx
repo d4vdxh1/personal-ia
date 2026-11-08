@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Icon, type IconName } from "@/components/ui/icon";
 
-export type AppSection = "today" | "habits" | "check-in" | "journal" | "goals" | "training" | "profile" | "menu" | "study" | "assistant" | "reminders" | "calendar" | "analytics";
+export type AppSection = "today" | "habits" | "check-in" | "journal" | "goals" | "training" | "profile" | "menu" | "study" | "assistant" | "reminders" | "calendar" | "analytics" | "finance";
 export type StudyView = "overview" | "subjects" | "assignments" | "exams" | "sessions";
 export type TrainingView = "week" | "exercises" | "plans" | "history" | "health";
 
@@ -25,6 +25,9 @@ const groups: { heading: string; items: NavItem[] }[] = [
   ] },
   { heading: "UNIVERSIDAD", items: [
     { key: "study", title: "Estudio", href: "/study", icon: "book" },
+  ] },
+  { heading: "FINANZAS", items: [
+    { key: "finance", title: "Mis finanzas", href: "/finance", icon: "chart" },
   ] },
   { heading: "CUENTA", items: [
     { key: "profile", title: "Mi perfil", href: "/profile", icon: "user" },
@@ -81,7 +84,7 @@ const mobileItems: NavItem[] = [
 ];
 
 export function MobileNavigation({ active }: { active: AppSection }) {
-  const selected = active === "check-in" || active === "journal" || active === "profile" || active === "study" || active === "assistant" || active === "reminders" || active === "calendar" || active === "analytics" ? "menu" : active;
+  const selected = active === "check-in" || active === "journal" || active === "profile" || active === "study" || active === "assistant" || active === "reminders" || active === "calendar" || active === "analytics" || active === "finance" ? "menu" : active;
   return <nav className="mobile-nav" aria-label="Navegación principal">
     {mobileItems.map(item => <Link key={item.key} href={item.href}
       className={selected === item.key ? "nav-item selected" : "nav-item"}

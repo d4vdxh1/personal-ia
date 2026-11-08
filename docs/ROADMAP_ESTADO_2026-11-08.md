@@ -17,7 +17,7 @@
 | 5C Recordatorios propuestos por Gemini | Publicada PR #17 | Usuario confirmó pruebas de propuesta, cancelación y confirmación |
 | 6 Analytics inteligente | 6A/6B/6C fusionadas PR #19 y #20 | Gráfico de líneas, comparaciones 7/30 días y revisión consentida; CI aprobado; 6C pendiente prueba real con Gemini |
 | 7 Voz | No iniciado | Transcripción primero, conversación en tiempo real después |
-| 8 Finanzas | No iniciado | Ingresos, gastos, categorías, presupuestos; sin operaciones bancarias |
+| 8 Finanzas | 8A en rama de revisión | Movimientos manuales en PYG, categorías y resumen; sin migración aplicada ni publicación; 8B cuentas/presupuestos y 8C ahorro pendientes |
 | 9 Producción estable | Parcial/transversal | Observabilidad, errores, backups, E2E, seguridad, analítica, límites de costo |
 
 ## Pendientes de integración y aceptación posteriores a Fase 6
@@ -63,3 +63,11 @@
 - **Fase 9:** seguridad y observabilidad, backups, E2E de dos cuentas, RLS/Auth, control de consumo Gemini, Web Analytics, rendimiento y monitoreo Push/Cron.
 - **Diseño:** UX/UI del MVP provisional; rediseño transversal profesional planificado para después del MVP.
 - Las entradas anteriores de este archivo son hitos históricos; este apartado es la referencia más reciente.
+
+## Nuevo orden de implementación — Finanzas antes que Voz
+
+- Por decisión del usuario (2026-11-08), la siguiente etapa activa es **Fase 8A Finanzas**, antes de **Fase 7 Voz**.
+- PR de finanzas en rama `feat/fase-8a-finanzas-manuales`; no aplicar migración productiva ni fusionar sin validar seguridad, integridad y funcionamiento con dos cuentas.
+- Primera versión: ingresos/gastos manuales PYG, resumen mensual y categorías, sin integraciones bancarias.
+- Después: 8B cuentas/presupuestos y 8C metas de ahorro/recurrentes; posteriormente 7 Voz y 9 estabilidad.
+- La UX/UI actual sigue provisional y se rediseñará cuando el MVP esté funcional.

@@ -1,6 +1,6 @@
 # PROJECT_STATUS — Día a Día
 
-**Última actualización:** 2026-11-08 (Fase 6A/6B/6C fusionadas; 6C requiere prueba manual en producción)
+**Última actualización:** 2026-11-08 (Fase 6 publicada; decisión de adelantar Finanzas 8A a Voz 7)
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
 **Estado general (2026-11-08):** Fases 0–4B, 5A.1–5A.3, 5C y **6A, 6B y 6C** fusionadas en `main@0578f63` (PR #19 y #20). 6B: gráficos y comparación de 7/30 días; 6C: generación manual y consentida de revisión Gemini con cuota compartida y solo agregados. PR #20 aprobó CI completo y preview READY; verificar producción READY y realizar prueba real de Gemini con cuenta del usuario antes de considerar aceptación E2E. **5B Google Calendar sigue pendiente de OAuth**. La UX/UI sigue provisional para el MVP.
 **Aceptación funcional 5A.2:** usuario confirmó recepción de Web Push en celular y en Chrome/Windows; indicó que Brave quedó funcionando tras corregir el servicio push. No implica garantía universal de entrega ni una prueba E2E independiente entre dos JWT reales.
@@ -285,3 +285,10 @@ Supabase migraciones `20261108043426` y `20261108043654` aplicadas. Vault config
 - **Aceptación real pendiente:** confirmar que Gemini genera una revisión con cuenta autenticada, validar indicadores con registros reales, y revisar factura/cuota si el proveedor limita el servicio.
 - **Otros pendientes:** Google Calendar 5B, fase 7 voz, fase 8 finanzas, fase 9 estabilidad/seguridad, E2E con dos usuarios, Web Analytics, backups/monitoreo, rediseño global de UX/UI posterior al MVP.
 - Esta actualización prevalece sobre secciones históricas del mismo documento que describen Fase 6 como rama o pendientes.
+
+## Nueva prioridad — Finanzas antes de Voz (2026-11-08)
+
+- El usuario prioriza Finanzas (Fase 8) antes de Voz (Fase 7), conservando numeración para trazabilidad.
+- Fase 8A en rama `feat/fase-8a-finanzas-manuales`, sin fusionar: ingresos/gastos en PYG manuales, categorías controladas, historial y resumen mensual; migración y tests SQL con RLS en dos identidades.
+- **No ejecutar migración ni publicar** hasta revisar CI y confirmar aceptación. Presupuestos, cuentas y ahorro quedarán para 8B/8C.
+- Se mantiene sin integración bancaria ni transferencia/pago, y el diseño general será reemplazado después del MVP.

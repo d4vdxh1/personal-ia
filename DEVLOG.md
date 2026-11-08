@@ -708,3 +708,10 @@ El PR #15 de 5A.3 se fusionó con CI aprobado y la migración `20261108184507_re
 - 6C: botón consentido, API autenticada con filtro de mismo origen, agregados sin identificadores ni notas, respuesta solo a solicitud, sin acciones de escritura y bajo la cuota Gemini ya existente.
 - Gemini real todavía no fue invocado con sesión real desde CI; verificar aceptación en producción. OAuth Calendar 5B sigue pendiente. No migraciones, secretos ni cambios RLS en esta fase.
 - Para próximos incrementos: 7 voz, 8 finanzas personales y 9 hardening/observabilidad, además del rediseño UX/UI posterior al MVP.
+
+## 2026-11-08 — Inicio de Fase 8A por decisión del usuario
+
+- Se adelanta Finanzas personales a Voz, sin renumerar el roadmap.
+- En rama `feat/fase-8a-finanzas-manuales` se prepara tabla aislada `finance_transactions` con RLS, moneda PYG y categorías controladas; el frontend ofrece entrada manual de ingresos/gastos, resumen y desglose mensual.
+- Seguridad: carga por usuario, backend con `getUser`, confirmación para eliminar, consultas limitadas, no operaciones bancarias ni IA financiera.
+- Tests SQL en base efímera y tests de validación; migración **aún no aplicada** en Supabase de producción. Falta revisión del PR y validación final.

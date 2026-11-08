@@ -631,3 +631,10 @@ Los controles del código funcional aprobaron en GitHub Actions #93, incluidos S
 ## 2026-11-08 — Protección antes de integrar 4B.3
 
 Se comprobó que el historial remoto de Supabase llega hasta `20261108025732_ai_checkin_actions`; falta `20261108033000_ai_study_actions`. Se agregó bandera segura por defecto `AI_STUDY_WRITES_ENABLED=false` y test que impide ofrecer la tool a Gemini sin habilitación. La integración del PR no debe activar la función antes de aplicar y comprobar la nueva migración con consentimiento específico.
+
+## 2026-11-08 — 4B.3: activación con migración verificada
+
+- Historial remoto de Supabase: versión `20261108033000` ya aplicada. No se volvió a ejecutar una migración existente.
+- Comprobadas las RPC `propose_study_session` y `decide_study_proposal`, `SECURITY INVOKER`, acceso `authenticated` sin acceso `anon`, auditoría bajo RLS y trigger de decisión.
+- Se activó por defecto el circuito de propuestas de estudio en el código; el interruptor `AI_STUDY_WRITES_ENABLED=false` queda como mecanismo de rollback selectivo.
+- Publicación sujeta a CI y despliegue Vercel; prueba real de usuario con Gemini pendiente de registrar explícitamente.

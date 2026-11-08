@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
   const { id, decision } = body;
   const checkin = body.kind === "checkin";
   const study = body.kind === "study";
-  if (study && process.env.AI_STUDY_WRITES_ENABLED !== "true") {
+  if (study && process.env.AI_STUDY_WRITES_ENABLED === "false") {
     return send({ error: "El registro de estudio desde Gemini todavía no está habilitado." }, 503);
   }
   const validShape = checkin

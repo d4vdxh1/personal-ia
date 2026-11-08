@@ -51,7 +51,7 @@ await assert.rejects(turn(call({ ...valid, user_id: "foreign" })));
 await assert.rejects(turn(call({ subject_name: "Matemática", duration_minutes: 30 })));
 await assert.rejects(turn([{ functionCall: { name: "decide_study_proposal", args: {} } }]));
 console.log("PASS: sesiones de estudio exigen materia, tema y duración explícitos; no se aceptan IDs, notas ni fechas.");
-// Por defecto se deshabilita la tool hasta aplicar y verificar la migración remota.
+// La bandera false deshabilita la tool; su valor predeterminado se configura en la ruta.
 await assert.rejects(new GeminiProvider("test", async (_url, request) => {
   const body = JSON.parse(request.body);
   assert.equal(body.tools[0].functionDeclarations.some(tool => tool.name === "propose_study_session"), false);

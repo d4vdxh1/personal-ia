@@ -62,8 +62,16 @@ export default async function RemindersPage({ searchParams }: { searchParams:Pro
           {item.notes && <p>{item.notes}</p>}
           {visiblePending.find(r=>r.series_id===item.id) && <p className="goal-meta">Próximo aviso: {when(visiblePending.find(r=>r.series_id===item.id)!.scheduled_at)}</p>}
           {(additionalOccurrences.get(item.id)?.length??0)>0 && <details className="recurrence-upcoming">
-            <summary>Ver próximas ocurrencias ({additionalOccurrences.get(item.id)?.length})</summary>
-            <ul>{additionalOccurrences.get(item.id)!.map(occurrence=><li key={occurrence.id}>{when(occurrence.scheduled_at)}</li>)}</ul>
+            <summary>Ver otras ocurrencias ({additionalOccurrences.get(item.id)?.length})</summary>
+            <ul>{additionalOccurrences.get(item.id)!.map(occurrence=><li key={occurrence.id}>
+              <time dateTime={occurrence.scheduled_at}>{when(occurrence.scheduled_at)}</time>
+              <div className="recurrence-extra-actions">
+                <form action={closeReminder}><input type="hidden" name="id" value={occurrence.id}/>
+                  <button className="secondary-button" name="status" value="completed">Marcar realizado</button></form>
+                <form action={closeReminder}><input type="hidden" name="id" value={occurrence.id}/>
+                  <button className="secondary-button" name="status" value="cancelled">Cancelar</button></form>
+              </div>
+            </li>)}</ul>
           </details>}
           <form action={toggleReminderSeries} className="reminder-actions"><input type="hidden" name="id" value={item.id}/>
             <button className="secondary-button" name="active" value={item.active?"false":"true"}>{item.active?"Pausar serie":"Reactivar serie"}</button>

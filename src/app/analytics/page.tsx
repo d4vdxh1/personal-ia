@@ -4,6 +4,7 @@ import { getAccount } from "@/lib/auth/account";
 import { createClient } from "@/lib/supabase/server";
 import { buildAnalytics, lastNDates, paraguayDate } from "@/lib/analytics/summary";
 import { loadAnalytics } from "@/lib/analytics/data";
+import { TrendLine } from "@/components/analytics/trend-line";
 
 export const dynamic="force-dynamic";
 const dateLabel=(date:string)=>new Intl.DateTimeFormat("es-PY",{timeZone:"UTC",weekday:"short",day:"2-digit",month:"2-digit"})
@@ -41,6 +42,7 @@ export default async function AnalyticsPage(){
     <section className="card analytics-detail">
      <h2>Tiempo de estudio por día</h2>
      <p className="goal-meta">Los minutos se calculan desde tus sesiones registradas.</p>
+     <TrendLine label="Tendencia diaria de minutos de estudio" points={report.daily.map(d=>({label:dateLabel(d.date).split(" ")[0],value:d.studyMinutes}))}/>
      <div className="analytics-daily">
       {report.daily.map(d=><div className="analytics-daily-row" key={d.date}>
        <span>{dateLabel(d.date)}</span>

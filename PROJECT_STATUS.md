@@ -1,13 +1,22 @@
 # PROJECT_STATUS — Día a Día
 
-**Última actualización:** 2026-11-08
+**Última actualización:** 2026-11-08 (cierre funcional Fase 5, inicio Fase 6A en rama)
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
-**Estado general (2026-11-08):** Fases 0–4B y 5A.1–5A.2 publicadas. PR #13 fusionado en `main@d402a7b`, Vercel Ready. Gemini propone escrituras confirmadas de hábitos, check-in y estudio; los recordatorios se entregan mediante Web Push por dispositivo suscrito.
+**Estado general (2026-11-08):** Fases 0–4B y 5A.1–5A.3 y 5C integradas y publicadas en `main@08c3f8e`, Vercel READY. Web Push, recurrencias y Gemini recordatorios tienen aceptación funcional reportada por el usuario. Fase 5B Google Calendar sigue sin activar por faltar OAuth Google Cloud. Ajuste UX A (una ocurrencia por serie visible) y Fase 6A (estadísticas de 7 días) avanzan solo en rama, no desplegadas. La UX/UI actual es provisional para MVP.
 **Aceptación funcional 5A.2:** usuario confirmó recepción de Web Push en celular y en Chrome/Windows; indicó que Brave quedó funcionando tras corregir el servicio push. No implica garantía universal de entrega ni una prueba E2E independiente entre dos JWT reales.
 **Estado avanzado (8/11):** 5A.3 PR #15 integrado; 5B.1 PR #16 código publicado pero sin cliente Google OAuth configurado; 5C PR #17 integrado, SQL y CI aprobados. 5B.2 se prepara como PR #18: exportación selectiva con autorización adicional y flag desactivado hasta validar Google. **Siguiente paso:** activar y probar Google OAuth real, aceptar un recordatorio desde Gemini, luego comenzar Fase 6.
 **Migraciones vigentes, no repetir:** `20261108035009_reminders`, `20261108043426_push_notifications`, `20261108043654_push_scheduler_extensions`. Cron `dia-a-dia-push-dispatch` cada minuto, Edge Function activa, VAPID privada en Vault y CI aprobado.
 
 > Las anotaciones de desarrollo fechadas más abajo son **históricas** y pueden indicar que una fase estaba pendiente cuando se redactaron. El resumen superior prevalece.
+
+## Continuidad 2026-11-08 — UX de recurrencias y Fase 6A (en rama, sin despliegue)
+
+- El usuario confirmó que funcionaron las pruebas de Fase 5: recordatorios individuales, notificaciones, recurrencias y propuestas de Gemini. Es aceptación funcional, no auditoría independiente de seguridad.
+- UX elegido: **opción A**, listar solo la próxima ocurrencia pendiente de cada serie; las demás aparecen agrupadas tras “Ver próximas ocurrencias” en la tarjeta de la serie. No modifica el scheduler ni la base.
+- Fase 6A: ruta `/analytics`, métricas deterministas de hábitos, estudio, entrenamiento, check-in y objetivos (últimos siete días), desde datos reales en Supabase bajo RLS. Requiere CI, revisión y aceptación; no se ha publicado.
+- Google Calendar 5B.1/5B.2 queda pendiente de credenciales OAuth y prueba real. **Sin cambios en secretos, flags ni migraciones.**
+- El diseño visual general es **temporal**: el usuario solicitó explícitamente un rediseño integral posterior, fuera del alcance del MVP actual.
+- La advertencia previa sobre permisos EXECUTE de `public.rls_auto_enable()` y endurecimiento de Auth sigue abierta; ninguna operación de seguridad se ejecutó en esta rama.
 
 ## Entrega y continuidad del 2026-11-06
 

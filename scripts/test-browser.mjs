@@ -57,7 +57,7 @@ const server = createServer((req, res) => {
         if (['select','order','limit','offset','on_conflict'].includes(field)) continue;
         const split=value.indexOf('.'), op=value.slice(0,split), val=value.slice(split+1);
         if (op==='in') { const vals=val.slice(1,-1).split(',').map(v=>v.replaceAll('"','')); where.push(`${ident(field)} in (${vals.map(v=>{args.push(v); return '$'+args.length;}).join(',')})`); }
-        else { assert.ok(['eq','gte','lte'].includes(op)); args.push(val); where.push(`${ident(field)} ${op==='eq'?'=':op==='gte'?'>=':'<='} ${args.length}`); }
+        else { assert.ok(['eq','gte','lte'].includes(op)); args.push(val); where.push(`${ident(field)} ${op==='eq'?'=':op==='gte'?'>=':'<='} $${args.length}`); }
       }
       const clause=where.length ? ' where '+where.join(' and ') : '';
       let rows;

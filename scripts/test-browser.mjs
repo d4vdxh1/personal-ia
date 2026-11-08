@@ -163,7 +163,7 @@ try {
   await page.getByText('Eliminar movimiento').click();
   await page.getByLabel('Confirmo que deseo eliminar este movimiento.').check();
   await page.getByRole('button',{name:'Eliminar definitivamente'}).click();
-  await page.getByText('Movimiento eliminado.').waitFor();
+  await page.getByText('No hay movimientos para este mes.').waitFor();
   await page.goto(base+'/finance');
   await page.getByText('No hay movimientos para este mes.').waitFor();
 

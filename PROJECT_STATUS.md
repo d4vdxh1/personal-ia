@@ -2,8 +2,12 @@
 
 **Última actualización:** 2026-11-08
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
-**Estado general:** Fases 0–3 implementadas y aceptadas funcionalmente; **Fase 4A activada y aceptada por el usuario el 2026-11-06** tras configurar Gemini en Vercel y probar el chat. La confirmación de uso no equivale a una auditoría independiente del proveedor o de aislamiento con dos cuentas reales.
-**Fase actual:** 4B.1 de hábitos publicada mediante PR #8 (`286e387`), con migración aplicada y aceptación funcional del usuario desde localhost. 4B.2 de check-in implementada en la rama `feat/fase-4b2-checkin-confirmado`, con migración aplicada, aceptación funcional del usuario y publicación autorizada mediante PR #9. Siguiente entrega del roadmap, 4B.3 de sesiones de estudio.
+**Estado general (2026-11-08):** Fases 0–4B y 5A.1–5A.2 publicadas. PR #13 fusionado en `main@d402a7b`, Vercel Ready. Gemini propone escrituras confirmadas de hábitos, check-in y estudio; los recordatorios se entregan mediante Web Push por dispositivo suscrito.
+**Aceptación funcional 5A.2:** usuario confirmó recepción de Web Push en celular y en Chrome/Windows; indicó que Brave quedó funcionando tras corregir el servicio push. No implica garantía universal de entrega ni una prueba E2E independiente entre dos JWT reales.
+**Siguiente etapa recomendada:** 5A.3 recurrencias; después 5B integración Google Calendar y 5C creación de recordatorios desde Gemini.
+**Migraciones vigentes, no repetir:** `20261108035009_reminders`, `20261108043426_push_notifications`, `20261108043654_push_scheduler_extensions`. Cron `dia-a-dia-push-dispatch` cada minuto, Edge Function activa, VAPID privada en Vault y CI aprobado.
+
+> Las anotaciones de desarrollo fechadas más abajo son **históricas** y pueden indicar que una fase estaba pendiente cuando se redactaron. El resumen superior prevalece.
 
 ## Entrega y continuidad del 2026-11-06
 
@@ -17,7 +21,7 @@
 
 PWA personal para registrar rutina, hábitos, entrenamiento, estudio, sueño, objetivos y progreso. Primero funcionamiento manual; IA después del núcleo.
 
-Next.js 16.4.5 + React + TypeScript + Tailwind; Supabase (PostgreSQL/Auth/RLS); Vercel. Gemini está integrado en el backend mediante `AIProvider` y herramientas de solo lectura; el usuario confirmó que funciona tras configurar la clave en Vercel. Google Calendar, recordatorios y voz corresponden a fases posteriores.
+Next.js 16.4.5 + React + TypeScript + Tailwind; Supabase (PostgreSQL/Auth/RLS); Vercel. Gemini está integrado en el backend mediante `AIProvider` y herramientas de solo lectura; el usuario confirmó que funciona tras configurar la clave en Vercel. Google Calendar y voz siguen en fases posteriores; recordatorios y Web Push ya están publicados.
 
 ## Funcionalidades actuales
 

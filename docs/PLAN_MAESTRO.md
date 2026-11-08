@@ -4,8 +4,9 @@
 **Bienvenida del login:** “Cada día se vuelve más fácil. Lo difícil es hacerlo cada día.”
 **Identificador técnico:** `personal-ia`. Se conservan repositorio, carpeta, URL de Vercel y proyecto Supabase actuales.
 
-**Estado:** Plan vigente — v1.7, actualizado el 2026-11-07.
-**Avance:** Fases 0–3 y **Fase 4A de Gemini** implementadas y aceptadas funcionalmente por confirmación del usuario el 2026-11-06. Gemini fue configurado privadamente en Vercel y probado por el usuario. Sin verificación independiente de dos JWT reales. **Fase 4B.1 publicada** mediante PR #8, con aceptación funcional del usuario. **4B.2 implementada en rama**, con migración aplicada, aceptación funcional del usuario y publicación autorizada mediante PR #9. Sigue 4B.3 de estudio. Ver PROJECT_STATUS, `docs/CIERRE_FASE_1.md` y `docs/ENTRENAMIENTO.md`.
+**Estado:** Plan vigente — v1.8, actualizado el 2026-11-08.
+**Avance:** Fases 0–4B y 5A.1–5A.2 publicadas; notificaciones Web Push recibidas por usuario en móvil y Chrome/Windows, Brave funcional tras configuración. `main@d402a7b`. Siguiente: 5A.3 recurrencias, luego 5B Google Calendar. Las notas cronológicas antiguas son históricas.
+
 **Objetivo:** construir una aplicación web/PWA personal, inteligente y progresiva para organizar rutina, entrenamiento, estudio, hábitos, sueño, objetivos, recordatorios y, más adelante, finanzas personales.
 
 ---
@@ -1622,3 +1623,12 @@ En desarrollo en `feat/fase-4b3-estudio-confirmado`: propuestas confirmadas de s
 ## 2026-11-08 — Fase 5 iniciada
 
 Fase 5A.1 en rama `feat/fase-5a-recordatorios`: recordatorios manuales con base de datos, RLS y UI. Sin entrega de notificaciones hasta implementar scheduler/canales. Ver `docs/FASE_5_RECORDATORIOS.md`. Migration no aplicada en Supabase.
+
+## 2026-11-08 — Estado actual y secuencia de Fase 5
+
+- **5A.1:** recordatorios manuales publicados (`20261108035009`).
+- **5A.2:** Web Push publicado y aceptado funcionalmente (`20261108043426`, `20261108043654`); Cron, Vault, worker y suscripción por dispositivo; entrega de mejor esfuerzo.
+- **5A.3 — Siguiente:** recurrencias diarias/semanales/mensuales con series y ocurrencias, reprogramación y suspensión, timezone por usuario y pruebas de duplicación/bordes mensuales.
+- **5B — Calendar:** nueva autorización OAuth Google Calendar con scopes mínimos; lectura/sincronización selectiva, almacenamiento seguro de tokens, revocación y prevención de eventos duplicados. El OAuth del login NO autoriza Calendar por sí mismo.
+- **5C — Gemini:** proponer recordatorios estructurados y solicitar confirmación humana; el cron ejecuta los avisos, no Gemini.
+- **Deuda técnica transversal:** E2E autenticado entre dos cuentas, observabilidad, mejoras de zona horaria, avisos previos de seguridad Supabase, y SMTP pospuesto sin bloquear fase 5.

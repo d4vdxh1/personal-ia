@@ -39,7 +39,8 @@ El enfoque es simple: **menos fricción para planificar y más claridad para ava
 | **Objetivos** | Organizar metas semanales o mensuales y seguir sus avances y vencimientos. |
 | **Entrenamiento** | Gestionar ejercicios, rutinas, sesiones, historial, medidas y molestias. |
 | **Universidad y Estudio** | Administrar materias, tareas, exámenes y sesiones de estudio. |
-| **Asistente IA** | Preguntar por tus registros mediante Google Gemini, y, en la rama 4B.1, confirmar el registro de un hábito de hoy. |
+| **Asistente IA** | Consultar datos y confirmar desde Gemini hábitos, check-in y sesiones de estudio. |
+| **Recordatorios y notificaciones** | Guardar recordatorios y recibir Web Push en dispositivos autorizados. |
 
 ### Asistente personal con Gemini
 
@@ -51,7 +52,7 @@ El asistente puede responder preguntas como:
 
 > ¿Cuáles son mis próximas tareas o exámenes?
 
-Sus respuestas se apoyan en consultas autorizadas a los módulos existentes. En 4B.1, escribí «Completé lectura hoy». Si existe un único hábito propio con ese nombre programado para hoy, aparece una tarjeta con nombre, fecha y valor. **Confirmar** guarda el registro y **Cancelar** descarta la propuesta. Antes de enviar preguntas y datos necesarios a Gemini, la aplicación solicita consentimiento. El historial del chat no se almacena de forma persistente.
+Gemini puede consultar registros y proponer marcar hábitos, actualizar el check-in o registrar estudios. **Todas las acciones requieren confirmación explícita** y validaciones del servidor. El chat no guarda historial persistente.
 
 ## Interfaz
 
@@ -144,15 +145,20 @@ Las pruebas de base de datos usan PostgreSQL de prueba y las pruebas de navegado
 
 ## Estado y próximos pasos
 
+**Corte 2026-11-08:** PR #13 fusionado (`main@d402a7b`) y Vercel Ready.
+
 | Etapa | Estado |
 |---|---|
-| Base, seguimiento personal, entrenamiento y estudio | Implementados |
-| **Fase 4A — Asistente Gemini de consulta** | Implementada y validada funcionalmente por el usuario |
-| **Fase 4B — Acciones mediante IA** | Hábitos y check-in con confirmación; 4B.2 aceptada por el usuario |
-| Recordatorios, Google Calendar y notificaciones | Pendientes |
-| Estadísticas avanzadas, voz y finanzas | Etapas futuras |
+| Fases 0–3 | Funcionales y publicadas |
+| 4A y 4B — Gemini | Consultas y acciones de hábitos, check-in y estudio con confirmación, publicadas |
+| 5A.1 — Recordatorios | Gestión manual publicada |
+| 5A.2 — Web Push | Publicada; recepción confirmada por el usuario en celular y Chrome/Windows; Brave configurado y funcionando según su reporte |
+| **5A.3 — Recurrencias** | Siguiente implementación propuesta |
+| 5B — Google Calendar | Pendiente: OAuth Calendar separado del login Google y sincronización selectiva |
+| 5C — Crear recordatorios con Gemini | Pendiente: propuestas estructuradas y confirmación humana |
+| Analítica avanzada, voz y finanzas | Fases posteriores |
 
-4B.1 está publicada y el usuario confirmó su funcionamiento desde localhost con Gemini. 4B.2 tiene la migración aplicada y fue aceptada funcionalmente por el usuario para su publicación mediante PR #9. Después sigue 4B.3, sesiones de estudio.
+Las notificaciones son de **mejor esfuerzo**, necesitan permisos individuales por dispositivo y no garantizan entrega exactamente al minuto. El éxito en dispositivos reales no sustituye las pruebas de seguridad con dos sesiones independientes.
 
 ## Documentación
 
@@ -161,6 +167,7 @@ Las pruebas de base de datos usan PostgreSQL de prueba y las pruebas de navegado
 - **[Plan maestro](docs/PLAN_MAESTRO.md)** — fases y roadmap.
 - **[Historial de desarrollo](DEVLOG.md)** — decisiones, cambios y verificaciones.
 - **[Plan de la Fase 4B](docs/FASE_4B_PLAN.md)** — acciones confirmadas por IA, validación y auditoría.
+- **[Fase 5](docs/FASE_5_RECORDATORIOS.md)** y **[Web Push](docs/FASE_5A2_PUSH.md)** — estado actual, arquitectura y operaciones.
 - **[Entrenamiento](docs/ENTRENAMIENTO.md)** · **[Universidad y Estudio](docs/FASE_3_ESTUDIO.md)** · **[Asistente IA](docs/FASE_4_IA_V1.md)**
 
 ---
@@ -172,19 +179,3 @@ Las pruebas de base de datos usan PostgreSQL de prueba y las pruebas de navegado
 [Aplicación](https://personal-ia-two.vercel.app/) · [Repositorio](https://github.com/d4vdxh1/personal-ia) · [Portafolio del desarrollador](https://d4vdxh1.github.io/david-espinola-portfolio/)
 
 </div>
-
-### Desarrollo en revisión — Fase 4B.3
-
-Registro de sesiones de estudio desde Gemini preparado en la rama `feat/fase-4b3-estudio-confirmado`, con propuesta, confirmación y auditoría. No está publicado en `main` ni habilitado en producción; requiere aplicar una migración nueva solo tras autorización. Ver `docs/FASE_4B_PLAN.md`.
-
-### En desarrollo — Fase 5A.1
-
-Se inició la gestión manual de recordatorios en rama, con validación y permisos por propietario. Guardar un recordatorio en la lista **todavía no genera una notificación**. La migración y el módulo requieren revisión y autorización antes de publicarse.
-
-### Fase 5A.2 en revisión — Web Push
-
-Código de notificaciones push en rama separada. La gestión de recordatorios manuales sigue operativa, pero **los avisos automáticos no se envían aún**. La infraestructura Web Push requiere migración, configuración VAPID y cron bajo autorización. Ver `docs/FASE_5A2_PUSH.md`.
-
-### Web Push — Fase 5A.2
-
-Backend push con suscripciones protegidas, Edge Function y programador Supabase Cron. La infraestructura se activó el 8/11/2026, pero las notificaciones requieren habilitar permisos desde un dispositivo y verificar su recepción. Ver `docs/FASE_5A2_PUSH.md` y la pantalla `/reminders`.

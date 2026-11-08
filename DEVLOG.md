@@ -691,3 +691,12 @@ El PR #15 de 5A.3 se fusionó con CI aprobado y la migración `20261108184507_re
 - Google Calendar queda pendiente; no se activaron scopes, flags o secretos de Google. El estilo general seguirá provisional hasta el rediseño posterior al MVP.
 - Revisar CI/preview/aceptación antes de fusionar y desplegar.
 
+
+## 2026-11-08 — Publicación 6A y preparación de 6B/6C
+
+- Fase 6A y cierre de UX recurrentes (opción A) fusionados en PR #19, commit `2c9e664`; pipeline GitHub Actions completo `success`; Vercel producción READY.
+- Se incorporó gráfico de líneas SVG accesible de minutos diarios estudiados, calculado con registros reales y sin llamadas Gemini.
+- Fase 6B en rama `feat/fase-6b-6c-main`: comparaciones móviles de 7/30 días con períodos previos de igual duración, diferencias de estudio, entrenamiento, hábitos, sueño y energía; objetivos sin snapshots históricos no se comparan.
+- Fase 6C en la misma rama: botón de revisión con consentimiento, endpoint protegido, agregados numéricos enviados a Gemini sin datos libres, cuota `reserve_ai_request`, respuesta no persistente y sin herramientas de escritura.
+- No se fusionó 6B/6C ni se aplicaron migraciones; CI y aceptación funcional son pendientes. Google Calendar 5B se mantiene sin activar. UI/UX global es provisional por decisión del usuario.
+

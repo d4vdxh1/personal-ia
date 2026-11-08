@@ -19,7 +19,7 @@ export function paraguayDate(now=new Date()):string {
 }
 export function lastNDates(finalDay:string,days=7):string[] {
  const end=new Date(`${finalDay}T12:00:00Z`);
- if(!Number.isFinite(end.getTime())||days<1||days>31)throw new Error("Rango de analítica inválido");
+ if(!Number.isFinite(end.getTime())||days<1||days>62)throw new Error("Rango de analítica inválido");
  return Array.from({length:days},(_,i)=>new Date(end.getTime()-(days-i-1)*86400000).toISOString().slice(0,10));
 }
 const weekDay=(iso:string)=>{const day=new Date(`${iso}T12:00:00Z`).getUTCDay();return day===0?7:day;};

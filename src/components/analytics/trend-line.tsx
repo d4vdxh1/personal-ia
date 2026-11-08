@@ -1,7 +1,7 @@
 import { lineGeometry, type Point } from "@/lib/analytics/line-chart";
 
 /** Accessible SVG, no chart dependency or client hydration required. */
-export function TrendLine({points,label,unit="min"}:{points:readonly Point[];label:string;unit?:string}) {
+export function TrendLine({points,label,unit="min",tickEvery=1}:{points:readonly Point[];label:string;unit?:string;tickEvery?:number}) {
  const {coords,path,yMax,width,height,left,right,top,bottom}=lineGeometry(points);
  const titleId="analytics-trend-title",descId="analytics-trend-desc";
  const empty=points.every(p=>p.value===0);
@@ -19,7 +19,7 @@ export function TrendLine({points,label,unit="min"}:{points:readonly Point[];lab
    {coords.length>0&&<path className="analytics-trend-path" d={path} />}
    {coords.map((p,i)=><g key={i}>
     <circle className="analytics-trend-dot" cx={p.x} cy={p.y} r={5}/>
-    <text className="analytics-axis-label" x={p.x} y={height-9} textAnchor="middle">{p.label}</text>
+    {(i%tickEvery===0||i===coords.length-1)&&<text className="analytics-axis-label" x={p.x} y={height-9} textAnchor="middle">{p.label}</text>}
    </g>)}
   </svg>
   {empty&&<p className="goal-meta">Sin actividad registrada en este período; la línea permanece en cero.</p>}

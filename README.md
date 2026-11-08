@@ -41,7 +41,7 @@ El enfoque es simple: **menos fricción para planificar y más claridad para ava
 | **Universidad y Estudio** | Administrar materias, tareas, exámenes y sesiones de estudio. |
 | **Asistente IA** | Consultar datos y confirmar desde Gemini hábitos, check-in y sesiones de estudio. |
 | **Recordatorios y notificaciones** | Guardar recordatorios y recibir Web Push en dispositivos autorizados. |
-| **Estadísticas (Fase 6A en rama)** | Resumen real de hábitos, estudio, entrenamiento, check-in y objetivos, últimos siete días. |
+| **Estadísticas** | 6A publicado: datos reales y gráfico de líneas de estudio. 6B/6C en revisión: comparación 7/30 días y análisis opcional con Gemini. |
 
 ### Asistente personal con Gemini
 
@@ -184,3 +184,6 @@ Las notificaciones son de **mejor esfuerzo**, necesitan permisos individuales po
 [Aplicación](https://personal-ia-two.vercel.app/) · [Repositorio](https://github.com/d4vdxh1/personal-ia) · [Portafolio del desarrollador](https://d4vdxh1.github.io/david-espinola-portfolio/)
 
 </div>
+
+
+**Continuidad Fase 6:** [6A estadísticas](docs/FASE_6A_ANALYTICS.md) · [6B comparaciones y 6C revisión inteligente](docs/FASE_6B_6C_ANALYTICS.md). Google Calendar permanece desactivado a la espera de OAuth propio; la UI se rediseñará después del MVP.

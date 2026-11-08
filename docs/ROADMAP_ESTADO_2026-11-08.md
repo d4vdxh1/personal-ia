@@ -15,7 +15,7 @@
 | 5B.1 Calendar solo lectura | Código publicado PR #16 | **No activo**: faltan OAuth Google Cloud y prueba real |
 | 5B.2 Exportación manual | PR #18 | SQL aplicado y CI; flag de escritura desactivado hasta OAuth y prueba Google real |
 | 5C Recordatorios propuestos por Gemini | Publicada PR #17 | Usuario confirmó pruebas de propuesta, cancelación y confirmación |
-| 6 Analytics inteligente | 6A en rama sin fusionar | Panel de 7 días con datos reales; 6B comparaciones y 6C IA pendientes; UX provisional |
+| 6 Analytics inteligente | 6A publicado PR #19 | Gráfico de líneas y métricas reales en `main`; 6B/6C desarrollados en rama de revisión, sin publicar; UX provisional |
 | 7 Voz | No iniciado | Transcripción primero, conversación en tiempo real después |
 | 8 Finanzas | No iniciado | Ingresos, gastos, categorías, presupuestos; sin operaciones bancarias |
 | 9 Producción estable | Parcial/transversal | Observabilidad, errores, backups, E2E, seguridad, analítica, límites de costo |
@@ -43,3 +43,11 @@
 - Fase 6A: `/analytics` con datos reales: cumplimiento de hábitos activos, estudio por día, sesiones de entrenamiento completadas y programadas, check-in/sueño y objetivos.
 - Rama: `feat/fase-6a-analytics-recurrencias-mvp`; no fusionada ni publicada. Ver [Fase 6A](FASE_6A_ANALYTICS.md).
 - UX/UI será rediseñada posteriormente; no hacer cambios visuales grandes ahora.
+
+## Continuidad de Fase 6 — 2026-11-08
+- PR #19 **fusionada**, commit `2c9e664`, GitHub Actions completo exitoso, Vercel producción READY. Incluye vista compacta de recurrencias y gráfico de líneas de estudio.
+- 6B (rama `feat/fase-6b-6c-main`): 7 días vs 7 anteriores y 30 días vs 30 anteriores. Son ventanas móviles, no meses calendario.
+- 6C en la misma rama: Gemini analiza solo agregados numéricos y exclusivamente por clic con consentimiento, respetando `reserve_ai_request`.
+- **No publicar automáticamente 6B/6C**: revisar CI, PR y aceptación real. Documentación ampliada: [6B/6C](FASE_6B_6C_ANALYTICS.md).
+- **5B Google Calendar**: integración OAuth todavía pendiente, sin habilitar scopes adicionales ni exportaciones.
+- **Diseño actual**: provisional para MVP; rediseño integral UX/UI pospuesto y solicitado expresamente.

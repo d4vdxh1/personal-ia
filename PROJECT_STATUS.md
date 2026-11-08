@@ -1,8 +1,8 @@
 # PROJECT_STATUS — Día a Día
 
-**Última actualización:** 2026-11-08 (cierre funcional Fase 5, inicio Fase 6A en rama)
+**Última actualización:** 2026-11-08 (Fase 6A publicada; Fases 6B y 6C en rama de revisión)
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
-**Estado general (2026-11-08):** Fases 0–4B y 5A.1–5A.3 y 5C integradas y publicadas en `main@08c3f8e`, Vercel READY. Web Push, recurrencias y Gemini recordatorios tienen aceptación funcional reportada por el usuario. Fase 5B Google Calendar sigue sin activar por faltar OAuth Google Cloud. Ajuste UX A (una ocurrencia por serie visible) y Fase 6A (estadísticas de 7 días) avanzan solo en rama, no desplegadas. La UX/UI actual es provisional para MVP.
+**Estado general (2026-11-08):** Fases 0–4B, 5A.1–5A.3, 5C y **6A** publicadas; `main@2c9e664`, CI exitoso y Vercel producción READY. UX de recurrencias compacta (opción A), estadísticas de 7 días y gráfico de líneas de estudio disponibles. 5B Google Calendar continúa diferida por OAuth Google Cloud no configurado. **6B y 6C** están desarrollándose en `feat/fase-6b-6c-main`, no fusionadas ni publicadas. La UX/UI actual es provisional para MVP.
 **Aceptación funcional 5A.2:** usuario confirmó recepción de Web Push en celular y en Chrome/Windows; indicó que Brave quedó funcionando tras corregir el servicio push. No implica garantía universal de entrega ni una prueba E2E independiente entre dos JWT reales.
 **Estado avanzado (8/11):** 5A.3 PR #15 integrado; 5B.1 PR #16 código publicado pero sin cliente Google OAuth configurado; 5C PR #17 integrado, SQL y CI aprobados. 5B.2 se prepara como PR #18: exportación selectiva con autorización adicional y flag desactivado hasta validar Google. **Siguiente paso:** activar y probar Google OAuth real, aceptar un recordatorio desde Gemini, luego comenzar Fase 6.
 **Migraciones vigentes, no repetir:** `20261108035009_reminders`, `20261108043426_push_notifications`, `20261108043654_push_scheduler_extensions`. Cron `dia-a-dia-push-dispatch` cada minuto, Edge Function activa, VAPID privada en Vault y CI aprobado.
@@ -267,3 +267,11 @@ Supabase migraciones `20261108043426` y `20261108043654` aplicadas. Vault config
 - Google Calendar 5B.1 en producción (PR #16) como código de solo lectura; no funciona sin OAuth Google Cloud. 5B.2 PR #18 implementa exportación manual segura, migración `20261108194807` aplicada, **flag de escritura apagado**. No afirmar sincronización completa ni real.
 - Recordatorios desde Gemini 5C publicados (PR #17, migración `20261108191759`), CI completo y prueba remota con cuentas desechables bajo rollback. Pendiente test real de Gemini con confirmación en app.
 - El roadmap posterior comprende Fase 6 analítica inteligente, 7 voz, 8 finanzas y 9 endurecimiento de producción. Ver `docs/ROADMAP_ESTADO_2026-11-08.md`.
+
+## Fase 6B/6C — Implementación en rama de revisión, 2026-11-08
+
+- **6A publicada:** PR #19, commit `2c9e664`, Vercel producción READY. Gráfico SVG de línea muestra tendencia real de minutos de estudio; opción A de recurrencias publicada.
+- **6B en rama:** selector de 7/30 días, comparación con ventana anterior de igual duración, deltas absolutos sin dividir por cero; 30 días es ventana móvil, no mes calendario.
+- **6C en rama:** POST `/api/analytics/review`, sesión y origen válidos, consentimiento explícito, agregados numéricos y límite global de Gemini; no hay acciones automáticas ni escrituras en base.
+- Pendientes para publicar 6B/6C: CI unitario, SQL, build, typecheck, browser, prueba real opcional de Gemini con cuenta autorizada, fusión aprobada.
+- Ver [documentación](docs/FASE_6B_6C_ANALYTICS.md). Google Calendar permanece pendiente, al igual que el endurecimiento transversal de seguridad y el rediseño visual posterior al MVP.

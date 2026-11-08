@@ -10,6 +10,8 @@ runInNewContext(outputText,{exports,Date,Intl});
 const {paraguayDate,lastNDates,buildAnalytics}=exports;
 assert.equal(paraguayDate(new Date("2026-11-08T22:00:00Z")),"2026-11-08");
 const dates=lastNDates("2026-11-08");
+assert.equal(lastNDates("2026-11-08",60).length,60);
+assert.throws(()=>lastNDates("2026-11-08",63));
 assert.equal(dates.join(","),"2026-11-02,2026-11-03,2026-11-04,2026-11-05,2026-11-06,2026-11-07,2026-11-08");
 const empty={habits:[],habitEntries:[],studySessions:[],trainingSessions:[],scheduledTrainings:[],checkins:[],goals:[]};
 const missing=buildAnalytics(dates,empty);

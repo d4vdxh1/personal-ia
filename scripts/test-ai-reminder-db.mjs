@@ -10,7 +10,7 @@ try {
   "20261108035009_reminders.sql",
   "20261108043426_push_notifications.sql",
   "20261108184507_reminder_recurrences.sql",
-  "20261108193000_ai_reminder_actions.sql"
+  "20261108191759_ai_reminder_actions.sql"
  ])await db.exec(await readFile("supabase/migrations/"+path,"utf8"));
  await q("insert into auth.users(id) values($1),($2)",[alice,bob]);
  const tomorrow=new Intl.DateTimeFormat("en-CA",{timeZone:"America/Asuncion",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(Date.now()+3*86400000));

@@ -1,0 +1,7 @@
+.reminder-notice{border:1px solid #c9dfcf;background:#f4faf6;color:#245438;margin-bottom:18px}
+.reminder-notice strong{font-size:14px}
+.reminder-notice p{margin-top:7px;font-size:13px;line-height:1.6;color:#486c54}
+.reminder-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.reminder-actions button{min-height:44px;cursor:pointer}
+.reminder-history-title{margin-top:26px;margin-bottom:10px}
+@media(max-width:600px){.reminder-actions form{flex:1}.reminder-actions button{width:100%}}

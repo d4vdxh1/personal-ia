@@ -638,3 +638,11 @@ Se comprobó que el historial remoto de Supabase llega hasta `20261108025732_ai_
 - Comprobadas las RPC `propose_study_session` y `decide_study_proposal`, `SECURITY INVOKER`, acceso `authenticated` sin acceso `anon`, auditoría bajo RLS y trigger de decisión.
 - Se activó por defecto el circuito de propuestas de estudio en el código; el interruptor `AI_STUDY_WRITES_ENABLED=false` queda como mecanismo de rollback selectivo.
 - Publicación sujeta a CI y despliegue Vercel; prueba real de usuario con Gemini pendiente de registrar explícitamente.
+
+## 2026-11-08 — Primer incremento de recordatorios (Fase 5A.1)
+
+- Nueva rama desde main con tabla de recordatorios y permisos RLS por usuario.
+- Vista de gestión manual: crear, editar, completar, cancelar, historial.
+- Fechas locales convertidas a `timestamptz`; toda escritura exige sesión y propietario.
+- Sin cron, entrega de notificaciones, Calendar OAuth ni tool Gemini. La interfaz explica claramente esa limitación.
+- Migración preparada, no aplicada a Supabase. Pruebas y despliegue pendientes.

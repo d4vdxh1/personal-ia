@@ -20,7 +20,7 @@ await hashFiles(join(root,'src'));
 for(const file of ['package-lock.json','next.config.ts','tsconfig.json','postcss.config.mjs'])hash.update(await readFile(join(root,file)));
 const fingerprint=hash.digest('hex'); let previousBuild; try { previousBuild=JSON.parse(await readFile(join(workspace,'test-build.json'),'utf8'));await access(join(workspace,'.next/BUILD_ID')); } catch {previousBuild=null;}
 const db = await createTestDatabase();
-for (const file of ["20261106152923_ai_usage.sql", "20261108023553_ai_habit_actions.sql", "20261108025732_ai_checkin_actions.sql", "20261108033000_ai_study_actions.sql"]) {
+for (const file of ["20261106152923_ai_usage.sql", "20261108023553_ai_habit_actions.sql", "20261108025732_ai_checkin_actions.sql", "20261108033000_ai_study_actions.sql", "20261108035009_reminders.sql"]) {
   await db.exec(await readFile(join(root, "supabase/migrations", file), "utf8"));
 }
 await db.query("insert into auth.users(id) values($1)", [alice]);
@@ -50,7 +50,7 @@ const server = createServer((req, res) => {
         const sql=table ? `select * from public.${ident(name)}(${args.map((_,i)=>'$'+(i+1)).join(',')})` : `select public.${ident(name)}(${args.map((_,i)=>'$'+(i+1)).join(',')}) as value`;
         const rows=(await db.query(sql,args)).rows; return table ? rows.map(normalize) : rows[0].value;
       }
-      assert.ok(['profiles','habits','habit_entries','daily_checkins','journal_entries','goals','training_exercises','training_plans','training_plan_items','training_schedule','training_sessions','training_sets','training_metrics','training_symptoms','study_subjects','study_assignments','study_exams','study_sessions'].includes(name));
+      assert.ok(['profiles','habits','habit_entries','daily_checkins','journal_entries','goals','training_exercises','training_plans','training_plan_items','training_schedule','training_sessions','training_sets','training_metrics','training_symptoms','study_subjects','study_assignments','study_exams','study_sessions','reminders'].includes(name));
       const args=[], where=[];
       for (const [field, value] of url.searchParams) {
         if (['select','order','limit','offset','on_conflict'].includes(field)) continue;
@@ -182,6 +182,19 @@ try {
   await page.getByRole('heading',{name:'Arquitectura de software',exact:true}).waitFor();
   await page.goto(base+'/study');
   await page.getByText('Trabajo final',{exact:true}).waitFor();
+  // Phase 5A.1: manual reminder saves to user-owned RLS-backed table. No delivery is implied.
+  const futureDate=new Date(Date.parse(today+"T12:00:00Z")+2*86400000).toISOString().slice(0,10)+"T16:30";
+  await page.goto(base+'/reminders');
+  await page.getByText('Los avisos automáticos todavía no están activos.').waitFor();
+  await page.getByLabel('¿Qué querés recordar?').fill('Repasar cálculo');
+  await page.getByLabel('Fecha y hora').fill(futureDate);
+  await page.getByRole('button',{name:'Agregar a mi lista'}).click();
+  await page.getByRole('heading',{name:'Repasar cálculo'}).waitFor();
+  await page.getByRole('button',{name:'Marcar realizado'}).click();
+  await page.getByText('Realizado',{exact:true}).waitFor();
+  const reminderRows=(await db.query("select title,status from public.reminders where user_id=$1",[alice])).rows;
+  assert.deepEqual(reminderRows,[{title:'Repasar cálculo',status:'completed'}]);
+
   await page.goto(base+'/assistant');
   await page.getByRole('heading',{name:'¿En qué te puedo ayudar hoy?'}).waitFor();
   assert.equal(await page.getByLabel('Tu pregunta').isDisabled(),true,'assistant requires a configured Gemini key');
@@ -211,7 +224,7 @@ try {
     setRevoked: value => { revoked = value; },
     setFailWrite: value => { failWrite = value; },
   });
-  const paths=['/','/assistant','/menu','/study','/study?view=subjects','/study?view=assignments','/study?view=exams','/study?view=sessions','/habits','/check-in','/journal','/goals','/profile','/training','/training?view=exercises','/training?view=plans','/training?view=history','/training?view=health',sessionUrl.replace(base,''),exerciseUrl.replace(base,'')];
+  const paths=['/','/reminders','/assistant','/menu','/study','/study?view=subjects','/study?view=assignments','/study?view=exams','/study?view=sessions','/habits','/check-in','/journal','/goals','/profile','/training','/training?view=exercises','/training?view=plans','/training?view=history','/training?view=health',sessionUrl.replace(base,''),exerciseUrl.replace(base,'')];
   for(const width of [360,390,768,800,930,1280]){
     await page.setViewportSize({width,height:900});
     for(const path of paths){ await page.goto(base+path); await page.locator('h1').waitFor(); assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`overflow ${width} ${path}`); const nav=page.getByRole('navigation',{name:'Navegación principal',exact:true}); assert.equal(await nav.isVisible(),true); const box=await nav.boundingBox(); if(width<=800)assert.ok(box.y>500,`menú móvil ${width}`); else assert.ok(box.x<250,`menú escritorio ${width}`);

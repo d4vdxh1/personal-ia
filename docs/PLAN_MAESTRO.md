@@ -4,8 +4,8 @@
 **Bienvenida del login:** “Cada día se vuelve más fácil. Lo difícil es hacerlo cada día.”
 **Identificador técnico:** `personal-ia`. Se conservan repositorio, carpeta, URL de Vercel y proyecto Supabase actuales.
 
-**Estado:** Plan vigente — v1.6, actualizado el 2026-11-06.
-**Avance:** Fases 0–3 y **Fase 4A de Gemini** implementadas y aceptadas funcionalmente por confirmación del usuario el 2026-11-06. Gemini fue configurado privadamente en Vercel y probado por el usuario. Sin verificación independiente de dos JWT reales. **Siguiente: Fase 4B**, acciones de escritura confirmadas y auditadas. Ver PROJECT_STATUS, `docs/CIERRE_FASE_1.md` y `docs/ENTRENAMIENTO.md`.
+**Estado:** Plan vigente — v1.7, actualizado el 2026-11-07.
+**Avance:** Fases 0–3 y **Fase 4A de Gemini** implementadas y aceptadas funcionalmente por confirmación del usuario el 2026-11-06. Gemini fue configurado privadamente en Vercel y probado por el usuario. Sin verificación independiente de dos JWT reales. **Fase 4B.1 en revisión en rama**, con confirmación de hábitos. Siguen 4B.2 de check-in y 4B.3 de estudio. Ver PROJECT_STATUS, `docs/CIERRE_FASE_1.md` y `docs/ENTRENAMIENTO.md`.
 **Objetivo:** construir una aplicación web/PWA personal, inteligente y progresiva para organizar rutina, entrenamiento, estudio, hábitos, sueño, objetivos, recordatorios y, más adelante, finanzas personales.
 
 ---
@@ -1093,7 +1093,7 @@ Implementar:
 
 ## Fase 4 — IA de texto V1
 
-**Estado:** **Fase 4A integrada, desplegada y aceptada funcionalmente por el usuario** el 2026-11-06 (PR #5, CI y migración aprobados; Gemini configurado en Vercel y prueba satisfactoria reportada). Sin auditoría directa del proveedor por el agente. **Fase 4B no iniciada.** Implementar Google Gemini API mediante un adaptador `AIProvider`, exclusivamente desde el servidor, con límites de consumo, autenticación y respuestas fundamentadas en datos existentes.
+**Estado:** **Fase 4A integrada, desplegada y aceptada funcionalmente por el usuario** el 2026-11-06 (PR #5, CI y migración aprobados; Gemini configurado en Vercel y prueba satisfactoria reportada). Sin auditoría directa del proveedor por el agente. **4B.1 implementada en rama, pendiente de aceptación autenticada antes de producción.** Implementar Google Gemini API mediante un adaptador `AIProvider`, exclusivamente desde el servidor, con límites de consumo, autenticación y respuestas fundamentadas en datos existentes.
 
 **Entrega 4A (primero):** conversación de texto de solo lectura y herramientas `get_today_plan`, `get_today_workout` y consultas de Estudio/Hábitos; validar autenticación, RLS, límites, errores y protección de datos.
 
@@ -1210,7 +1210,7 @@ Comenzar con carga manual/conversacional.
 ## Continuidad — 2026-11-07
 
 - Google OAuth desplegado en Vercel y confirmado por el usuario; PR #6 integrado. El nuevo registro mediante email y recuperación quedan pospuestos hasta SMTP y antiabuso, sin bloquear el roadmap.
-- Próxima implementación: Fase 4B.1, propuesta de marcar un hábito con confirmación explícita, control de identidad/RLS, idempotencia y auditoría. Ver `docs/FASE_4B_PLAN.md`. La IA continúa solo lectura hasta implementar estos controles.
+- Entrega en revisión: 4B.1 ya permite proponer un hábito propio y registrar su cumplimiento tras confirmación. Pendiente la prueba con Gemini y dos cuentas en un entorno aislado. Ver [plan de 4B](FASE_4B_PLAN.md).
 
 ## Estado consolidado de fases (2026-11-06)
 
@@ -1220,14 +1220,14 @@ Comenzar con carga manual/conversacional.
 | 1 · Tracker personal | Cerrada | Usuario confirmó funcionamiento |
 | 2 · Entrenamiento | Publicada | Confirmación general del usuario; prueba independiente con dos cuentas aún pendiente |
 | 3 · Universidad y Estudio | **Cerrada** | Usuario confirmó funcionamiento; PR #4, CI, RLS y Vercel aprobados |
-| 4 · Asistente IA texto | **4A activa y aceptada por el usuario** | 4B: escrituras con permisos, confirmaciones y auditoría; todavía pendiente |
+| 4 · Asistente IA texto | **4A activa y aceptada por el usuario** | 4B.1 en rama de revisión; 4B.2 y 4B.3 pendientes |
 | 5 · Recordatorios/Calendar | Pendiente | Tabla y ejecución programada, notificaciones, OAuth |
 | 6 · Analytics | Pendiente | Revisión semanal y gráficas con datos reales |
 | 7 · Voz | Pendiente | Transcripción y, después, tiempo real |
 | 8 · Finanzas | Pendiente | Registros manuales y controles adicionales |
 | 9 · Estabilidad | En curso, sin cierre | Métricas, backups, auditoría y control de costes |
 
-No se debe asumir que las fases anteriores contienen un calendario independiente ni recordatorios automáticos; **la IA de consulta ya está activa según confirmación del usuario**, pero todavía no puede realizar acciones de escritura. Hay tareas **académicas** por materia, pero no un gestor de tareas **generales**. Las estadísticas detalladas por materia, sincronización Calendar y recomendaciones automatizadas no forman parte del MVP de Estudio cerrado.
+No se debe asumir que las fases anteriores contienen un calendario independiente ni recordatorios automáticos; **la IA de consulta ya está activa según confirmación del usuario**, y la primera escritura confirmada de hábitos está en revisión. Hay tareas **académicas** por materia, pero no un gestor de tareas **generales**. Las estadísticas detalladas por materia, sincronización Calendar y recomendaciones automatizadas no forman parte del MVP de Estudio cerrado.
 
 ---
 

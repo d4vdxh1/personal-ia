@@ -5,6 +5,7 @@ import { spawn } from "node:child_process";
 import { cp, mkdir, symlink, access, writeFile, readFile, readdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { resolve, join } from "node:path";
+import { testAssistantBrowser } from "./test-assistant-browser.mjs";
 import { chromium } from "@playwright/test";
 import { createTestDatabase, asUser, alice } from "./test-db.mjs";
 const root = process.cwd(), workspace = resolve(root, ".test-workspace"), output = resolve(root, "test-results");
@@ -18,7 +19,11 @@ async function hashFiles(dir) { for(const entry of (await readdir(dir,{withFileT
 await hashFiles(join(root,'src'));
 for(const file of ['package-lock.json','next.config.ts','tsconfig.json','postcss.config.mjs'])hash.update(await readFile(join(root,file)));
 const fingerprint=hash.digest('hex'); let previousBuild; try { previousBuild=JSON.parse(await readFile(join(workspace,'test-build.json'),'utf8'));await access(join(workspace,'.next/BUILD_ID')); } catch {previousBuild=null;}
-const db = await createTestDatabase(); await db.query("insert into auth.users(id) values($1)", [alice]);
+const db = await createTestDatabase();
+for (const file of ["20261106152923_ai_usage.sql", "20261108020800_ai_habit_actions.sql"]) {
+  await db.exec(await readFile(join(root, "supabase/migrations", file), "utf8"));
+}
+await db.query("insert into auth.users(id) values($1)", [alice]);
 const user = { id: alice, email: "test@example.com", aud: "authenticated", role: "authenticated" };
 const encode = v => Buffer.from(JSON.stringify(v)).toString("base64url");
 const token = `${encode({alg:'HS256',typ:'JWT'})}.${encode({sub:alice,aud:'authenticated',role:'authenticated',exp:Math.floor(Date.now()/1000)+3600})}.test`;
@@ -39,7 +44,7 @@ const server = createServer((req, res) => {
     const name=url.pathname.split('/').at(-1);
     const result = await asUser(db, alice, async () => {
       if (url.pathname.includes('/rpc/')) {
-        const names={ save_training_plan:['p_id','p_name','p_notes','p_items'],start_training_session:['p_id','p_plan_id','p_schedule_id'],save_training_session:['p_id','p_sets','p_duration','p_rpe','p_notes','p_complete'],training_progress:[],training_exercise_history:['p_exercise','p_page'] };
+        const names={ reserve_ai_request:[], propose_mark_habit:['p_name'], decide_habit_proposal:['p_id','p_decision'], save_training_plan:['p_id','p_name','p_notes','p_items'],start_training_session:['p_id','p_plan_id','p_schedule_id'],save_training_session:['p_id','p_sets','p_duration','p_rpe','p_notes','p_complete'],training_progress:[],training_exercise_history:['p_exercise','p_page'] };
         assert.ok(name in names); const args=names[name].map(k => typeof payload[k]==='object' && payload[k]!==null ? JSON.stringify(payload[k]) : payload[k]);
         const table=name==='training_progress'||name==='training_exercise_history';
         const sql=table ? `select * from public.${ident(name)}(${args.map((_,i)=>'$'+(i+1)).join(',')})` : `select public.${ident(name)}(${args.map((_,i)=>'$'+(i+1)).join(',')}) as value`;
@@ -77,20 +82,37 @@ const server = createServer((req, res) => {
   };
   queue=queue.then(task).catch(e=>{ console.error('Test API:',e.message); if(!res.headersSent)res.writeHead(400);res.end(JSON.stringify({message:e.message})); });
 });
-let app, browser; const logs=[];
+let app, assistantApp, browser; const logs=[];
 try {
   await new Promise((r,reject)=>{server.once('error',reject);server.listen(3109,'127.0.0.1',r);});
-  const launch = args => spawn(process.execPath,[join(root,'node_modules/next/dist/bin/next'),...args],{cwd:workspace,windowsHide:true,env:{...process.env,NEXT_TELEMETRY_DISABLED:'1',NEXT_PUBLIC_SUPABASE_URL:`http://127.0.0.1:${server.address().port}`,NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:'test-public-key'},stdio:['ignore','pipe','pipe']});
+  function launch(args, mockGemini = false) {
+    const preload = mockGemini ? ['--import', join(root, 'scripts/mock-assistant-provider.mjs')] : [];
+    return spawn(process.execPath, [...preload, join(root, 'node_modules/next/dist/bin/next'), ...args], {
+      cwd: workspace, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'],
+      env: { ...process.env, GEMINI_API_KEY: mockGemini ? 'browser-test-only' : '',
+        NEXT_TELEMETRY_DISABLED: '1', NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'test-public-key',
+        NEXT_PUBLIC_SUPABASE_URL: `http://127.0.0.1:${server.address().port}` },
+    });
+  }
+  async function waitForApp(child, baseUrl) {
+    for (let attempt = 0; attempt < 150 && child.exitCode === null; attempt++) {
+      try {
+        if ((await fetch(baseUrl + '/login', { signal: AbortSignal.timeout(5000) })).ok) return;
+      } catch { /* The app is still starting. */ }
+      await new Promise(resolve => setTimeout(resolve, 300));
+    }
+    throw Error('Next no inició: ' + logs.join('').slice(-4000));
+  }
   if(previousBuild?.fingerprint !== fingerprint){
   app=launch(['build','--webpack']);
   app.stdout.on('data',b=>{logs.push(String(b));process.stdout.write(b);}); app.stderr.on('data',b=>{logs.push(String(b));process.stderr.write(b);});
   await new Promise((ok,bad)=>{app.on('error',bad);app.on('exit',code=>code===0?ok():bad(Error('La compilación aislada falló')));});
   await writeFile(join(workspace,'test-build.json'),JSON.stringify({fingerprint}));
   } else console.log('Browser: compilación idéntica verificada, reutilizada');
-  app=launch(['start','-p','3108']);
+  app=launch(['start','-H','localhost','-p','3108']);
   app.stdout.on('data',b=>{logs.push(String(b));process.stdout.write(b);}); app.stderr.on('data',b=>{logs.push(String(b));process.stderr.write(b);});
   const base='http://localhost:3108';
-  for(let i=0;;i++){try{await fetch(base+'/login',{signal:AbortSignal.timeout(5000)});break;}catch{if(i>150||app.exitCode!==null)throw Error('Next no inició: '+logs.join('').slice(-4000)); await new Promise(r=>setTimeout(r,300));}}
+  await waitForApp(app, base);
   browser=await chromium.launch({headless:true,...(process.env.BROWSER_CHANNEL?{channel:process.env.BROWSER_CHANNEL}:{})});
   const page=await browser.newPage({viewport:{width:390,height:844}}); page.setDefaultTimeout(30000); const errors=[]; page.on('pageerror',e=>errors.push(e.message));
   console.log('Browser: servidor listo');
@@ -166,9 +188,19 @@ try {
   await page.waitForURL(/\/menu$/);
   await page.getByRole('link',{name:'Asistente IA',exact:true}).waitFor({state:'visible'});
   assert.equal((await page.request.post(base+'/api/assistant',{
-    headers: {'Content-Type':'application/json'},
+    headers: {'Content-Type':'application/json',origin:base},
     data: {message:'Qué tengo hoy?'}
   })).status(),503,'no provider key should never fake model output');
+  assistantApp=launch(['start','-H','localhost','-p','3110'], true);
+  assistantApp.stdout.on('data',b=>logs.push(String(b)));
+  assistantApp.stderr.on('data',b=>logs.push(String(b)));
+  const assistantBase='http://localhost:3110';
+  await waitForApp(assistantApp, assistantBase);
+  await testAssistantBrowser({
+    page, base: assistantBase, db, output,
+    setRevoked: value => { revoked = value; },
+    setFailWrite: value => { failWrite = value; },
+  });
   const paths=['/','/assistant','/menu','/study','/study?view=subjects','/study?view=assignments','/study?view=exams','/study?view=sessions','/habits','/check-in','/journal','/goals','/profile','/training','/training?view=exercises','/training?view=plans','/training?view=history','/training?view=health',sessionUrl.replace(base,''),exerciseUrl.replace(base,'')];
   for(const width of [360,390,768,800,930,1280]){
     await page.setViewportSize({width,height:900});
@@ -197,4 +229,4 @@ try {
   revoked=true; await page.goto(base+'/training'); await page.waitForURL(/login/);
   assert.deepEqual(errors,[]); console.log('PASS: navegador con SQL real, recorrido completo, borrador/recarga, medidas/molestias, evolución, fallos, sesión, navegación y controles a seis anchos.');
 } catch(error) { console.error('Browser failure:', error.message); throw error; }
-finally { await writeFile(join(output,'next-browser.log'),logs.join('')); if(browser)await browser.close();if(app)app.kill();server.closeAllConnections();await new Promise(r=>server.close(r));await db.close(); }
+finally { await writeFile(join(output,'next-browser.log'),logs.join('')); if(browser)await browser.close();if(assistantApp)assistantApp.kill();if(app)app.kill();server.closeAllConnections();await new Promise(r=>server.close(r));await db.close(); }

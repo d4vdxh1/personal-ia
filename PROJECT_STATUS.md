@@ -3,7 +3,7 @@
 **Última actualización:** 2026-11-07
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
 **Estado general:** Fases 0–3 implementadas y aceptadas funcionalmente; **Fase 4A activada y aceptada por el usuario el 2026-11-06** tras configurar Gemini en Vercel y probar el chat. La confirmación de uso no equivale a una auditoría independiente del proveedor o de aislamiento con dos cuentas reales.
-**Fase actual:** Fase 4A — **cerrada funcionalmente por confirmación del usuario** (PR #5, CI y Supabase verificados; Gemini configurado y probado por el usuario en Vercel). **Siguiente: Fase 4B** — herramientas de escritura validadas, confirmadas y auditadas; no implementada.
+**Fase actual:** Fase 4A — **cerrada funcionalmente por confirmación del usuario** (PR #5, CI y Supabase verificados; Gemini configurado y probado por el usuario en Vercel). **En revisión en rama:** Fase 4B.1 para marcar un hábito de hoy con confirmación y auditoría. La versión publicada sigue en 4A.
 
 ## Entrega y continuidad del 2026-11-06
 
@@ -31,7 +31,7 @@ Next.js 16.4.5 + React + TypeScript + Tailwind; Supabase (PostgreSQL/Auth/RLS); 
 | Mi Día con datos reales | Completado y confirmado por el usuario |
 | Entrenamiento | Publicado y probado (PR #2); incluye ejercicios, rutinas, programación, sesiones, historial, evolución, medidas y molestias. El usuario confirmó el funcionamiento general de la aplicación; falta la comprobación independiente con dos logins reales. |
 | Estudio | **Fase 3 cerrada por confirmación del usuario (2026-11-06)**: materias, tareas, exámenes, sesiones y resumen en Mi Día. CI, RLS, migración y Vercel verificados. |
-| Asistente IA | **Fase 4A cerrada funcionalmente (2026-11-06)**: chat Gemini operativo según prueba del usuario, cinco consultas de solo lectura, cuota de 20 solicitudes/día y consentimiento. **Fase 4B pendiente**: escrituras validadas y auditadas. |
+| Asistente IA | **Fase 4A cerrada funcionalmente (2026-11-06)**: chat Gemini operativo según prueba del usuario, cinco consultas de solo lectura, cuota de 20 solicitudes/día y consentimiento. **4B.1 en rama**: propuesta y confirmación de hábitos. Check-ins y sesiones de estudio siguen pendientes. |
 | Recordatorios, Calendar, estadísticas, voz y finanzas | Fases 5–8 pendientes. Analítica de Vercel y observabilidad: Fase 9. |
 
 Mi Día integra hábitos, check-in, notas de hoy, vencimientos de objetivos, entrenamiento y próximos compromisos académicos. El calendario general independiente y las relaciones de objetivos con actividades siguen pendientes.
@@ -178,3 +178,11 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - **Aplazado sin bloquear el proyecto:** SMTP externo para altas con email, edición de plantillas y confirmación/recuperación por correo público. No hay dominio propio; sin acceso a configuración de AgendaV. El correo anterior de Supabase solo acredita envío en ese otro proyecto, no envío libre a usuarios externos en Día a Día.
 - Conservar `EMAIL_SIGNUP_ENABLED=false` y `EMAIL_RECOVERY_ENABLED=false`; no desactivar confirmación de correo. Pendientes CAPTCHA/Turnstile, límites Auth, protección de contraseñas filtradas, advertencias sobre EXECUTE de `rls_auto_enable()` y cuota global de Gemini.
 - **Siguiente fase:** 4B.1: propuestas de marcado de hábitos mediante IA, con confirmación explícita y permisos RLS. Plan: `docs/FASE_4B_PLAN.md`. No se han habilitado escrituras del asistente.
+
+## 2026-11-07 — Fase 4B.1 en revisión
+
+La rama `feat/fase-4b1-habitos-confirmados` parte de `main@35df567`. En el chat, «Completé lectura hoy» permite revisar el hábito, la fecha local y el valor antes de confirmar. Cancelar cierra la propuesta. La confirmación caduca a los diez minutos o al cambiar el día. Mi Día y Hábitos leen el mismo registro diario.
+
+Verificados localmente lógica, SQL con dos identidades, concurrencia con dos conexiones PostgreSQL y el recorrido en Chromium a seis anchos con Auth y Gemini simulados.
+
+La migración incremental está en la rama. El historial del Supabase estable se cotejó en modo lectura y termina en `20261106152923_ai_usage`. Antes de publicar, validar la migración y el flujo con Gemini y cuentas autenticadas en un entorno de prueba independiente. SMTP continúa aplazado. Ver [verificación y salida de 4B.1](docs/FASE_4B_PLAN.md).

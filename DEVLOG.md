@@ -577,3 +577,11 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - Analizado correo de Supabase Auth recibido en AgendaV: no es evidencia de SMTP abierto al público para este proyecto; no tenemos acceso al panel ni a su configuración.
 - Se posponen SMTP, alta por correo, recuperación y plantillas SSR, preservando Google OAuth y cuentas preexistentes. También quedan controles de CAPTCHA/rate limit y alertas de consumo.
 - Se documenta Fase 4B.1 en `docs/FASE_4B_PLAN.md`; ninguna escritura mediante IA está activada.
+
+## 2026-11-07 — Fase 4B.1 · hábitos con confirmación
+
+- Rama `feat/fase-4b1-habitos-confirmados` desde `35df567`. Gemini propone por nombre; la persona confirma o cancela desde una tarjeta en el chat existente. Se ajustó el texto informativo de bienvenida, privacidad y términos.
+- Migración incremental con RLS, permisos por columna, dos RPC invocadoras y un trigger transaccional. El identificador generado vincula dueño, objetivo, fecha y versión. Los reintentos conservan el resultado de la primera decisión.
+- Pruebas automatizadas de ambigüedad, propiedad, vencimiento, cambio de día o de hábito, cancelación, errores, sesión y reenvío. Prueba adicional local con dos conexiones PostgreSQL simultáneas: doble confirmación, dos propuestas para el mismo hábito y cancelación seguida de confirmación concurrente.
+- En local pasaron lint, compilación, tipos, pruebas de lógica y SQL. Chromium verificó la tarjeta con Gemini y Auth simulados, controles de al menos 44 px en seis anchos (360, 390, 768, 800, 930 y 1280 px), cancelación, sesión vencida, error de acceso a la BD y reintento. Se inspeccionaron capturas de celular y escritorio.
+- Supabase estable consultado en modo lectura para cotejar el historial. La migración nueva está reservada para un entorno aislado antes de publicar. Continúan pendientes el recorrido con Gemini y dos cuentas reales y las fases 4B.2/4B.3. SMTP sigue en su propio pendiente.

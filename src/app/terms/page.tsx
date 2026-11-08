@@ -25,7 +25,7 @@ export default function TermsPage() {
         <p>Los apartados de actividad y entrenamiento sirven para organizar registros personales. No sustituyen la evaluación de profesionales de salud ni ofrecen diagnóstico o tratamiento médico. Las respuestas generadas por IA pueden contener errores y deben verificarse antes de tomar decisiones importantes.</p>
 
         <h2>4. Asistente IA y proveedores externos</h2>
-        <p>El asistente Gemini se utiliza de forma opcional y con consentimiento para enviar las preguntas y datos de consulta necesarios. En la versión actual es de solo lectura: no crea, elimina ni actualiza tus registros. El acceso a proveedores externos está sujeto a sus condiciones y puede verse limitado por cuota, interrupciones o cambios del proveedor.</p>
+        <p>El asistente Gemini se utiliza de forma opcional y con consentimiento para enviar las preguntas y datos de consulta necesarios. Cuando pedís marcar un hábito como completado hoy, podés revisar, confirmar o cancelar la propuesta. La confirmación registra el hábito en tu cuenta. El acceso a proveedores externos está sujeto a sus condiciones y puede verse limitado por cuota, interrupciones o cambios del proveedor.</p>
 
         <h2>5. Disponibilidad y cambios</h2>
         <p>El proyecto se encuentra en desarrollo y puede experimentar fallos o cambios de funcionalidad. Se procura mantener una experiencia segura, pero no se garantiza disponibilidad ininterrumpida ni ausencia de errores. La información importante debe conservarse también por medios propios cuando corresponda.</p>

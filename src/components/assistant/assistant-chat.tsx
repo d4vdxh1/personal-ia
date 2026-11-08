@@ -2,7 +2,10 @@
 
 import { useRef, useState, type FormEvent } from "react";
 
-type Message = { role: "user" | "assistant"; text: string };
+import { isHabitProposal, type HabitProposal } from "@/lib/assistant/habit-proposal";
+import { HabitProposalCard } from "./habit-proposal-card";
+
+type Message = { role: "user" | "assistant"; text: string; proposal?: HabitProposal };
 const examples = [
   "¿Qué tengo que hacer hoy?",
   "¿Qué tareas o exámenes tengo pendientes?",
@@ -36,11 +39,13 @@ export function AssistantChat({ enabled }: { enabled: boolean }) {
         body: JSON.stringify({ message: text }),
       });
       const data: unknown = await response.json();
-      const result = data as { answer?: unknown; error?: unknown; remaining?: unknown };
+      const result = data as { answer?: unknown; error?: unknown; remaining?: unknown; proposal?: unknown };
       if (!response.ok || typeof result.answer !== "string") {
         throw new Error(typeof result.error === "string" ? result.error : "No se pudo obtener una respuesta.");
       }
-      setMessages(old => [...old, { role: "assistant", text: result.answer as string }]);
+      const answer = result.answer;
+      const proposal = isHabitProposal(result.proposal) ? result.proposal : undefined;
+      setMessages(old => [...old, { role: "assistant", text: answer, proposal }]);
       if (typeof result.remaining === "number") setRemaining(result.remaining);
     } catch (e) {
       setError(e instanceof Error ? e.message : "No pudimos completar tu consulta.");
@@ -59,7 +64,7 @@ export function AssistantChat({ enabled }: { enabled: boolean }) {
       {messages.length === 0 && <div className="assistant-welcome">
         <span className="assistant-mark" aria-hidden="true">✳</span>
         <h2>¿En qué te puedo ayudar hoy?</h2>
-        <p>Consultá tus hábitos, objetivos, entrenamientos y compromisos académicos. Respondo usando lo que registraste en Día a Día.</p>
+        <p>Consultá tus hábitos, objetivos, entrenamientos y compromisos académicos. Si completaste un hábito hoy, escribí su nombre para registrarlo.</p>
         <div className="assistant-suggestions">
           {examples.map(example => <button key={example} type="button" onClick={() => void ask(example)}
             disabled={!enabled || !consent || busy}>{example}</button>)}
@@ -69,6 +74,7 @@ export function AssistantChat({ enabled }: { enabled: boolean }) {
         className={message.role === "user" ? "assistant-message is-user" : "assistant-message is-assistant"}>
         <span className="assistant-role">{message.role === "user" ? "Vos" : "Día a Día"}</span>
         <p>{message.text}</p>
+        {message.proposal && <HabitProposalCard proposal={message.proposal} />}
       </article>)}
       {busy && <div role="status" className="assistant-thinking"><span className="assistant-spinner" aria-hidden="true"/> Consultando tu información…</div>}
     </section>
@@ -93,7 +99,7 @@ export function AssistantChat({ enabled }: { enabled: boolean }) {
         <button className="assistant-send" type="submit" disabled={!enabled || !consent || busy || input.trim().length < 2}>Enviar</button>
       </form>
       <div className="assistant-disclaimer">
-        <span>Solo lectura · Sin cambios en tus registros · Sin historial guardado</span>
+        <span>Para marcar un hábito, confirmá la propuesta.</span>
         <span>{remaining === null ? "Máximo 20 consultas al día" : `${remaining} consultas disponibles hoy`}</span>
       </div>
     </div>

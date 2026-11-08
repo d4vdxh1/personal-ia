@@ -39,7 +39,7 @@ El enfoque es simple: **menos fricción para planificar y más claridad para ava
 | **Objetivos** | Organizar metas semanales o mensuales y seguir sus avances y vencimientos. |
 | **Entrenamiento** | Gestionar ejercicios, rutinas, sesiones, historial, medidas y molestias. |
 | **Universidad y Estudio** | Administrar materias, tareas, exámenes y sesiones de estudio. |
-| **Asistente IA** | Preguntar por tus registros mediante Google Gemini, con herramientas de **solo lectura**. |
+| **Asistente IA** | Preguntar por tus registros mediante Google Gemini, y, en la rama 4B.1, confirmar el registro de un hábito de hoy. |
 
 ### Asistente personal con Gemini
 
@@ -51,7 +51,7 @@ El asistente puede responder preguntas como:
 
 > ¿Cuáles son mis próximas tareas o exámenes?
 
-Sus respuestas se apoyan en consultas autorizadas a los módulos existentes. **La Fase 4A no permite crear, editar ni eliminar registros mediante IA.** Antes de enviar preguntas y datos necesarios a Gemini, la aplicación solicita consentimiento. El historial del chat no se almacena de forma persistente.
+Sus respuestas se apoyan en consultas autorizadas a los módulos existentes. En 4B.1, escribí «Completé lectura hoy». Si existe un único hábito propio con ese nombre programado para hoy, aparece una tarjeta con nombre, fecha y valor. **Confirmar** guarda el registro y **Cancelar** descarta la propuesta. Antes de enviar preguntas y datos necesarios a Gemini, la aplicación solicita consentimiento. El historial del chat no se almacena de forma persistente.
 
 ## Interfaz
 
@@ -70,7 +70,7 @@ Next.js + React + TypeScript
           ├── Interfaz responsive y rutas protegidas
           │
           ├── Acciones y API del servidor
-          │     └── Asistente Gemini (consultas de solo lectura)
+          │     └── Asistente Gemini (consultas y propuestas de hábitos)
           │
           └── Supabase
                 ├── Authentication
@@ -148,11 +148,11 @@ Las pruebas de base de datos usan PostgreSQL de prueba y las pruebas de navegado
 |---|---|
 | Base, seguimiento personal, entrenamiento y estudio | Implementados |
 | **Fase 4A — Asistente Gemini de consulta** | Implementada y validada funcionalmente por el usuario |
-| **Fase 4B — Acciones mediante IA** | Próxima etapa |
+| **Fase 4B — Acciones mediante IA** | 4B.1 de hábitos implementada en rama de revisión |
 | Recordatorios, Google Calendar y notificaciones | Pendientes |
 | Estadísticas avanzadas, voz y finanzas | Etapas futuras |
 
-La siguiente entrega propone permitir acciones desde el asistente —por ejemplo, marcar hábitos o guardar un check-in— **con validación, confirmación y auditoría**, sin habilitar escrituras libres en la base de datos.
+Queda validar 4B.1 con Gemini y dos cuentas en un entorno aislado antes de publicarla. Los siguientes incrementos del roadmap son el check-in diario (4B.2) y las sesiones de estudio (4B.3).
 
 ## Documentación
 

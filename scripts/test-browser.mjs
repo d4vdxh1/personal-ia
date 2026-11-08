@@ -150,6 +150,23 @@ try {
   await page.getByLabel('Correo electrónico').fill(user.email); await page.getByLabel('Contraseña',{exact:true}).fill('test-password'); await page.getByRole('button',{name:'Ingresar',exact:true}).click(); await page.waitForURL(base+'/');
   const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Argentina/Buenos_Aires',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
   console.log('Browser: login correcto');
+  // 6B/6C: auth-scoped analytics and consent/origin guards, no model calls in CI.
+  await page.goto(base+'/analytics?period=month');
+  await page.getByRole('heading',{name:'Comparación con los 30 días anteriores'}).waitFor();
+  await page.getByRole('img',{name:/Tendencia diaria de minutos de estudio/}).waitFor();
+  const badConsent=await page.request.post(base+'/api/analytics/review',{
+    headers:{origin:base,'content-type':'application/json'},data:{period:'week',consent:false},
+  });
+  assert.equal(badConsent.status(),400,'6C must require explicit consent');
+  const badPeriod=await page.request.post(base+'/api/analytics/review',{
+    headers:{origin:base,'content-type':'application/json'},data:{period:'invalid',consent:true},
+  });
+  assert.equal(badPeriod.status(),400,'6C must reject invalid period');
+  const crossOrigin=await page.request.post(base+'/api/analytics/review',{
+    headers:{origin:'https://example.net','content-type':'application/json'},data:{period:'week',consent:true},
+  });
+  assert.equal(crossOrigin.status(),403,'6C must reject cross origin');
+
   await page.goto(base+'/calendar');
   await page.getByRole('heading',{name:'Google Calendar'}).waitFor();
   await page.getByText('La conexión todavía requiere configurar un cliente OAuth').waitFor();

@@ -108,3 +108,80 @@ export async function testAssistantBrowser({ page, base, db, output, setRevoked,
   assert.equal((await counts()).completed, 1);
   console.log("PASS: chat → tarjeta → cancelar/confirmar, origen, sesión, reintento, doble envío y seis anchos.");
 }
+
+export async function testCheckinBrowser({ page, base, db, output, setRevoked, setFailWrite }) {
+  const endpoint = base + "/api/assistant";
+  const headers = { origin: base };
+  const card = page.getByRole("region", { name: "Propuesta de check-in diario" }).last();
+  const cooldown = () => db.exec("update public.ai_daily_usage set last_request_at=now()-interval '6 seconds'");
+  const count = async () => (await db.query("select count(*)::int n from public.daily_checkins where user_id=$1", [alice])).rows[0].n;
+  async function requestCard() {
+    await cooldown();
+    await page.getByLabel("Tu pregunta").fill("Check-in válido de hoy");
+    const response = page.waitForResponse(r => r.url() === endpoint);
+    await page.getByRole("button", { name: "Enviar", exact: true }).click();
+    const data = await (await response).json();
+    assert.equal(data.proposal.kind, "checkin");
+    await card.getByRole("button", { name: "Confirmar" }).waitFor();
+    return data.proposal;
+  }
+  await page.goto(base + "/assistant");
+  await page.getByRole("checkbox").check();
+  for (const text of ["Check-in incompleto", "Check-in con notas"]) {
+    await cooldown();
+    assert.equal((await page.request.post(endpoint, { headers, data: { message: text } })).status(), 502);
+  }
+  const first = await requestCard();
+  assert.equal(first.overwrite, false);
+  assert.equal(await count(), 0);
+  await card.getByRole("button", { name: "Cancelar" }).click();
+  await card.getByText("Propuesta cancelada.").waitFor();
+  assert.equal(await count(), 0);
+  const fresh = await requestCard();
+  await card.getByRole("button", { name: "Confirmar" }).click();
+  await card.getByText("Check-in de hoy guardado.").waitFor();
+  assert.equal(await count(), 1);
+  await db.query("update public.daily_checkins set notes='private fixture',stress=2 where user_id=$1", [alice]);
+  const update = await requestCard();
+  assert.equal(update.overwrite, true);
+  const confirm = card.getByRole("button", { name: "Confirmar" });
+  const consent = card.getByRole("checkbox");
+  assert.equal(await confirm.isDisabled(), true);
+  const data = { id: update.id, kind: "checkin", decision: "confirm", overwrite: false };
+  assert.equal((await page.request.post(endpoint + "/decision", { headers, data })).status(), 409);
+  for (const width of [360, 390, 768, 800, 930, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    await consent.scrollIntoViewIfNeeded();
+    await consent.check();
+    assert.equal(await confirm.isDisabled(), false);
+    await confirm.evaluate(el => el.scrollIntoView({ block: "center" }));
+    const rect = await confirm.boundingBox();
+    assert.ok(rect.height >= 44);
+    assert.ok(await confirm.evaluate(el => {
+      const r = el.getBoundingClientRect();
+      return el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2));
+    }));
+    if (width === 390 || width === 1280) await page.screenshot({ path: join(output, "checkin-proposal-" + width + ".png") });
+    await consent.uncheck();
+  }
+  setRevoked(true);
+  assert.equal((await page.request.post(endpoint + "/decision", { headers, data: { ...data, overwrite: true } })).status(), 401);
+  setRevoked(false);
+  await consent.check();
+  setFailWrite(true);
+  await confirm.click();
+  await card.getByText(/No pudimos comprobar el resultado/).waitFor();
+  setFailWrite(false);
+  await confirm.click();
+  await card.getByText("Check-in de hoy guardado.").waitFor();
+  const row = (await db.query("select energy,stress,notes from public.daily_checkins where user_id=$1", [alice])).rows[0];
+  assert.deepEqual(row, { energy: 4, stress: 2, notes: "private fixture" });
+  const repeat = await page.request.post(endpoint + "/decision", { headers, data: { ...data, overwrite: true } });
+  assert.equal(repeat.status(), 409);
+  await page.goto(base + "/check-in");
+  await page.getByRole("heading", { name: "Check-in diario", exact: true }).waitFor();
+  assert.equal(await count(), 1);
+  assert.equal(fresh.date, update.date);
+  console.log("PASS: check-in chat, preview, cancellation, creation, explicit overwrite, notes, session/retry and six widths.");
+}

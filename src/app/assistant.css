@@ -38,3 +38,9 @@
 .assistant-cancel{min-height:44px;padding:10px 15px;border:1px solid #b9d0c0;border-radius:9px;background:#fff;color:#1c6340;cursor:pointer}
 .assistant-proposal button:focus-visible{outline:2px solid #16734a;outline-offset:2px}
 .assistant-proposal [role=status]:not(:empty){margin-top:10px}
+
+.assistant-proposal-values{display:grid;gap:8px;margin:12px 0;font-size:14px}
+.assistant-proposal-values>div{display:flex;justify-content:space-between;gap:16px}
+.assistant-proposal-values dd{margin:0;font-weight:700}
+.assistant-overwrite{display:flex;align-items:center;gap:10px;min-height:44px;margin-top:12px;cursor:pointer;font-size:13px;line-height:1.5}
+.assistant-overwrite input{width:18px;height:18px;flex-shrink:0;accent-color:#16734a}

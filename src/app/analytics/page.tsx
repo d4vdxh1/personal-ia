@@ -35,7 +35,7 @@ export default async function AnalyticsPage({searchParams}:{searchParams:Promise
   {!report?<section className="card"><p className="form-error" role="alert">
     No pudimos cargar las estadísticas completas. Reintentá más tarde para evitar mostrar cifras incompletas.
   </p></section>:<>
-   <section className="analytics-metrics" aria-label="Indicadores de la semana">
+   <section className="analytics-metrics" aria-label="Indicadores del período">
     <article className="card analytics-stat"><span>Hábitos cumplidos</span>
      <strong>{report.habits.percentage===null?"—":`${report.habits.percentage}%`}</strong>
      <small>{report.habits.completed} de {report.habits.scheduled} ocasiones programadas</small>
@@ -68,17 +68,19 @@ export default async function AnalyticsPage({searchParams}:{searchParams:Promise
      <p className="goal-meta">Los minutos se calculan desde tus sesiones registradas.</p>
      <TrendLine label={`Tendencia diaria de minutos de estudio: ${days} días`} tickEvery={period==="month"?5:1}
        points={report.daily.map(d=>({label:period==="month"?d.date.slice(5):dateLabel(d.date).split(" ")[0],value:d.studyMinutes}))}/>
-     <div className="analytics-daily">
+     <details className="analytics-breakdown" open={period==="week"}>
+      <summary>Desglose diario ({days} días)</summary>
+      <div className="analytics-daily">
       {report.daily.map(d=><div className="analytics-daily-row" key={d.date}>
        <span>{dateLabel(d.date)}</span>
        <progress aria-label={`Estudio del ${dateLabel(d.date)}`} max={maximum} value={d.studyMinutes}/>
        <strong>{d.studyMinutes} min</strong>
       </div>)}
-     </div>
+     </div></details>
      <Link href="/study?view=sessions" className="habits-manage">Ver sesiones de estudio →</Link>
     </section>
     <section className="card analytics-detail">
-     <h2>Tu registro semanal</h2>
+     <h2>Tu registro del período</h2>
      <dl className="analytics-facts">
       <div><dt>Promedio de sueño</dt><dd>{report.checkin.averageSleep===null?"Sin datos":`${report.checkin.averageSleep} h`}</dd></div>
       <div><dt>Objetivos activos</dt><dd>{report.goals.active}</dd></div>

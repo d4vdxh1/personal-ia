@@ -90,6 +90,7 @@ try {
     return spawn(process.execPath, [...preload, join(root, 'node_modules/next/dist/bin/next'), ...args], {
       cwd: workspace, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'],
       env: { ...process.env, GEMINI_API_KEY: mockGemini ? 'browser-test-only' : '',
+        AI_STUDY_WRITES_ENABLED: mockGemini ? 'true' : 'false',
         NEXT_TELEMETRY_DISABLED: '1', NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'test-public-key',
         NEXT_PUBLIC_SUPABASE_URL: `http://127.0.0.1:${server.address().port}` },
     });

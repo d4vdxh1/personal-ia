@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
   const budget = reserved.data as { allowed?: boolean; remaining?: number };
   if (!budget.allowed) return send({ error: "Alcanzaste el límite diario o enviaste mensajes muy seguidos. Probá nuevamente más tarde." }, 429);
 
-  const provider = new GeminiProvider(key);
+  const provider = new GeminiProvider(key, fetch, process.env.AI_STUDY_WRITES_ENABLED === "true");
   const messages: ModelMessage[] = [{ role: "user", parts: [{ text: question }] }];
   try {
     const first = await provider.generate(messages, true);
@@ -38,6 +38,9 @@ export async function POST(request: NextRequest) {
     if (writes.length && first.calls.length !== 1) return send({ answer: "Pedime una sola acción por mensaje.", remaining });
     const studyCall = first.calls.find(call => call.name === "propose_study_session");
     if (studyCall) {
+      if (process.env.AI_STUDY_WRITES_ENABLED !== "true") {
+        return send({ answer: "El registro de estudio mediante Gemini todavía no está activado.", remaining });
+      }
       const { subject_name, topic, duration_minutes } = studyCall.values;
       const { data, error } = await client.rpc("propose_study_session", {
         p_subject_name: subject_name, p_topic: topic, p_duration_minutes: duration_minutes,

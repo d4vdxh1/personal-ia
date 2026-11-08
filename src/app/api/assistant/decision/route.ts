@@ -19,6 +19,9 @@ export async function POST(request: NextRequest) {
   const { id, decision } = body;
   const checkin = body.kind === "checkin";
   const study = body.kind === "study";
+  if (study && process.env.AI_STUDY_WRITES_ENABLED !== "true") {
+    return send({ error: "El registro de estudio desde Gemini todavía no está habilitado." }, 503);
+  }
   const validShape = checkin
     ? Object.keys(body).length === 4 && typeof body.overwrite === "boolean"
     : study ? Object.keys(body).length === 3 : Object.keys(body).length === 2;

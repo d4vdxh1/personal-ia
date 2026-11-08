@@ -221,3 +221,7 @@ Los controles del código funcional aprobaron en GitHub Actions #93, incluidos S
 ## 2026-11-08 — Fase 4B.3 en revisión
 
 Nueva rama `feat/fase-4b3-estudio-confirmado` desde `main@a4ae184`. Se prepararon la integración Gemini, vista previa y confirmación de sesiones de estudio, auditoría mínima, migración incremental y pruebas de lógica/SQL/navegador. La migración `20261108033000_ai_study_actions.sql` **no está aplicada al Supabase de producción**. No se fusionó la rama. Ver `docs/FASE_4B_PLAN.md`. La publicación requiere pruebas aprobadas, revisión y autorización explícita del usuario.
+
+## 2026-11-08 — Integración de 4B.3 con activación diferida
+
+El usuario autorizó integrar el PR #10. Antes de fusionarlo se añadió `AI_STUDY_WRITES_ENABLED=false` (servidor) como protección: la herramienta de sesiones de estudio no aparece en Gemini ni la decisión se ejecuta hasta activar la bandera, después de migrar y verificar la base. La migración remota sigue sin ejecutar. Continuar con Fase 5 en rama separada.

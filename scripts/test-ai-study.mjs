@@ -44,10 +44,16 @@ const turn = parts => new GeminiProvider("test", async (url, request) => {
   const body = JSON.parse(request.body);
   assert.ok(body.tools[0].functionDeclarations.some(tool => tool.name === "propose_study_session"));
   return Response.json({ candidates: [{ content: { parts } }] });
-}).generate([{ role: "user", parts: [{ text: "estudio" }] }], true);
+}, true).generate([{ role: "user", parts: [{ text: "estudio" }] }], true);
 const call = args => [{ functionCall: { name: "propose_study_session", args } }];
 assert.equal((await turn(call(valid))).calls[0].values.duration_minutes, 45);
 await assert.rejects(turn(call({ ...valid, user_id: "foreign" })));
 await assert.rejects(turn(call({ subject_name: "Matemática", duration_minutes: 30 })));
 await assert.rejects(turn([{ functionCall: { name: "decide_study_proposal", args: {} } }]));
 console.log("PASS: sesiones de estudio exigen materia, tema y duración explícitos; no se aceptan IDs, notas ni fechas.");
+// Por defecto se deshabilita la tool hasta aplicar y verificar la migración remota.
+await assert.rejects(new GeminiProvider("test", async (_url, request) => {
+  const body = JSON.parse(request.body);
+  assert.equal(body.tools[0].functionDeclarations.some(tool => tool.name === "propose_study_session"), false);
+  return Response.json({ candidates: [{ content: { parts: call(valid) } }] });
+}).generate([{ role: "user", parts: [{ text: "estudio" }] }], true));

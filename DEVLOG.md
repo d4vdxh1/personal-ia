@@ -627,3 +627,7 @@ Los controles del código funcional aprobaron en GitHub Actions #93, incluidos S
 - La RPC de propuesta resuelve la materia activa exclusivamente para `auth.uid()`, comprueba ambigüedad y duración y limita el número de propuestas. Decisión separada con bloqueo, verificación de propietario/RLS, caducidad, reintentos y auditoría sin texto académico después del procesamiento.
 - Agregadas suites de validación de modelo, RLS/PostgreSQL embebido y recorrido de navegador con seis anchuras; **verificar resultados de CI antes de considerar estas pruebas aprobadas**.
 - No se ejecutaron migraciones remotas ni se fusionó el PR. Pendiente: revisión técnica, CI, pruebas autenticadas y autorización del usuario.
+
+## 2026-11-08 — Protección antes de integrar 4B.3
+
+Se comprobó que el historial remoto de Supabase llega hasta `20261108025732_ai_checkin_actions`; falta `20261108033000_ai_study_actions`. Se agregó bandera segura por defecto `AI_STUDY_WRITES_ENABLED=false` y test que impide ofrecer la tool a Gemini sin habilitación. La integración del PR no debe activar la función antes de aplicar y comprobar la nueva migración con consentimiento específico.

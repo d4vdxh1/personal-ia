@@ -17,7 +17,10 @@ globalThis.fetch = async (input, init) => {
   } else {
     const declared = body.tools[0].functionDeclarations.map(tool => tool.name);
     assert.ok(declared.includes(name) && !declared.includes("decide_habit_proposal"));
-    if (text.startsWith("Check-in válido")) parts = [call("propose_daily_checkin", { energy: 4, emotional_state: 3, life_rating: 5, sleep_hours: 7.25 })];
+    if (text === "Estudio válido") parts = [call("propose_study_session", { subject_name: "Ingeniería del Software", topic: "Repaso de arquitectura con IA", duration_minutes: 45 })];
+    else if (text === "Estudio incompleto") parts = [call("propose_study_session", { subject_name: "Ingeniería del Software", duration_minutes: 45 })];
+    else if (text === "Estudio con ID") parts = [call("propose_study_session", { subject_name: "Ingeniería del Software", topic: "Arquitectura", duration_minutes: 45, user_id: "foreign" })];
+    else if (text.startsWith("Check-in válido")) parts = [call("propose_daily_checkin", { energy: 4, emotional_state: 3, life_rating: 5, sleep_hours: 7.25 })];
     else if (text === "Check-in incompleto") parts = [call("propose_daily_checkin", { energy: 4 })];
     else if (text === "Check-in con notas") parts = [call("propose_daily_checkin", { energy: 4, emotional_state: 3, life_rating: 5, notes: "private" })];
     else if (text === "Resumen de hábitos") parts = [call("get_habits_summary", {})];

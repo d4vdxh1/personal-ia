@@ -29,7 +29,9 @@ export default async function LoginPage({ searchParams }: {
       <GoogleSignInButton />
       <div className="auth-divider"><span>o ingresá con tu correo</span></div>
       <LoginForm />
-      <div className="auth-links"><Link href="/forgot-password">¿Olvidaste tu contraseña?</Link></div>
+      {process.env.EMAIL_RECOVERY_ENABLED === "true" && <div className="auth-links">
+        <Link href="/forgot-password">¿Olvidaste tu contraseña?</Link>
+      </div>}
       <p className="auth-footer">¿Todavía no tenés cuenta? <Link href="/signup">Crear cuenta gratis</Link></p>
     </section>
   </main>;

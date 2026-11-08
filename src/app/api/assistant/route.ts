@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { readAssistantRequest, send } from "@/lib/assistant/request";
 import { isCheckinProposal } from "@/lib/assistant/checkin-proposal";
+import { isStudyProposal } from "@/lib/assistant/study-proposal";
 import { isHabitProposal } from "@/lib/assistant/habit-proposal";
 import { GeminiProvider, ProviderError, type ModelMessage } from "@/lib/assistant/provider";
 import { runReadTool } from "@/lib/assistant/tools";
@@ -33,8 +34,25 @@ export async function POST(request: NextRequest) {
     const first = await provider.generate(messages, true);
     let text = first.text;
     const remaining = Math.max(0, budget.remaining ?? 0);
-    const writes = first.calls.filter(call => call.name === "propose_mark_habit" || call.name === "propose_daily_checkin");
+    const writes = first.calls.filter(call => call.name === "propose_mark_habit" || call.name === "propose_daily_checkin" || call.name === "propose_study_session");
     if (writes.length && first.calls.length !== 1) return send({ answer: "Pedime una sola acción por mensaje.", remaining });
+    const studyCall = first.calls.find(call => call.name === "propose_study_session");
+    if (studyCall) {
+      const { subject_name, topic, duration_minutes } = studyCall.values;
+      const { data, error } = await client.rpc("propose_study_session", {
+        p_subject_name: subject_name, p_topic: topic, p_duration_minutes: duration_minutes,
+      });
+      if (!error && data?.status === "pending" && isStudyProposal(data)) {
+        const { kind, id, date, subject, topic: proposedTopic, duration_minutes: minutes } = data;
+        return send({ answer: "Revisá los datos de la sesión de estudio antes de guardarla.",
+          proposal: { kind, id, date, subject, topic: proposedTopic, duration_minutes: minutes }, remaining });
+      }
+      if (!error && data?.status === "limited") return send({ error: "Alcanzaste el límite de propuestas de estudio de hoy." }, 429);
+      if (!error && data?.status === "ambiguous") return send({ answer: "Tenés varias materias activas con ese nombre. Cambiá el nombre de una para diferenciarlas.", remaining });
+      if (!error && data?.status === "not_found") return send({ answer: "No encontré una materia activa con ese nombre. Revisala en Estudio.", remaining });
+      console.error("assistant.study.proposal_unavailable", { userId });
+      return send({ error: "No pudimos preparar la sesión de estudio. Volvé a intentar." }, 503);
+    }
     const checkinCall = first.calls.find(call => call.name === "propose_daily_checkin");
     if (checkinCall) {
       const { data, error } = await client.rpc("propose_daily_checkin", { p_values: checkinCall.values });
@@ -60,7 +78,7 @@ export async function POST(request: NextRequest) {
       console.error("assistant.mark_habit.proposal_unavailable", { userId });
       return send({ error: "No pudimos preparar la propuesta. Volvé a intentar." }, 503);
     }
-    const reads = first.calls.filter(call => call.name !== "propose_mark_habit" && call.name !== "propose_daily_checkin");
+    const reads = first.calls.filter(call => call.name !== "propose_mark_habit" && call.name !== "propose_daily_checkin" && call.name !== "propose_study_session");
     if (reads.length) {
       const results = await Promise.all(reads.map(call => runReadTool(call.name, client, userId)));
       messages.push({ role: "model", parts: first.parts });

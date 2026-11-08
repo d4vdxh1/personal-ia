@@ -5,8 +5,9 @@ import { useRef, useState, type FormEvent } from "react";
 import { isHabitProposal, type HabitProposal } from "@/lib/assistant/habit-proposal";
 import { ProposalCard } from "./proposal-card";
 import { isCheckinProposal, type CheckinProposal } from "@/lib/assistant/checkin-proposal";
+import { isStudyProposal, type StudyProposal } from "@/lib/assistant/study-proposal";
 
-type Message = { role: "user" | "assistant"; text: string; proposal?: HabitProposal | CheckinProposal };
+type Message = { role: "user" | "assistant"; text: string; proposal?: HabitProposal | CheckinProposal | StudyProposal };
 const examples = [
   "¿Qué tengo que hacer hoy?",
   "¿Qué tareas o exámenes tengo pendientes?",
@@ -45,7 +46,7 @@ export function AssistantChat({ enabled }: { enabled: boolean }) {
         throw new Error(typeof result.error === "string" ? result.error : "No se pudo obtener una respuesta.");
       }
       const answer = result.answer;
-      const proposal = (isHabitProposal(result.proposal) || isCheckinProposal(result.proposal)) ? result.proposal : undefined;
+      const proposal = (isHabitProposal(result.proposal) || isCheckinProposal(result.proposal) || isStudyProposal(result.proposal)) ? result.proposal : undefined;
       setMessages(old => [...old, { role: "assistant", text: answer, proposal }]);
       if (typeof result.remaining === "number") setRemaining(result.remaining);
     } catch (e) {
@@ -65,7 +66,7 @@ export function AssistantChat({ enabled }: { enabled: boolean }) {
       {messages.length === 0 && <div className="assistant-welcome">
         <span className="assistant-mark" aria-hidden="true">✳</span>
         <h2>¿En qué te puedo ayudar hoy?</h2>
-        <p>Consultá tus hábitos, objetivos, entrenamientos y compromisos académicos. Podés proponer el registro de un hábito o tu check-in de hoy y revisarlo antes de confirmar.</p>
+        <p>Consultá tus hábitos, objetivos, entrenamientos y compromisos académicos. Podés proponer el registro de un hábito, tu check-in o una sesión de estudio de hoy y revisarlo antes de confirmar.</p>
         <div className="assistant-suggestions">
           {examples.map(example => <button key={example} type="button" onClick={() => void ask(example)}
             disabled={!enabled || !consent || busy}>{example}</button>)}

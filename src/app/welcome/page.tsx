@@ -12,7 +12,7 @@ const features = [
   { index: "02", name: "Entrenamiento", text: "Organizá ejercicios, rutinas y sesiones en tu propio ritmo." },
   { index: "03", name: "Universidad y Estudio", text: "Reuní materias, entregas, exámenes y horas de estudio." },
   { index: "04", name: "Objetivos y diario", text: "Planificá metas, registrá avances y escribí lo que querés recordar." },
-  { index: "05", name: "Asistente con Gemini", text: "Consultá tus registros mediante IA. Por ahora, el asistente solo lee información autorizada." },
+  { index: "05", name: "Asistente con Gemini", text: "Consultá tus registros mediante IA. Si completaste un hábito hoy, podés revisar y confirmar su registro." },
 ];
 
 export default function WelcomePage() {

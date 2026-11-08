@@ -1,54 +1,21 @@
-import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { NextRequest } from "next/server";
+import { readAssistantRequest, send } from "@/lib/assistant/request";
+import { isHabitProposal } from "@/lib/assistant/habit-proposal";
 import { GeminiProvider, ProviderError, type ModelMessage } from "@/lib/assistant/provider";
 import { runReadTool } from "@/lib/assistant/tools";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-function send(body: Record<string, unknown>, status: number) {
-  return NextResponse.json(body, { status, headers: { "Cache-Control": "no-store" } });
-}
-
 export async function POST(request: NextRequest) {
-  const origin = request.headers.get("origin");
-  if (origin && origin !== request.nextUrl.origin) return send({ error: "Origen no autorizado." }, 403);
-  if (!request.headers.get("content-type")?.startsWith("application/json")) return send({ error: "Formato inválido." }, 415);
-  const length = Number(request.headers.get("content-length") || "0");
-  if (length > 4000) return send({ error: "Solicitud demasiado extensa." }, 413);
-
-  const client = await createClient();
-  const { data: auth, error: authError } = await client.auth.getUser();
-  if (authError || !auth.user) return send({ error: "Iniciá sesión para utilizar el asistente." }, 401);
+  const context = await readAssistantRequest(request);
+  if (context instanceof Response) return context;
+  const { client, userId, body } = context;
+  if (Object.keys(body).length !== 1 || typeof body.message !== "string") return send({ error: "Se requiere un mensaje de texto." }, 400);
+  const question = body.message.trim();
+  if (question.length < 2 || question.length > 500) return send({ error: "El mensaje debe tener entre 2 y 500 caracteres." }, 400);
   const key = process.env.GEMINI_API_KEY;
   if (!key) return send({ error: "El asistente aún no está configurado. Falta GEMINI_API_KEY en Vercel." }, 503);
-
-  let question: string;
-  try {
-    const reader = request.body?.getReader();
-    if (!reader) return send({ error: "Solicitud vacía." }, 400);
-    const chunks: Uint8Array[] = [];
-    let size = 0;
-    while (true) {
-      const chunk = await reader.read();
-      if (chunk.done) break;
-      size += chunk.value.byteLength;
-      if (size > 4000) {
-        void reader.cancel();
-        return send({ error: "Solicitud demasiado extensa." }, 413);
-      }
-      chunks.push(chunk.value);
-    }
-    const bytes = new Uint8Array(size);
-    let offset = 0;
-    for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
-    const value: unknown = JSON.parse(new TextDecoder().decode(bytes));
-    if (!value || typeof value !== "object" || Array.isArray(value)) return send({ error: "Solicitud inválida." }, 400);
-    const body = value as Record<string, unknown>;
-    if (Object.keys(body).length !== 1 || typeof body.message !== "string") return send({ error: "Se requiere un mensaje de texto." }, 400);
-    question = body.message.trim();
-    if (question.length < 2 || question.length > 500) return send({ error: "El mensaje debe tener entre 2 y 500 caracteres." }, 400);
-  } catch { return send({ error: "JSON inválido." }, 400); }
 
   // Atomic durable limit: max 20/day per account, min 5s between calls.
   // No user input reaches the model unless the rate-limit RPC authorizes it.
@@ -64,12 +31,29 @@ export async function POST(request: NextRequest) {
   try {
     const first = await provider.generate(messages, true);
     let text = first.text;
-    if (first.calls.length) {
-      const results = await Promise.all(first.calls.map(call => runReadTool(call.name, client, auth.user!.id)));
+    const remaining = Math.max(0, budget.remaining ?? 0);
+    const proposalCall = first.calls.find(call => call.name === "propose_mark_habit");
+    if (proposalCall) {
+      if (first.calls.length !== 1) return send({ answer: "Pedime marcar un solo hábito por mensaje.", remaining });
+      const { data, error } = await client.rpc("propose_mark_habit", { p_name: proposalCall.habitName });
+      if (!error && data?.status === "pending" && isHabitProposal(data)) {
+        const { id, name, date, completed } = data;
+        return send({ answer: "Revisá el registro antes de guardarlo.", proposal: { id, name, date, completed }, remaining });
+      }
+      if (!error && data?.status === "limited") return send({ error: "Alcanzaste el límite de propuestas de hoy." }, 429);
+      if (!error && data?.status === "ambiguous") return send({ answer: "Tenés varios hábitos programados con ese nombre. Podés diferenciarlos en Hábitos antes de volver a intentarlo.", remaining });
+      if (!error && data?.status === "not_found") return send({ answer: "No encontré un hábito activo con ese nombre para hoy. Revisá el nombre en Hábitos.", remaining });
+      if (!error && data?.status === "already_done") return send({ answer: "Ese hábito ya figura como completado hoy.", remaining });
+      console.error("assistant.mark_habit.proposal_unavailable", { userId });
+      return send({ error: "No pudimos preparar la propuesta. Volvé a intentar." }, 503);
+    }
+    const reads = first.calls.filter(call => call.name !== "propose_mark_habit");
+    if (reads.length) {
+      const results = await Promise.all(reads.map(call => runReadTool(call.name, client, userId)));
       messages.push({ role: "model", parts: first.parts });
       messages.push({
         role: "user",
-        parts: first.calls.map((call, i) => ({
+        parts: reads.map((call, i) => ({
           functionResponse: { id: call.id, name: call.name, response: results[i] },
         })),
       });
@@ -77,7 +61,7 @@ export async function POST(request: NextRequest) {
       text = answer.text;
     }
     if (!text) return send({ error: "El asistente no pudo generar una respuesta. Probá reformulando la pregunta." }, 502);
-    return send({ answer: text.slice(0, 2500), remaining: Math.max(0, budget.remaining ?? 0) }, 200);
+    return send({ answer: text.slice(0, 2500), remaining }, 200);
   } catch (error) {
     if (error instanceof ProviderError) {
       return send({ error: error.message }, error.code === "quota" ? 429 : 502);

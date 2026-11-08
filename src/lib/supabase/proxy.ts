@@ -29,6 +29,13 @@ export async function updateSession(request: NextRequest) {
     "/welcome", "/privacy", "/terms"].includes(request.nextUrl.pathname) ||
     request.nextUrl.pathname.startsWith("/auth/");
   if (!isPublicPage && (error || !data?.claims)) {
+    if (request.nextUrl.pathname === "/api/assistant" || request.nextUrl.pathname.startsWith("/api/assistant/")) {
+      const unauthorized = NextResponse.json({ error: "Tu sesión venció. Ingresá de nuevo." }, {
+        status: 401, headers: { "Cache-Control": "private, no-store" },
+      });
+      response.cookies.getAll().forEach(cookie => unauthorized.cookies.set(cookie));
+      return unauthorized;
+    }
     const destination = request.nextUrl.clone();
     destination.pathname = "/login";
     destination.search = "?reason=session";

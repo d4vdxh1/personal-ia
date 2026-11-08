@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "check:supabase": "node scripts/check-supabase.mjs",
     "test": "node scripts/test-checkin.mjs && node scripts/test-journal.mjs && node scripts/test-goals.mjs && node scripts/test-today.mjs && node scripts/test-training.mjs",
-    "test:db": "node scripts/test-database.mjs && node scripts/test-study-db.mjs && node scripts/test-ai-db.mjs",
+    "test:db": "node scripts/test-database.mjs && node scripts/test-study-db.mjs && node scripts/test-ai-db.mjs && node scripts/test-ai-habits-db.mjs",
     "test:browser": "node scripts/test-browser.mjs"
   },
   "dependencies": {

@@ -32,3 +32,9 @@
 
 .assistant-privacy{display:flex;align-items:flex-start;gap:10px;margin:0 0 13px;color:#3b6049;font-size:12px;line-height:1.6;cursor:pointer}
 .assistant-privacy input{width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:#16734a}
+
+.assistant-proposal{margin-top:12px;border-top:1px solid #c9dfcf;padding-top:12px;color:#1b3627}
+.assistant-proposal-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.assistant-cancel{min-height:44px;padding:10px 15px;border:1px solid #b9d0c0;border-radius:9px;background:#fff;color:#1c6340;cursor:pointer}
+.assistant-proposal button:focus-visible{outline:2px solid #16734a;outline-offset:2px}
+.assistant-proposal [role=status]:not(:empty){margin-top:10px}

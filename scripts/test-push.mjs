@@ -31,6 +31,8 @@ assert.match(sw,/notificationclick/);
 assert.match(sw,/showNotification/);
 assert.match(sw,/\/reminders/);
 const worker=readFileSync("supabase/functions/push-dispatch/index.ts","utf8");
+const compiledWorker=ts.transpileModule(worker,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}});
+assert.ok(!compiledWorker.diagnostics?.some(x=>x.category===ts.DiagnosticCategory.Error));
 assert.match(worker,/sameSecret/);
 assert.match(worker,/claim_push_deliveries/);
 assert.match(worker,/finish_push_delivery/);

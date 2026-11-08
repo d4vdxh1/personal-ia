@@ -226,6 +226,10 @@ Nueva rama `feat/fase-4b3-estudio-confirmado` desde `main@a4ae184`. Se prepararo
 
 El usuario autorizó integrar el PR #10. Antes de fusionarlo se añadió `AI_STUDY_WRITES_ENABLED=false` (servidor) como protección: la herramienta de sesiones de estudio no aparece en Gemini ni la decisión se ejecuta hasta activar la bandera, después de migrar y verificar la base. La migración remota sigue sin ejecutar. Continuar con Fase 5 en rama separada.
 
+## 2026-11-08 — Activación de 4B.3 autorizada
+
+El usuario pidió activar 4B.3 antes de seguir con la Fase 5. Se verificó que la migración `20261108033000_ai_study_actions` **ya constaba como aplicada** en el proyecto Supabase `personal-ia`; se comprobó RLS, trigger, funciones invocadoras y permisos. La activación de la funcionalidad se hace mediante una actualización del código en GitHub/Vercel: habilitada por defecto, con posibilidad de desactivar inmediatamente usando `AI_STUDY_WRITES_ENABLED=false` del lado servidor. Los tests automatizados son independientes de las pruebas manuales con Gemini autenticado.
+
 ## 2026-11-08 — Fase 5A.1 iniciada en rama
 
 Rama `feat/fase-5a-recordatorios` desde `main@9b0bcd9`: gestión manual de recordatorios futuros, con RLS por propietario, validación del servidor y navegación móvil/escritorio. **No hay notificaciones automáticas ni scheduler**; la migración `20261108050000_reminders.sql` está versionada pero NO aplicada remotamente. Requiere CI, revisión, autorización y pruebas antes de publicar. Ver `docs/FASE_5_RECORDATORIOS.md`.

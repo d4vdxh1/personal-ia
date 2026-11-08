@@ -7,6 +7,9 @@ import { createClient } from "@/lib/supabase/server";
 export type SignupState = { message: string; status: "idle" | "error" | "success" };
 
 export async function signup(_previous: SignupState, form: FormData): Promise<SignupState> {
+  if (process.env.EMAIL_SIGNUP_ENABLED !== "true") {
+    return { status: "error", message: "El registro con correo todavía no está disponible. Continuá con Google." };
+  }
   const email = form.get("email");
   const password = form.get("password");
   const confirmPassword = form.get("confirmPassword");

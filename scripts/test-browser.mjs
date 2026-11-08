@@ -21,7 +21,7 @@ for(const file of ['package-lock.json','next.config.ts','tsconfig.json','postcss
 const fingerprint=hash.digest('hex'); let previousBuild; try { previousBuild=JSON.parse(await readFile(join(workspace,'test-build.json'),'utf8'));await access(join(workspace,'.next/BUILD_ID')); } catch {previousBuild=null;}
 const db = await createTestDatabase();
 await db.exec("create role service_role nologin; create schema vault; create table vault.decrypted_secrets(name text,decrypted_secret text);");
-for (const file of ["20261106152923_ai_usage.sql", "20261108023553_ai_habit_actions.sql", "20261108025732_ai_checkin_actions.sql", "20261108033000_ai_study_actions.sql", "20261108035009_reminders.sql","20261108043426_push_notifications.sql","20261108184507_reminder_recurrences.sql","20261108192000_google_calendar_connections.sql"]) {
+for (const file of ["20261106152923_ai_usage.sql", "20261108023553_ai_habit_actions.sql", "20261108025732_ai_checkin_actions.sql", "20261108033000_ai_study_actions.sql", "20261108035009_reminders.sql","20261108043426_push_notifications.sql","20261108184507_reminder_recurrences.sql","20261108185959_google_calendar_connections.sql"]) {
   await db.exec(await readFile(join(root, "supabase/migrations", file), "utf8"));
 }
 await db.query("insert into auth.users(id) values($1)", [alice]);

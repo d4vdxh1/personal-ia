@@ -4,7 +4,7 @@ import {createTestDatabase,asUser,alice,bob} from "./test-db.mjs";
 const db=await createTestDatabase(false);
 const q=async(sql,params=[]) => (await db.query(sql,params)).rows;
 try{
- await db.exec(await readFile("supabase/migrations/20261108192000_google_calendar_connections.sql","utf8"));
+ await db.exec(await readFile("supabase/migrations/20261108185959_google_calendar_connections.sql","utf8"));
  await q("insert into auth.users(id) values($1),($2)",[alice,bob]);
  assert.equal((await q("select relrowsecurity from pg_class where oid='public.google_calendar_connections'::regclass"))[0].relrowsecurity,true);
  assert.equal((await q("select has_table_privilege('anon','public.google_calendar_connections','select') allowed"))[0].allowed,false);

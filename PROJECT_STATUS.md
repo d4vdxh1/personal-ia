@@ -162,3 +162,11 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - El proxy deja públicas solo las rutas de autenticación, manteniendo privadas las rutas de seguimiento, Estudio, Entrenamiento y Asistente. El esquema ya contempla `handle_new_user` para crear un perfil con `user_id`; falta comprobar con cuentas reales nuevas.
 - El PR requiere CI, configuración de Supabase Auth y Google Cloud OAuth, entrega real de correos, pruebas con dos cuentas y revisión antiabuso antes de publicarse. No se añadieron migraciones ni se alteraron datos.
 - Guía detallada: [docs/REGISTRO_PUBLICO.md](docs/REGISTRO_PUBLICO.md). No confundir interfaz preparada con proveedor Google activado.
+
+
+## 2026-11-07 — Google OAuth validado; publicación gradual
+
+- El usuario confirmó Google Auth Platform en producción, inicio de sesión Google desde localhost y aislamiento entre dos cuentas reales. La comprobación es funcional, no una auditoría independiente.
+- PR #6 integra nuevas pantallas de autenticación con las páginas públicas de presentación y legales.
+- Para el primer lanzamiento, Google permite crear cuentas y las cuentas existentes siguen usando contraseña. Registro y recuperación por email quedan bloqueados por defecto con banderas de servidor hasta SMTP.
+- El bloqueo en la app **no bloquea la API pública de registro de Supabase**. Revisar CAPTCHA, límites y consumo de Gemini antes de promocionar el acceso.

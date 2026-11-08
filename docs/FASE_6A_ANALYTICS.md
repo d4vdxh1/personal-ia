@@ -1,13 +1,13 @@
 # Fase 6A — Estadísticas de MVP (interfaz provisional)
 
-**Estado:** implementado en la rama `feat/fase-6a-analytics-recurrencias-mvp`; pendiente de CI, revisión y aceptación en cuenta autenticada. La Fase 6B (comparaciones semanales/mensuales) y 6C (revisión inteligente con Gemini) todavía no están implementadas.
+**Estado:** validación del usuario y gráfico de líneas incorporado a la rama `feat/fase-6a-analytics-recurrencias-mvp`; pendiente de CI, revisión y aceptación en cuenta autenticada. La Fase 6B (comparaciones semanales/mensuales) y 6C (revisión inteligente con Gemini) todavía no están implementadas.
 
 ## Alcance funcional
 
 - Nueva ruta privada `/analytics`, accesible desde navegación desktop y menú móvil.
 - Resumen de los últimos siete días **según America/Asuncion**.
 - Hábitos: ocasiones cumplidas / ocasiones programadas de hábitos **actualmente activos**. Solo se cuentan fechas desde la creación de cada hábito. Una ocasión no registrada no se da por cumplida; si no hay ocasiones, se muestra raya y no 0%/100% artificial.
-- Estudio: minutos y horas registrados en `study_sessions`, con distribución diaria y sin contar tareas como horas estudiadas.
+- Estudio: minutos y horas registrados en `study_sessions`, con distribución diaria, gráfico de líneas SVG accesible (con título y descripción), y sin contar tareas como horas estudiadas.
 - Entrenamiento: número de sesiones completadas y número de sesiones programadas; estos totales se presentan por separado, sin asumir correspondencia 1:1 ni medir adherencia de forma engañosa.
 - Check-in: energía y horas de sueño medias solo entre registros válidos, con número de check-ins que informa sobre la cobertura.
 - Objetivos: cantidad de objetivos activos, completados (histórico) y progreso medio de los activos.

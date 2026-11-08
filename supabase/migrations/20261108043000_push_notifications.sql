@@ -19,15 +19,15 @@ create function public.limit_push_subscriptions() returns trigger
 language plpgsql set search_path = '' as $
 begin
   perform pg_advisory_xact_lock(hashtextextended(new.user_id::text, 5002));
-  if (select count(*) from public.push_subscriptions
-      where user_id=new.user_id and active) >= 5 then
+  if new.active and (select count(*) from public.push_subscriptions
+      where user_id=new.user_id and active and id<>new.id) >= 5 then
     raise exception 'maximum 5 active subscriptions' using errcode='23514';
   end if;
   return new;
 end;
 $;
 revoke all on function public.limit_push_subscriptions() from public, anon, authenticated;
-create trigger limit_push_subscriptions before insert on public.push_subscriptions
+create trigger limit_push_subscriptions before insert or update of active,user_id on public.push_subscriptions
   for each row execute function public.limit_push_subscriptions();
 create index push_subscriptions_user_active_idx on public.push_subscriptions(user_id, active);
 alter table public.push_subscriptions enable row level security;

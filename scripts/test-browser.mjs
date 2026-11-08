@@ -108,7 +108,21 @@ try {
   await page.goto(base+'/welcome');
   await page.getByRole('link',{name:'Leer la política de privacidad'}).click();
   await page.waitForURL(/\/privacy$/);
-  await page.goto(base); await page.waitForURL(/login/);
+  for (const path of ['/signup','/forgot-password']) {
+     const response = await page.request.get(base+path,{maxRedirects:0});
+     assert.equal(response.status(),200,'public auth route '+path);
+   }
+   assert.equal((await page.request.get(base+'/auth/callback',{maxRedirects:0})).status(),307);
+   await page.goto(base+'/signup');
+   await page.getByRole('heading',{name:'Creá tu espacio personal.'}).waitFor();
+   await page.getByRole('button',{name:'Continuar con Google'}).waitFor();
+   await page.getByText('las cuentas nuevas se crean con Google',{exact:false}).waitFor();
+   assert.equal(await page.getByRole('button',{name:'Crear cuenta',exact:true}).count(),0,'email signup UI must be gated until SMTP setup');
+   await page.goto(base+'/forgot-password');
+   await page.getByRole('heading',{name:'Recuperá tu contraseña.'}).waitFor();
+   await page.getByText('La recuperación por correo estará disponible',{exact:false}).waitFor();
+   await page.goto(base+'/login'); await page.getByRole('link',{name:'Crear cuenta gratis'}).waitFor();
+   await page.goto(base); await page.waitForURL(/login/);
   await page.getByLabel('Correo electrónico').fill(user.email); await page.getByLabel('Contraseña',{exact:true}).fill('test-password'); await page.getByRole('button',{name:'Ingresar',exact:true}).click(); await page.waitForURL(base+'/');
   const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Argentina/Buenos_Aires',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
   console.log('Browser: login correcto');

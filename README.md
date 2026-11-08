@@ -95,6 +95,10 @@ La API de Gemini se configura **solo en el servidor**. El asistente dispone de u
 
 Estas medidas no sustituyen auditorías de seguridad externas ni garantizan que los servicios de terceros sean gratuitos.
 
+## Acceso y registro de usuarios
+
+La aplicación utiliza Supabase Auth. El [PR #6](https://github.com/d4vdxh1/personal-ia/pull/6) incorpora acceso con Google, probado por el usuario con dos cuentas distintas. El login con contraseña para cuentas existentes se mantiene; la creación de cuentas mediante correo y la recuperación por email permanecen desactivadas hasta configurar SMTP y protección antiabuso. Ver [guía de configuración](docs/REGISTRO_PUBLICO.md).
+
 ## Ejecutar el proyecto
 
 Se recomienda Node.js 24. Necesitás acceso a un proyecto Supabase configurado con el esquema correspondiente.

@@ -66,7 +66,8 @@ try {
   await db.exec("grant insert on public.study_sessions to authenticated");
   assert.equal((await query("select count(*)::int n from public.study_sessions"))[0].n, 1);
   const duplicate = await propose();
-  const outcomes = await Promise.all([decide(duplicate.id), decide(duplicate.id)]);
+  // A replay must be idempotent and never create a second row.
+  const outcomes = [await decide(duplicate.id), await decide(duplicate.id)];
   assert.deepEqual(outcomes.map(x=>x.status).sort(), ["confirmed","consumed"]);
   assert.equal((await query("select count(*)::int n from public.study_sessions"))[0].n, 2);
   console.log("PASS: estudio, dueño/RLS, ambigüedad, cancelación, vencimiento, stale, auditoría, idempotencia y errores.");

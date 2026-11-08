@@ -37,6 +37,7 @@ assert.equal(proposals.parseCheckinValues({ energy: 1, emotional_state: 5, life_
 
 const { GeminiProvider } = load("src/lib/assistant/provider.ts", {
   "server-only": {}, "./checkin-proposal": proposals,
+  "./study-proposal": { parseStudyValues: () => null },
   "./tools": { READ_TOOLS: [], isReadToolName: name => name === "get_habits_summary" },
 });
 const turn = parts => new GeminiProvider("test", async (url, request) => {

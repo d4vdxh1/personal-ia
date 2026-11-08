@@ -92,3 +92,7 @@ Para dar por completada la fase: revisar resultados de CI (lint, unitarias, SQL/
 ### Protección de despliegue de 4B.3
 
 El PR #10 integra el código con una bandera de servidor `AI_STUDY_WRITES_ENABLED=false` por defecto. Mientras esté desactivada, `propose_study_session` no se anuncia a Gemini; la API de decisión rechaza su ejecución. Esto permite fusionar el código **sin** migrar la base. Tras autorización explícita para producción, cotejar historial, aplicar/validar migración `20261108033000_ai_study_actions`, probar con dos cuentas y recién entonces configurar `AI_STUDY_WRITES_ENABLED=true` en Vercel. No confundir merge de código con activación funcional.
+
+## Activación autorizada de 4B.3 (8/11/2026)
+
+La versión de migración `20261108033000_ai_study_actions` ya estaba registrada en el Supabase de producción al comprobar el estado. **No se ejecutó otra vez.** Se comprobaron controles de dueño y RPC invocadoras. Con permiso del usuario, la rama `codex/activate-fase-4b3` modifica la activación por defecto para poder publicar el flujo por el despliegue automático de Vercel. El valor de entorno `AI_STUDY_WRITES_ENABLED=false` continúa permitiendo desactivarlo; no se imprimen secretos. Queda pendiente prueba E2E real con cuenta autenticada después del despliegue.

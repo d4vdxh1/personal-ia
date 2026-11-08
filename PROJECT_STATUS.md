@@ -225,3 +225,7 @@ Nueva rama `feat/fase-4b3-estudio-confirmado` desde `main@a4ae184`. Se prepararo
 ## 2026-11-08 — Integración de 4B.3 con activación diferida
 
 El usuario autorizó integrar el PR #10. Antes de fusionarlo se añadió `AI_STUDY_WRITES_ENABLED=false` (servidor) como protección: la herramienta de sesiones de estudio no aparece en Gemini ni la decisión se ejecuta hasta activar la bandera, después de migrar y verificar la base. La migración remota sigue sin ejecutar. Continuar con Fase 5 en rama separada.
+
+## 2026-11-08 — Activación de 4B.3 autorizada
+
+El usuario pidió activar 4B.3 antes de seguir con la Fase 5. Se verificó que la migración `20261108033000_ai_study_actions` **ya constaba como aplicada** en el proyecto Supabase `personal-ia`; se comprobó RLS, trigger, funciones invocadoras y permisos. La activación de la funcionalidad se hace mediante una actualización del código en GitHub/Vercel: habilitada por defecto, con posibilidad de desactivar inmediatamente usando `AI_STUDY_WRITES_ENABLED=false` del lado servidor. Los tests automatizados son independientes de las pruebas manuales con Gemini autenticado.

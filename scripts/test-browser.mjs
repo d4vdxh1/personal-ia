@@ -21,7 +21,7 @@ for(const file of ['package-lock.json','next.config.ts','tsconfig.json','postcss
 const fingerprint=hash.digest('hex'); let previousBuild; try { previousBuild=JSON.parse(await readFile(join(workspace,'test-build.json'),'utf8'));await access(join(workspace,'.next/BUILD_ID')); } catch {previousBuild=null;}
 const db = await createTestDatabase();
 await db.exec("create role service_role nologin; create schema vault; create table vault.decrypted_secrets(name text,decrypted_secret text);");
-for (const file of ["20261106152923_ai_usage.sql", "20261108023553_ai_habit_actions.sql", "20261108025732_ai_checkin_actions.sql", "20261108033000_ai_study_actions.sql", "20261108035009_reminders.sql","20261108043426_push_notifications.sql","20261108184507_reminder_recurrences.sql"]) {
+for (const file of ["20261106152923_ai_usage.sql", "20261108023553_ai_habit_actions.sql", "20261108025732_ai_checkin_actions.sql", "20261108033000_ai_study_actions.sql", "20261108035009_reminders.sql","20261108043426_push_notifications.sql","20261108184507_reminder_recurrences.sql","20261108193000_ai_reminder_actions.sql"]) {
   await db.exec(await readFile(join(root, "supabase/migrations", file), "utf8"));
 }
 await db.query("insert into auth.users(id) values($1)", [alice]);
@@ -45,7 +45,7 @@ const server = createServer((req, res) => {
     const name=url.pathname.split('/').at(-1);
     const result = await asUser(db, alice, async () => {
       if (url.pathname.includes('/rpc/')) {
-        const names={ propose_daily_checkin:['p_values'], decide_checkin_proposal:['p_id','p_decision','p_overwrite'], propose_study_session:['p_subject_name','p_topic','p_duration_minutes'], decide_study_proposal:['p_id','p_decision'], reserve_ai_request:[], propose_mark_habit:['p_name'], decide_habit_proposal:['p_id','p_decision'], save_training_plan:['p_id','p_name','p_notes','p_items'],start_training_session:['p_id','p_plan_id','p_schedule_id'],save_training_session:['p_id','p_sets','p_duration','p_rpe','p_notes','p_complete'],training_progress:[],training_exercise_history:['p_exercise','p_page'] };
+        const names={ propose_daily_checkin:['p_values'], decide_checkin_proposal:['p_id','p_decision','p_overwrite'], propose_ai_reminder:["p_values"], decide_ai_reminder:["p_id","p_decision"], propose_study_session:['p_subject_name','p_topic','p_duration_minutes'], decide_study_proposal:['p_id','p_decision'], reserve_ai_request:[], propose_mark_habit:['p_name'], decide_habit_proposal:['p_id','p_decision'], save_training_plan:['p_id','p_name','p_notes','p_items'],start_training_session:['p_id','p_plan_id','p_schedule_id'],save_training_session:['p_id','p_sets','p_duration','p_rpe','p_notes','p_complete'],training_progress:[],training_exercise_history:['p_exercise','p_page'] };
         assert.ok(name in names); const args=names[name].map(k => typeof payload[k]==='object' && payload[k]!==null ? JSON.stringify(payload[k]) : payload[k]);
         const table=name==='training_progress'||name==='training_exercise_history';
         const sql=table ? `select * from public.${ident(name)}(${args.map((_,i)=>'$'+(i+1)).join(',')})` : `select public.${ident(name)}(${args.map((_,i)=>'$'+(i+1)).join(',')}) as value`;

@@ -10,7 +10,7 @@ const keys="A".repeat(87),authKey="b".repeat(22);
 try {
   await db.exec("create role service_role nologin; create schema vault; create table vault.decrypted_secrets(name text,decrypted_secret text);");
   await db.exec(await readFile("supabase/migrations/20261108035009_reminders.sql","utf8"));
-  await db.exec(await readFile("supabase/migrations/20261108043000_push_notifications.sql","utf8"));
+  await db.exec(await readFile("supabase/migrations/20261108043426_push_notifications.sql","utf8"));
   await q("insert into auth.users(id) values($1),($2)",[alice,bob]);
   assert.equal((await q("select relrowsecurity from pg_class where oid='public.push_subscriptions'::regclass"))[0].relrowsecurity,true);
   assert.equal((await q("select relrowsecurity from pg_class where oid='push_private.deliveries'::regclass"))[0].relrowsecurity,true);

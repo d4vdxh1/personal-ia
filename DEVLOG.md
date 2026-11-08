@@ -585,3 +585,10 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - Pruebas automatizadas de ambigüedad, propiedad, vencimiento, cambio de día o de hábito, cancelación, errores, sesión y reenvío. Prueba adicional local con dos conexiones PostgreSQL simultáneas: doble confirmación, dos propuestas para el mismo hábito y cancelación seguida de confirmación concurrente.
 - En local pasaron lint, compilación, tipos, pruebas de lógica y SQL. Chromium verificó la tarjeta con Gemini y Auth simulados, controles de al menos 44 px en seis anchos (360, 390, 768, 800, 930 y 1280 px), cancelación, sesión vencida, error de acceso a la BD y reintento. Se inspeccionaron capturas de celular y escritorio.
 - Supabase estable consultado en modo lectura para cotejar el historial. La migración nueva está reservada para un entorno aislado antes de publicar. Continúan pendientes el recorrido con Gemini y dos cuentas reales y las fases 4B.2/4B.3. SMTP sigue en su propio pendiente.
+
+## 2026-11-07 — Habilitación remota para probar 4B.1 desde local
+
+- El usuario autorizó aplicar la migración en la base compartida `personal-ia`. Supabase la registró como `20261108023553_ai_habit_actions`. Se alinearon el archivo SQL y las referencias de las pruebas.
+- La prueba SQL remota con dos identidades aprobó propuesta, cancelación, aislamiento, confirmación, auditoría y repetición. Las filas de prueba se revirtieron al finalizar.
+- Los asesores no agregaron hallazgos de la nueva migración. Continúan los avisos preexistentes sobre `rls_auto_enable` y contraseñas filtradas, y los controles intencionales de la cuota IA.
+- Pendiente la prueba funcional del usuario desde localhost con Gemini. PR #8 permanece en borrador.

@@ -186,3 +186,9 @@ La rama `feat/fase-4b1-habitos-confirmados` parte de `main@35df567`. En el chat,
 Verificados localmente lógica, SQL con dos identidades, concurrencia con dos conexiones PostgreSQL y el recorrido en Chromium a seis anchos con Auth y Gemini simulados.
 
 La migración incremental está en la rama. El historial del Supabase estable se cotejó en modo lectura y termina en `20261106152923_ai_usage`. Antes de publicar, validar la migración y el flujo con Gemini y cuentas autenticadas en un entorno de prueba independiente. SMTP continúa aplazado. Ver [verificación y salida de 4B.1](docs/FASE_4B_PLAN.md).
+
+## 2026-11-07 — Migración 4B.1 aplicada con autorización del usuario
+
+- Aplicada en el Supabase existente `personal-ia` como `20261108023553_ai_habit_actions`, con autorización explícita para actualizar la base compartida con producción. Archivo SQL y referencias alineados al historial remoto.
+- Comprobación SQL transaccional con dos identidades y rollback aprobada para propuesta sin cumplimiento automático, cancelación, rechazo de cuenta ajena, confirmación, auditoría y repetición rechazada. No sustituye la prueba con dos sesiones reales.
+- El código continúa en el PR #8 en borrador. El usuario puede probar desde local con la rama 4B.1 y la misma base. Pendiente su aceptación funcional del recorrido con Gemini.

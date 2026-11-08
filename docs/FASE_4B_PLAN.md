@@ -38,5 +38,9 @@ No depende de SMTP. No incorpora recordatorios, tareas generales, Google Calenda
 ### Verificación antes de publicar
 
 - Ejecutar `npm run lint`, `npm test`, `npm run test:db`, `npm run build`, `npm run typecheck` y `npm run test:browser`. La suite de navegador necesita Chromium de Playwright. Usa Auth y Gemini simulados, con Next y PostgreSQL de prueba.
-- En una base **de pruebas**, cotejar las cuatro migraciones existentes y aplicar la incremental `20261108020800_ai_habit_actions.sql`. Conectar el preview exclusivamente a esa base y configurar Gemini en el servidor.
+- En una base **de pruebas**, cotejar las cuatro migraciones existentes y aplicar la incremental `20261108023553_ai_habit_actions.sql`. Conectar el preview exclusivamente a esa base y configurar Gemini en el servidor.
 - Con dos cuentas de prueba, crear un hábito para hoy con el mismo nombre en ambas. En la primera, pedir «Completé lectura hoy», cancelar y comprobar en Mi Día que sigue pendiente. Repetir y confirmar. Comprobar el cumplimiento en Mi Día, que el hábito de la segunda cuenta continúa pendiente y un único resultado confirmado en la auditoría. Revisar CI y el recorrido autenticado antes de promover la migración y el código.
+
+### Migración remota aplicada
+
+El 7/11/2026 el usuario autorizó aplicar la migración en el Supabase actual compartido con producción. Quedó registrada como `20261108023553_ai_habit_actions` y se comprobó con SQL transaccional bajo dos identidades. El código del PR #8 ya puede probarse desde localhost conectado a esa base. Evitar repetir la migración. Falta la aceptación del recorrido completo del usuario con Gemini.

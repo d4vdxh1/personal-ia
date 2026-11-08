@@ -13,7 +13,7 @@ const createHabit = async (name, user = alice) =>
   (await query("insert into public.habits(user_id,name) values($1,$2) returning id", [user, name]))[0].id;
 const entries = async () => query("select habit_id, completed from public.habit_entries");
 try {
-  await db.exec(await readFile("supabase/migrations/20261108020800_ai_habit_actions.sql", "utf8"));
+  await db.exec(await readFile("supabase/migrations/20261108023553_ai_habit_actions.sql", "utf8"));
   await query("insert into auth.users(id) values($1),($2)", [alice, bob]);
   for (const rpc of ["public.propose_mark_habit(text)", "public.decide_habit_proposal(uuid,text)"]) {
     assert.equal((await query("select has_function_privilege('anon',$1,'execute') allowed", [rpc]))[0].allowed, false);

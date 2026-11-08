@@ -562,3 +562,10 @@ Registro cronológico del desarrollo. **No borrar entradas anteriores.** Agregar
 - Proxy ajustado para permitir solo las rutas de acceso público; resto de la app mantiene autenticación y RLS.
 - Se conserva el diseño blanco/verde y el login antiguo con correo/contraseña. Pruebas de navegación sin sesión añadidas.
 - Manual de configuración y seguridad: `docs/REGISTRO_PUBLICO.md`. Pendientes activar Google en Cloud/Supabase, SMTP/correo, protección antiabuso, completar CI y comprobar con dos cuentas reales.
+
+
+## 2026-11-07 — Prueba OAuth y publicación gradual
+
+- Google OAuth verificado por el usuario en localhost; dos cuentas separadas sin registros compartidos.
+- PR #6 preparado para integrar Google OAuth y páginas públicas, con formularios/Server Actions de registro y recuperación email desactivados por defecto hasta SMTP.
+- Mantener login email/contraseña existente. Pendientes: callback real en Vercel, SMTP/plantillas, CAPTCHA y alertas de gasto del proveedor Gemini.

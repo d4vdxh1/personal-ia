@@ -11,11 +11,11 @@
 | 4B.1 Hábitos / 4B.2 check-in / 4B.3 estudio | Publicadas | Confirma antes de escribir, validación/RLS/auditoría |
 | 5A.1 Recordatorios manuales | Publicada | RLS y CI |
 | 5A.2 Web Push | Publicada | Recepción confirmada en celular/Chrome, Brave configurado |
-| 5A.3 Recurrencias | Publicada PR #15 | CI y SQL remoto con dos identidades; aceptación real de recurrencia pendiente |
+| 5A.3 Recurrencias | Publicada PR #15 | Usuario confirmó flujo real; opción A de agrupación UX implementada en rama de Fase 6A |
 | 5B.1 Calendar solo lectura | Código publicado PR #16 | **No activo**: faltan OAuth Google Cloud y prueba real |
 | 5B.2 Exportación manual | PR #18 | SQL aplicado y CI; flag de escritura desactivado hasta OAuth y prueba Google real |
-| 5C Recordatorios propuestos por Gemini | Publicada PR #17 | SQL + CI aprobados; recorrido Gemini real pendiente |
-| 6 Analytics inteligente | No iniciado | Dashboard, gráficas, revisión semanal, agregados |
+| 5C Recordatorios propuestos por Gemini | Publicada PR #17 | Usuario confirmó pruebas de propuesta, cancelación y confirmación |
+| 6 Analytics inteligente | 6A en rama sin fusionar | Panel de 7 días con datos reales; 6B comparaciones y 6C IA pendientes; UX provisional |
 | 7 Voz | No iniciado | Transcripción primero, conversación en tiempo real después |
 | 8 Finanzas | No iniciado | Ingresos, gastos, categorías, presupuestos; sin operaciones bancarias |
 | 9 Producción estable | Parcial/transversal | Observabilidad, errores, backups, E2E, seguridad, analítica, límites de costo |
@@ -35,3 +35,11 @@
 - **9:** endurecimiento de producción: Vercel Web Analytics, captura de errores, monitoreo de Cron, copias de seguridad, pruebas E2E, antiabuso de Auth, limites globales de Gemini y SMTP transaccional si se habilita registro por email.
 
 **No repetir migraciones ya aplicadas.** Los avisos Web Push son de mejor esfuerzo y requieren permiso del navegador.
+
+## Fase 6A y decisión de interfaz — 2026-11-08
+
+- Fase 5 aceptada funcionalmente por usuario, salvo Google Calendar 5B, deliberadamente pospuesto.
+- Recurrentes: una sola próxima ocurrencia visible por serie, demás ocurrencias consultables dentro del bloque de series. Sin cambios en persistencia ni entregas Push.
+- Fase 6A: `/analytics` con datos reales: cumplimiento de hábitos activos, estudio por día, sesiones de entrenamiento completadas y programadas, check-in/sueño y objetivos.
+- Rama: `feat/fase-6a-analytics-recurrencias-mvp`; no fusionada ni publicada. Ver [Fase 6A](FASE_6A_ANALYTICS.md).
+- UX/UI será rediseñada posteriormente; no hacer cambios visuales grandes ahora.

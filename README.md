@@ -97,7 +97,7 @@ Estas medidas no sustituyen auditorías de seguridad externas ni garantizan que 
 
 ## Acceso y registro de usuarios
 
-La aplicación utiliza Supabase Auth. El registro público con correo, acceso mediante Google y recuperación de contraseña están propuestos en el [PR #6](https://github.com/d4vdxh1/personal-ia/pull/6), pendiente de configuración de proveedores y pruebas reales antes de publicarse. Los datos personales continúan aislados mediante RLS. Ver [guía de configuración](docs/REGISTRO_PUBLICO.md).
+La aplicación utiliza Supabase Auth. El [PR #6](https://github.com/d4vdxh1/personal-ia/pull/6) incorpora acceso con Google, probado por el usuario con dos cuentas distintas. El login con contraseña para cuentas existentes se mantiene; la creación de cuentas mediante correo y la recuperación por email permanecen desactivadas hasta configurar SMTP y protección antiabuso. Ver [guía de configuración](docs/REGISTRO_PUBLICO.md).
 
 ## Ejecutar el proyecto
 

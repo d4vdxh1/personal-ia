@@ -34,3 +34,6 @@
 .analytics-ai-result{margin-top:16px;padding:16px;border:1px solid #dce7df;border-radius:10px;line-height:1.6}
 .analytics-ai-result p{white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0;font-size:14px}
 .analytics-ai-result small{color:var(--muted);font-size:11px}
+
+.analytics-breakdown{margin:14px 0}
+.analytics-breakdown summary{cursor:pointer;color:var(--green);font-size:13px;font-weight:650;min-height:44px;padding:10px 0}

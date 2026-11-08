@@ -97,7 +97,7 @@ Estas medidas no sustituyen auditorías de seguridad externas ni garantizan que 
 
 ## Acceso y registro de usuarios
 
-La aplicación utiliza Supabase Auth. El [PR #6](https://github.com/d4vdxh1/personal-ia/pull/6) incorpora acceso con Google, probado por el usuario con dos cuentas distintas. El login con contraseña para cuentas existentes se mantiene; la creación de cuentas mediante correo y la recuperación por email permanecen desactivadas hasta configurar SMTP y protección antiabuso. Ver [guía de configuración](docs/REGISTRO_PUBLICO.md).
+La aplicación utiliza Supabase Auth. El [PR #6](https://github.com/d4vdxh1/personal-ia/pull/6) publicó el acceso con Google; el usuario probó dos cuentas distintas. El login con contraseña para cuentas existentes se mantiene; la creación de cuentas mediante correo y la recuperación por email permanecen desactivadas hasta configurar SMTP y protección antiabuso. Ver [guía de configuración](docs/REGISTRO_PUBLICO.md).
 
 ## Ejecutar el proyecto
 
@@ -160,6 +160,7 @@ La siguiente entrega propone permitir acciones desde el asistente —por ejemplo
 - **[Estado del proyecto](PROJECT_STATUS.md)** — módulos, avances y pendientes verificados.
 - **[Plan maestro](docs/PLAN_MAESTRO.md)** — fases y roadmap.
 - **[Historial de desarrollo](DEVLOG.md)** — decisiones, cambios y verificaciones.
+- **[Plan de la Fase 4B](docs/FASE_4B_PLAN.md)** — acciones confirmadas por IA, validación y auditoría.
 - **[Entrenamiento](docs/ENTRENAMIENTO.md)** · **[Universidad y Estudio](docs/FASE_3_ESTUDIO.md)** · **[Asistente IA](docs/FASE_4_IA_V1.md)**
 
 ---

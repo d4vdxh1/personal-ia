@@ -1,6 +1,6 @@
 # Fase 4B — Acciones confirmadas del asistente
 
-**Estado al 7/11/2026:** 4B.1 de hábitos publicada por PR #8 y aceptada funcionalmente por el usuario. 4B.2 de check-in está implementada en una nueva rama y requiere aplicar su migración antes de probarse con Gemini.
+**Estado al 7/11/2026:** 4B.1 de hábitos publicada por PR #8 y aceptada funcionalmente por el usuario. 4B.2 de check-in está implementada en una nueva rama y tiene la migración aplicada y está lista para probarse con Gemini desde localhost.
 
 ## Entrega 4B.1 — Marcar un hábito desde la IA
 
@@ -61,8 +61,14 @@ Ejemplo para probar después de aplicar la migración y arrancar la rama:
 
 La tarjeta muestra fecha y valores. Si ya existe un check-in, Confirmar requiere marcar «Confirmo que quiero actualizar estos valores del check-in de hoy». Los campos opcionales omitidos y las notas privadas mantienen sus valores. El servidor verifica otra vez propietario, fecha, caducidad y versión. Si hubo cambios desde la propuesta, se pide una nueva. Cancelar cierra la propuesta.
 
-La migración `20261108024434_ai_checkin_actions.sql` agrega `assistant_private.checkin_actions`, validación SQL y RPC invocadoras. La auditoría conserva propietario, tipo, objetivo, versión, decisión, resultado y tiempos. Las propuestas pendientes almacenan los valores estructurados necesarios hasta procesarse. Al confirmar, cancelar, vencer o fallar durante la decisión, se borran esos valores de la auditoría. La caducidad se comprueba cuando se intenta decidir. La tabla queda fuera de la Data API y con RLS. Hay un máximo de veinte propuestas por cuenta y día.
+La migración `20261108025732_ai_checkin_actions.sql` agrega `assistant_private.checkin_actions`, validación SQL y RPC invocadoras. La auditoría conserva propietario, tipo, objetivo, versión, decisión, resultado y tiempos. Las propuestas pendientes almacenan los valores estructurados necesarios hasta procesarse. Al confirmar, cancelar, vencer o fallar durante la decisión, se borran esos valores de la auditoría. La caducidad se comprueba cuando se intenta decidir. La tabla queda fuera de la Data API y con RLS. Hay un máximo de veinte propuestas por cuenta y día.
 
 La revisión automática rechazó aplicar esta migración en el Supabase compartido porque la autorización anterior correspondía a hábitos. Pendiente autorización explícita para 4B.2. Tras aplicarla, cotejar su versión real y alinear el archivo, probar con dos identidades bajo rollback y verificar el recorrido con Gemini antes de integrar el nuevo PR.
 
 QA local aprobado con `npm run lint`, `npm test`, `npm run test:db`, `npm run build`, `npm run typecheck` y `npm run test:browser`. Chromium usa Gemini/Auth simulados y SQL de prueba. Dos conexiones PostgreSQL independientes comprobaron idempotencia, exclusión de propuestas antiguas y actualización manual concurrente. SMTP y 4B.3 continúan pendientes.
+
+### Migración 4B.2 aplicada con autorización
+
+El usuario autorizó aplicar la migración el 7/11/2026. Supabase registró `20261108025732_ai_checkin_actions`. Pasaron las comprobaciones remotas con dos identidades desechables bajo rollback para permisos, cancelación, creación y actualización confirmada, aislamiento, notas, auditoría y reintentos. El bloqueo de autorización anterior queda resuelto.
+
+Para probar, actualizar y ejecutar la rama `feat/fase-4b2-checkin-confirmado` conectada al Supabase actual. Usar el ejemplo completo de escalas de esta guía. La migración ya está aplicada. El PR #9 sigue pendiente de aceptación del recorrido real con Gemini.

@@ -3,7 +3,7 @@
 **Última actualización:** 2026-11-07
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
 **Estado general:** Fases 0–3 implementadas y aceptadas funcionalmente; **Fase 4A activada y aceptada por el usuario el 2026-11-06** tras configurar Gemini en Vercel y probar el chat. La confirmación de uso no equivale a una auditoría independiente del proveedor o de aislamiento con dos cuentas reales.
-**Fase actual:** 4B.1 de hábitos publicada mediante PR #8 (`286e387`), con migración aplicada y aceptación funcional del usuario desde localhost. 4B.2 de check-in implementada en la rama `feat/fase-4b2-checkin-confirmado`, con migración pendiente de autorización para la base compartida.
+**Fase actual:** 4B.1 de hábitos publicada mediante PR #8 (`286e387`), con migración aplicada y aceptación funcional del usuario desde localhost. 4B.2 de check-in implementada en la rama `feat/fase-4b2-checkin-confirmado`, con migración aplicada en la base compartida y prueba funcional del usuario pendiente.
 
 ## Entrega y continuidad del 2026-11-06
 
@@ -203,5 +203,11 @@ La migración `20261108023553_ai_habit_actions` está aplicada. El código está
 
 - PR #8 integrado como `286e387552489e339a766755ea7ab7740140c924`. CI del último commit del PR aprobado y Vercel informó despliegue de producción exitoso. Sin sesión, `/assistant` redirige al login con `private, no-store`. La aceptación del usuario corresponde al recorrido desde localhost.
 - 4B.2 permite proponer un check-in de hoy con energía, estado emocional y satisfacción (1–5), más sueño (0–24) y estrés opcionales. El servidor reutiliza la validación del formulario y rechaza campos adicionales. El chat muestra los valores y requiere aceptar explícitamente la actualización de un registro existente.
-- La migración `20261108024434_ai_checkin_actions.sql` está probada en bases desechables. Su aplicación en el Supabase compartido fue rechazada por la revisión automática por faltar autorización específica de 4B.2. Sigue pendiente. La migración de hábitos ya aplicada conserva su historial.
+- La migración `20261108025732_ai_checkin_actions.sql` está probada en bases desechables. Su aplicación en el Supabase compartido fue rechazada por la revisión automática por faltar autorización específica de 4B.2. Sigue pendiente. La migración de hábitos ya aplicada conserva su historial.
 - QA local aprobado para lint, lógica, SQL, compilación, tipos y Chromium. Nueva tarjeta verificada a 360/390/768/800/930/1280 px. Dos conexiones PostgreSQL verificaron reintentos y propuestas simultáneas con una modificación manual. Pendiente CI remoto y prueba funcional con Gemini tras autorizar y aplicar la migración.
+
+## 2026-11-07 — Migración de check-in aplicada
+
+El usuario autorizó expresamente aplicar la migración 4B.2 en `personal-ia`. Supabase la registró como `20261108025732_ai_checkin_actions`, y se alineó el archivo SQL con el historial remoto. La prueba remota con dos identidades desechables y rollback aprobó propuesta, cancelación, creación, aislamiento, actualización explícita, preservación de notas, auditoría y repetición. RLS activo y acceso anónimo a la RPC denegado. Los asesores no agregaron hallazgos de esta migración.
+
+El PR #9 continúa en borrador. Próximo paso, probar desde localhost con la rama `feat/fase-4b2-checkin-confirmado` y Gemini. La migración ya está aplicada y no debe repetirse.

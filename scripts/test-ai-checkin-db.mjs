@@ -11,7 +11,7 @@ const propose = async (v = values, user = alice) =>
 const decide = async (id, choice = "confirm", overwrite = false, user = alice) =>
   (await asUser(db, user, () => query("select public.decide_checkin_proposal($1,$2,$3) r", [id, choice, overwrite])))[0].r;
 try {
-  for (const file of ["20261108023553_ai_habit_actions.sql", "20261108024434_ai_checkin_actions.sql"]) {
+  for (const file of ["20261108023553_ai_habit_actions.sql", "20261108025732_ai_checkin_actions.sql"]) {
     await db.exec(await readFile("supabase/migrations/" + file, "utf8"));
   }
   await query("insert into auth.users(id) values($1),($2)", [alice, bob]);

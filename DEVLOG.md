@@ -607,3 +607,9 @@ La migración `20261108023553_ai_habit_actions` está aplicada. El código está
 - Migración incremental con dos RPC SECURITY INVOKER, RLS, permisos por columna, caducidad, control de versión y auditoría. Al procesar una propuesta se eliminan los valores del registro de auditoría y se conserva el resultado mínimo.
 - Pasaron lint, suites de lógica y SQL, build, typecheck y navegador con Gemini/Auth simulados. Inspeccionadas capturas a 390 y 1280 px, controles verificados en seis anchos. Prueba con dos conexiones PostgreSQL aprobada para doble envío, dos propuestas y modificación manual concurrente.
 - La aplicación remota de esta nueva migración fue bloqueada por la revisión automática por requerir autorización específica para la base compartida. Se continúa con PR revisable y documentación completa. No se ha ejecutado la migración de check-in remota.
+
+## 2026-11-07 — Migración 4B.2 autorizada y verificada
+
+- Tras la instrucción «aplica la migración», se aplicó en el Supabase compartido como `20261108025732_ai_checkin_actions`. Archivo SQL y referencias alineados con esa versión.
+- Test remoto transaccional con dos usuarios desechables aprobado para crear/cancelar propuestas, aislamiento por dueño, creación confirmada, aceptación explícita de actualización, preservación de notas/valores omitidos y auditoría mínima. Todas las filas y usuarios de prueba se revirtieron.
+- No hubo hallazgos nuevos de asesores sobre esta migración. Se conserva el alcance de las comprobaciones previas. Pendiente aceptación funcional del usuario con Gemini desde localhost antes de integrar PR #9.

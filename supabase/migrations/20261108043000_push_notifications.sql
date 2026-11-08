@@ -16,7 +16,7 @@ create table public.push_subscriptions (
 );
 -- Enforcement in the database, not only the HTTP API, against excessive subscriptions.
 create function public.limit_push_subscriptions() returns trigger
-language plpgsql set search_path = '' as $
+language plpgsql set search_path = '' as $$
 begin
   perform pg_advisory_xact_lock(hashtextextended(new.user_id::text, 5002));
   if new.active and (select count(*) from public.push_subscriptions
@@ -25,7 +25,7 @@ begin
   end if;
   return new;
 end;
-$;
+$$;
 revoke all on function public.limit_push_subscriptions() from public, anon, authenticated;
 create trigger limit_push_subscriptions before insert or update of active,user_id on public.push_subscriptions
   for each row execute function public.limit_push_subscriptions();

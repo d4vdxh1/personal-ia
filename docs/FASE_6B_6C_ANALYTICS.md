@@ -17,7 +17,7 @@
 - El servidor calcula de nuevo los agregados: nunca acepta cifras arbitrarias del navegador.
 - Se envían **solo números agregados**, sin títulos, notas, correos, IDs o textos de usuarios. No persiste la respuesta.
 - Gemini sin herramientas ni funciones de escritura. Máximo de salida y timeout en provider existente. Usa **la misma reserva atómica `reserve_ai_request`** del asistente (20/día, enfriamiento 5s) y sus cuotas de API existentes.
-- Si no hay actividad suficiente, informa antes de consumir una consulta. La respuesta es orientativa; evita recomendaciones médicas o afirmaciones no sustentadas.
+- La reserva de cuota ocurre **antes** de consultar agregados, para limitar abuso de lecturas: también cuenta si después se detecta que no hay actividad suficiente. La respuesta es orientativa; evita recomendaciones médicas o afirmaciones no sustentadas.
 - Pruebas de validación de períodos, valores faltantes, diferencias y prompt solo numérico. CI de navegador y base.
 
 ## Límites y pendientes

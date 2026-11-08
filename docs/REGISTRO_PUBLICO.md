@@ -1,13 +1,13 @@
 # Registro abierto y acceso con Google
 
-**Estado:** implementación propuesta en la rama `feat/public-signup-google-auth`. El código no habilita automáticamente Google OAuth ni la entrega de correo de Supabase: requieren configuración en sus paneles. No anunciar acceso público hasta completar las comprobaciones con cuentas nuevas.
+**Estado (2026-11-07):** Google OAuth configurado y probado por el usuario en localhost con dos cuentas y datos aislados. Primer lanzamiento con Google para altas nuevas y contraseñas para cuentas existentes. Registro y recuperación por email quedan deshabilitados por defecto hasta configurar SMTP y seguridad.
 
 ## Flujos
 
-- **Correo:** `/signup` valida correo y contraseña de mínimo 10 caracteres. `signUp()` crea la cuenta; con confirmación de correo activa, envía un enlace y no crea una sesión utilizable hasta confirmar.
+- **Correo (pendiente):** `/signup` permite registrar nuevas cuentas solo con `EMAIL_SIGNUP_ENABLED=true` en el servidor; por defecto desactivado hasta disponer de SMTP y confirmación de correo verificados.
 - **Google:** botón «Continuar con Google» en inicio y registro, `signInWithOAuth` con redirect a `/auth/callback`, intercambio de PKCE code del lado del servidor.
 - **Sesiones:** el proxy permite exclusivamente login, signup, recuperación y callbacks sin autenticación; los módulos privados conservan la comprobación actual de sesión y las políticas RLS. `handle_new_user` crea una fila en `profiles` para cada nuevo usuario; no requiere migración nueva.
-- **Recuperación:** `/forgot-password` solicita correo y `/auth/confirm` acepta el token de recuperación para abrir `/reset-password`.
+- **Recuperación (pendiente):** `/forgot-password` solo permite solicitar emails con `EMAIL_RECOVERY_ENABLED=true`. Por defecto desactivada.
 
 ## Configuración de Supabase Auth
 
@@ -44,17 +44,25 @@ En [Supabase Dashboard](https://supabase.com/dashboard/project/bpfhuuemibcxhxxoq
 
 ## Vercel
 
-Configurar `NEXT_PUBLIC_SITE_URL=https://personal-ia-two.vercel.app` en Production; luego ejecutar un redeploy. No hace falta Pro ni otra base de datos.
+Configurar `NEXT_PUBLIC_SITE_URL=https://personal-ia-two.vercel.app` en Production y conservar `EMAIL_SIGNUP_ENABLED=false` y `EMAIL_RECOVERY_ENABLED=false` (o no establecerlas). Redesplegar tras modificar variables. Google Client Secret se gestiona en Supabase, no en Vercel.
 
 ## Pruebas antes de cerrar
 
 - [ ] `/signup` accesible sin sesión, contraseñas coinciden y se valida longitud.
 - [ ] Se recibe correo real y se confirma por enlace.
 - [ ] Nuevo usuario entra a Mi Día sin datos de otras personas.
-- [ ] Inicio con Google desde navegador privado y perfil creado.
+- [x] Google OAuth probado en desarrollo local con dos cuentas y aislamiento confirmado por el usuario.
 - [ ] Cierre de sesión e inicio posterior por correo y Google.
 - [ ] Recuperación de contraseña por correo.
 - [ ] Dos cuentas reales diferentes no acceden a datos ajenos.
 - [ ] Límite de correos, protección antiabuso y uso público de Gemini revisados.
 
 **Costes:** abrir el registro hace que más usuarios compartan cuotas de Vercel, Supabase y Gemini. El límite de 20 consultas al día es por cuenta y no evita que múltiples cuentas consuman los límites gratuitos globales.
+
+
+## Lanzamiento gradual y seguridad
+
+- Google OAuth disponible para nuevas cuentas; el login por contraseña existente se mantiene.
+- Las banderas de servidor impiden iniciar registro y recuperación por correo desde la app, pero **no desactivan los endpoints públicos de Supabase Auth**. Revisar CAPTCHA, rate limits y protección contra contraseñas filtradas en Supabase.
+- El SMTP y las plantillas compatibles con SSR se requieren antes de habilitar altas por email y recuperación. No desactivar `Confirm email` para evitar la configuración.
+- Las 20 consultas diarias de Gemini son **por cuenta**, no un tope global; revisar cuotas y alertas del proveedor de IA.

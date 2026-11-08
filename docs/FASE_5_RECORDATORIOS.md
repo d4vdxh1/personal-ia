@@ -9,7 +9,7 @@
 - Vista `/reminders`: agregar, editar, completar y cancelar recordatorios; integrada al menú de escritorio/móvil.
 - Fechas interpretadas en `America/Argentina/Buenos_Aires`, zona horaria vigente del proyecto, y almacenadas como `timestamptz`.
 - No se promete envío automático: sin scheduler, la lista es informativa.
-- Migración `20261108050000_reminders.sql` **NO aplicada a Supabase producción**. No habilitar preview en el Supabase principal antes de revisar la migración y la política de previews.
+- Migración `20261108035009_reminders.sql` **NO aplicada a Supabase producción**. No habilitar preview en el Supabase principal antes de revisar la migración y la política de previews.
 
 ## Próximas entregas
 

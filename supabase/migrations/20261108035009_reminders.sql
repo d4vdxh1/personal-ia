@@ -1,5 +1,5 @@
 -- Phase 5A.1: manual reminder planning only.
--- This schema does NOT send messages or notifications. Do not run remotely before approval.
+-- This schema does NOT send messages or notifications. Applied to Supabase personal-ia as migration 20261108035009_reminders on 2026-11-08.
 begin;
 create table public.reminders (
   id uuid primary key default gen_random_uuid(),

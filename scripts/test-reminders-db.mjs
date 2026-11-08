@@ -4,7 +4,7 @@ import { createTestDatabase, asUser, alice, bob } from "./test-db.mjs";
 const db=await createTestDatabase(false);
 const query=async (sql,args=[]) => (await db.query(sql,args)).rows;
 try{
-  await db.exec(await readFile("supabase/migrations/20261108050000_reminders.sql","utf8"));
+  await db.exec(await readFile("supabase/migrations/20261108035009_reminders.sql","utf8"));
   await query("insert into auth.users(id) values($1),($2)",[alice,bob]);
   assert.equal((await query("select relrowsecurity from pg_class where oid='public.reminders'::regclass"))[0].relrowsecurity,true);
   assert.equal((await query("select has_table_privilege('anon','public.reminders','select') allowed"))[0].allowed,false);

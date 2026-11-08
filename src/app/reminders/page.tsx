@@ -14,7 +14,8 @@ import { getBuenosAiresToday } from "@/lib/habits/data";
 import { reminderLocalInput } from "@/lib/reminders/validation";
 
 export const dynamic = "force-dynamic";
-export default async function RemindersPage() {
+export default async function RemindersPage({ searchParams }: { searchParams:Promise<{calendar?:string}> }) {
+  const { calendar }=await searchParams;
   const {user,profile} = await getAccount();
   const client = await createClient();
   const { reminders,error } = await loadReminders(client,user.id);
@@ -43,6 +44,11 @@ export default async function RemindersPage() {
       <strong>Exportar recordatorios a Google Calendar</strong>
       <p>Elegí un recordatorio individual para crearlo una sola vez en tu calendario. No se sincronizan cambios ni recurrencias automáticamente.</p>
       {!calendarCanWrite && <Link href="/calendar">Conectar o autorizar Google Calendar</Link>}
+      {calendar==="exported" && <p role="status">Recordatorio agregado a Google Calendar.</p>}
+      {calendar==="already" && <p role="status">Ese recordatorio ya estaba exportado.</p>}
+      {calendar==="invalid" && <p role="alert">El recordatorio no está disponible para exportar.</p>}
+      {calendar==="unauthorized" && <p role="alert">Google necesita autorización adicional. Revisá la conexión en Calendar.</p>}
+      {calendar==="unavailable" && <p role="alert">No se pudo verificar la exportación. Podés reintentarlo sin duplicar el evento.</p>}
     </section>}
     <section className="card study-card" aria-label="Recordatorios recurrentes">
       <h2>Recordatorios recurrentes</h2>
@@ -70,7 +76,7 @@ export default async function RemindersPage() {
           <div className="study-record-head"><h3>{reminder.title}</h3><span className="study-chip">Pendiente</span></div>
           <p className="goal-meta">Programado para <time dateTime={reminder.scheduled_at}>{when(reminder.scheduled_at)}</time></p>
           {reminder.notes && <p>{reminder.notes}</p>}
-          {calendarExportEnabled && calendarCanWrite && (
+          {calendarExportEnabled && calendarCanWrite && !reminder.series_id && (
             linkedReminders.has(reminder.id)
               ? <p role="status">Exportado a Google Calendar</p>
               : <form action={exportReminderToGoogle} className="reminder-actions">

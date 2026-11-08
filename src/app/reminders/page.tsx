@@ -1,10 +1,13 @@
 import { TrackingShell } from "@/components/tracking-shell";
 import { ReminderForm } from "@/components/reminders/reminder-form";
+import { RecurrenceForm } from "@/components/reminders/recurrence-form";
+import { toggleReminderSeries } from "./recurrence-actions";
+import { recurrenceLabel } from "@/lib/reminders/recurrence";
 import { PushPermission } from "@/components/reminders/push-permission";
 import { closeReminder } from "./actions";
 import { getAccount } from "@/lib/auth/account";
 import { createClient } from "@/lib/supabase/server";
-import { loadReminders } from "@/lib/reminders/data";
+import { loadReminders, loadReminderSeries } from "@/lib/reminders/data";
 import { getBuenosAiresToday } from "@/lib/habits/data";
 import { reminderLocalInput } from "@/lib/reminders/validation";
 
@@ -13,6 +16,7 @@ export default async function RemindersPage() {
   const {user,profile} = await getAccount();
   const client = await createClient();
   const { reminders,error } = await loadReminders(client,user.id);
+  const {series, error:seriesError}=await loadReminderSeries(client,user.id);
   const { date } = getBuenosAiresToday();
   const pushEnabled = process.env.PUSH_DELIVERY_ENABLED === "true";
   const pending = reminders.filter(r=>r.status==="pending");
@@ -26,6 +30,21 @@ export default async function RemindersPage() {
       <p>{pushEnabled ? "Activá las notificaciones en este dispositivo para recibir recordatorios. La entrega depende del navegador, conexión y permisos; puede demorarse." : "En esta primera versión podés guardar y administrar tus recordatorios. La entrega de notificaciones llegará cuando se habilite el programador."}</p>
     </section>
     <PushPermission deliveryEnabled={pushEnabled} />
+    <section className="card study-card" aria-label="Recordatorios recurrentes">
+      <h2>Recordatorios recurrentes</h2>
+      {seriesError ? <p className="form-error">No pudimos cargar las series recurrentes.</p> : <>
+        <RecurrenceForm />
+        {series.length===0 ? <p className="habit-empty">Todavía no tenés series recurrentes.</p> : series.map(item=><article className="study-record" key={item.id}>
+          <div className="study-record-head"><h3>{item.title}</h3><span className="study-chip">{item.active?"Activa":"Pausada"}</span></div>
+          <p className="goal-meta">{recurrenceLabel(item.frequency,item.weekdays,item.month_day)} · {item.local_time.slice(0,5)} ({item.timezone})</p>
+          {item.notes && <p>{item.notes}</p>}
+          <form action={toggleReminderSeries} className="reminder-actions"><input type="hidden" name="id" value={item.id}/>
+            <button className="secondary-button" name="active" value={item.active?"false":"true"}>{item.active?"Pausar serie":"Reactivar serie"}</button>
+          </form>
+          <details><summary>Editar serie</summary><RecurrenceForm series={item}/></details>
+        </article>)}
+      </>}
+    </section>
     {error ? <section className="card"><p className="form-error" role="alert">
       No pudimos cargar los recordatorios. Verificá la conexión y que la migración de Fase 5 esté aplicada.
     </p></section> : <div className="journal-layout">

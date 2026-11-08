@@ -20,7 +20,8 @@ await hashFiles(join(root,'src'));
 for(const file of ['package-lock.json','next.config.ts','tsconfig.json','postcss.config.mjs'])hash.update(await readFile(join(root,file)));
 const fingerprint=hash.digest('hex'); let previousBuild; try { previousBuild=JSON.parse(await readFile(join(workspace,'test-build.json'),'utf8'));await access(join(workspace,'.next/BUILD_ID')); } catch {previousBuild=null;}
 const db = await createTestDatabase();
-for (const file of ["20261106152923_ai_usage.sql", "20261108023553_ai_habit_actions.sql", "20261108025732_ai_checkin_actions.sql", "20261108033000_ai_study_actions.sql", "20261108035009_reminders.sql"]) {
+await db.exec("create role service_role nologin; create schema vault; create table vault.decrypted_secrets(name text,decrypted_secret text);");
+for (const file of ["20261106152923_ai_usage.sql", "20261108023553_ai_habit_actions.sql", "20261108025732_ai_checkin_actions.sql", "20261108033000_ai_study_actions.sql", "20261108035009_reminders.sql","20261108043426_push_notifications.sql","20261108184507_reminder_recurrences.sql"]) {
   await db.exec(await readFile(join(root, "supabase/migrations", file), "utf8"));
 }
 await db.query("insert into auth.users(id) values($1)", [alice]);
@@ -50,7 +51,7 @@ const server = createServer((req, res) => {
         const sql=table ? `select * from public.${ident(name)}(${args.map((_,i)=>'$'+(i+1)).join(',')})` : `select public.${ident(name)}(${args.map((_,i)=>'$'+(i+1)).join(',')}) as value`;
         const rows=(await db.query(sql,args)).rows; return table ? rows.map(normalize) : rows[0].value;
       }
-      assert.ok(['profiles','habits','habit_entries','daily_checkins','journal_entries','goals','training_exercises','training_plans','training_plan_items','training_schedule','training_sessions','training_sets','training_metrics','training_symptoms','study_subjects','study_assignments','study_exams','study_sessions','reminders'].includes(name));
+      assert.ok(['profiles','habits','habit_entries','daily_checkins','journal_entries','goals','training_exercises','training_plans','training_plan_items','training_schedule','training_sessions','training_sets','training_metrics','training_symptoms','study_subjects','study_assignments','study_exams','study_sessions','reminders','reminder_series'].includes(name));
       const args=[], where=[];
       for (const [field, value] of url.searchParams) {
         if (['select','order','limit','offset','on_conflict'].includes(field)) continue;
@@ -180,6 +181,19 @@ try {
   await page.getByLabel('Tema estudiado').fill('Arquitectura de software');
   await page.getByRole('button',{name:'Registrar',exact:true}).click();
   await page.getByRole('heading',{name:'Arquitectura de software',exact:true}).waitFor();
+  await page.goto(base+'/reminders');
+  await page.getByRole('heading',{name:'Recordatorios recurrentes'}).waitFor();
+  await page.getByLabel('Título',{exact:true}).fill('Revisar apuntes');
+  await page.getByLabel('Repetición').selectOption('daily');
+  const seriesStart=new Date(Date.now()+86400000).toISOString().slice(0,10);
+  await page.getByLabel('Fecha de inicio').fill(seriesStart);
+  await page.getByLabel('Hora local').fill('18:00');
+  await page.getByRole('button',{name:'Crear serie'}).click();
+  await page.getByRole('heading',{name:'Revisar apuntes'}).waitFor();
+  await page.getByRole('button',{name:'Pausar serie'}).click();
+  await page.getByRole('button',{name:'Reactivar serie'}).waitFor();
+  await page.getByRole('button',{name:'Reactivar serie'}).click();
+  await page.getByRole('button',{name:'Pausar serie'}).waitFor();
   await page.goto(base+'/study');
   await page.getByText('Trabajo final',{exact:true}).waitFor();
   // Phase 5A.1: manual reminder saves to user-owned RLS-backed table. No delivery is implied.

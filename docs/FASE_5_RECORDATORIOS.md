@@ -35,3 +35,7 @@ Permitir que Gemini **proponga** título, fecha, hora y recurrencia. Confirmaci�
 ## Limitaciones y pendientes transversales
 
 La entrega Web Push depende del permiso y del servicio de cada navegador, de la red y del sistema operativo. Puede retrasarse y sigue un modelo de mejor esfuerzo. Zona horaria actual del código: `America/Argentina/Buenos_Aires`; pasar a preferencia de usuario antes de consolidar recurrencias. Completar pruebas independientes de aislamiento con dos sesiones reales y observabilidad de fallos.
+
+## Implementación técnica de Fase 5A.3 (rama)
+
+Véase [FASE_5A3_RECURRENCIAS.md](FASE_5A3_RECURRENCIAS.md): series, materialización por el Cron existente y pruebas. La migración nueva se aplica solo tras completar CI y revisión. No modifica funciones 5B/5C.

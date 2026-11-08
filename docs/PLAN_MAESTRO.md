@@ -1207,6 +1207,11 @@ Comenzar con carga manual/conversacional.
 
 ---
 
+## Continuidad — 2026-11-07
+
+- Google OAuth desplegado en Vercel y confirmado por el usuario; PR #6 integrado. El nuevo registro mediante email y recuperación quedan pospuestos hasta SMTP y antiabuso, sin bloquear el roadmap.
+- Próxima implementación: Fase 4B.1, propuesta de marcar un hábito con confirmación explícita, control de identidad/RLS, idempotencia y auditoría. Ver `docs/FASE_4B_PLAN.md`. La IA continúa solo lectura hasta implementar estos controles.
+
 ## Estado consolidado de fases (2026-11-06)
 
 | Fase | Estado | Próximo hito o evidencia |

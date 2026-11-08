@@ -155,4 +155,20 @@ end;
 $$;
 revoke all on function public.finish_push_delivery(uuid,uuid,text) from public, anon, authenticated;
 grant execute on function public.finish_push_delivery(uuid,uuid,text) to service_role;
+
+-- Vault-backed configuration never exposes keys to unauthenticated or regular accounts.
+-- Edge Functions use the injected server-side service key to fetch these values.
+create function public.get_push_dispatch_config()
+returns jsonb
+language sql security definer set search_path = ''
+as $push$
+  select jsonb_build_object(
+    'cronSecret', (select decrypted_secret from vault.decrypted_secrets where name='push_cron_secret' limit 1),
+    'publicKey', (select decrypted_secret from vault.decrypted_secrets where name='push_vapid_public' limit 1),
+    'privateKey', (select decrypted_secret from vault.decrypted_secrets where name='push_vapid_private' limit 1),
+    'subject', (select decrypted_secret from vault.decrypted_secrets where name='push_vapid_subject' limit 1)
+  );
+$push$;
+revoke all on function public.get_push_dispatch_config() from public, anon, authenticated;
+grant execute on function public.get_push_dispatch_config() to service_role;
 commit;

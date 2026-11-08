@@ -1,12 +1,16 @@
 -- Fase 5A.2 — ACTIVACIÓN MANUAL, NO es una migración automática.
 -- Ejecutar sólo tras desplegar y verificar la Edge Function, configurar Vault y aprobar producción.
 -- 1. Habilitar desde Supabase Extensions: pg_cron y pg_net.
--- 2. En Supabase Vault guardar secretos con nombres:
+-- 2. Guardar estos cinco valores en Supabase Vault, preferentemente desde el Dashboard:
 --    push_project_url = https://<project-ref>.supabase.co
---    push_cron_secret = token aleatorio >= 32 bytes, mismo valor que CRON_SECRET en Secrets de Edge Function.
---    Crear esos secretos por Dashboard, no insertar claves en SQL ni commits.
+--    push_cron_secret = token aleatorio de 32 bytes o más
+--    push_vapid_public = clave pública VAPID, también configurada en Vercel
+--    push_vapid_private = clave privada VAPID (NO PUBLICAR)
+--    push_vapid_subject = https://personal-ia-two.vercel.app
+-- No cargar claves en código ni variables NEXT_PUBLIC_ ni logs.
+-- La Edge Function recibe una configuración Vault por una RPC service_role-only.
 -- 3. Verificar que ambos existan antes de programar:
--- select name from vault.decrypted_secrets where name in ('push_project_url','push_cron_secret');
+-- select name from vault.decrypted_secrets where name in ('push_project_url','push_cron_secret','push_vapid_public','push_vapid_private','push_vapid_subject');
 -- 4. Programar UNA invocación por minuto. El token sólo se resuelve en el SQL de pg_cron:
 select cron.schedule(
   'dia-a-dia-push-dispatch',

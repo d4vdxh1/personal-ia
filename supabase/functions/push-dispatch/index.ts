@@ -19,16 +19,26 @@ async function sameSecret(left:string,right:string):Promise<boolean>{
 }
 Deno.serve(async request=>{
   if(request.method!=="POST")return new Response("Method not allowed",{status:405});
-  const secret=Deno.env.get("CRON_SECRET");
-  if(!secret || secret.length<32 || !await sameSecret(request.headers.get("x-cron-secret")??"",secret))
-    return new Response("Unauthorized",{status:401});
-  const url=Deno.env.get("SUPABASE_URL"),key=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  const publicKey=Deno.env.get("WEB_PUSH_VAPID_PUBLIC_KEY");
-  const privateKey=Deno.env.get("WEB_PUSH_VAPID_PRIVATE_KEY");
-  const subject=Deno.env.get("WEB_PUSH_VAPID_SUBJECT");
-  if(!url||!key||!publicKey||!privateKey||!subject)
-    return new Response("Worker not configured",{status:503});
+  const url=Deno.env.get("SUPABASE_URL");
+  let key=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if(!key){
+    try {
+      const all=JSON.parse(Deno.env.get("SUPABASE_SECRET_KEYS")??"{}") as Record<string,string>;
+      key=all.default??null;
+    }catch{key=null;}
+  }
+  if(!url||!key) return new Response("Worker credentials unavailable",{status:503});
   const client=createClient(url,key,{auth:{autoRefreshToken:false,persistSession:false}});
+  const {data:rawConfig,error:configError}=await client.rpc("get_push_dispatch_config");
+  if(configError||!rawConfig||typeof rawConfig!=="object")
+    return new Response("Worker config unavailable",{status:503});
+  const config=rawConfig as {cronSecret?:string;publicKey?:string;privateKey?:string;subject?:string};
+  const secret=config.cronSecret, publicKey=config.publicKey;
+  const privateKey=config.privateKey, subject=config.subject;
+  if(!secret||secret.length<32||!publicKey||!privateKey||!subject)
+    return new Response("Worker configuration incomplete",{status:503});
+  if(!await sameSecret(request.headers.get("x-cron-secret")??"",secret))
+    return new Response("Unauthorized",{status:401});
   const {data,error}=await client.rpc("claim_push_deliveries",{p_limit:25});
   if(error||!Array.isArray(data)){
     console.error("push.claim_failed",error?.code??"invalid");

@@ -34,6 +34,8 @@ const worker=readFileSync("supabase/functions/push-dispatch/index.ts","utf8");
 const compiledWorker=ts.transpileModule(worker,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}});
 assert.ok(!compiledWorker.diagnostics?.some(x=>x.category===ts.DiagnosticCategory.Error));
 assert.match(worker,/sameSecret/);
+assert.match(worker,/get_push_dispatch_config/);
+assert.ok(!worker.includes('Deno.env.get("CRON_SECRET")'));
 assert.match(worker,/claim_push_deliveries/);
 assert.match(worker,/finish_push_delivery/);
 console.log("PASS: endpoints Web Push permitidos, sin SSRF, schema estricta y worker/SW presentes.");

@@ -29,7 +29,7 @@ for(const [key,value] of [
  ["amount_pyg","01"],["occurred_on","2026-02-30"],["occurred_on","2026-11-09"],["category","salario"],
  ["note","n".repeat(301)],
 ]){
- const copy=new FormData(form);copy.set(key,value);
+ const copy=new FormData();for(const [k,v] of form)copy.set(k,v);copy.set(key,value);
  assert.equal(parseFinanceTransaction(copy,"2026-11-08"),null,key);
 }
 assert.equal(financeFormat(45000).includes("₲"),true);

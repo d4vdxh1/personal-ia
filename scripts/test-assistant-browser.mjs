@@ -245,14 +245,14 @@ export async function testStudyBrowser({ page, base, db, output, setRevoked, set
   await card.getByText("Sesión de estudio registrada.").waitFor();
   assert.equal(await count(), before+1);
   const row = (await db.query("select s.topic,s.duration_minutes,x.name from public.study_sessions s join public.study_subjects x on x.id=s.subject_id where s.user_id=$1 order by s.created_at desc limit 1",[alice])).rows[0];
-  assert.equal(row.topic, "Arquitectura de software");
+  assert.equal(row.topic, "Repaso de arquitectura con IA");
   assert.equal(row.duration_minutes, 45);
   assert.equal(row.name, "Ingeniería del Software");
   const replay = await page.request.post(endpoint + "/decision", { headers, data: decision });
   assert.equal(replay.status(), 409);
   assert.equal((await replay.json()).result, "confirmed");
   await page.goto(base + "/study?view=sessions");
-  await page.getByRole("heading", { name: "Arquitectura de software", exact: true }).waitFor();
+  await page.getByRole("heading", { name: "Repaso de arquitectura con IA", exact: true }).waitFor();
   assert.equal(first.date, next.date);
   console.log("PASS: estudio chat/tarjeta, sin ejecución automática, cancelación, validación, confirmación, reintento y seis anchos.");
 }

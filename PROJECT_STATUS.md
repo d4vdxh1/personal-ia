@@ -1,6 +1,6 @@
 # PROJECT_STATUS — Día a Día
 
-**Última actualización:** 2026-11-06
+**Última actualización:** 2026-11-07
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
 **Estado general:** Fases 0–3 implementadas y aceptadas funcionalmente; **Fase 4A activada y aceptada por el usuario el 2026-11-06** tras configurar Gemini en Vercel y probar el chat. La confirmación de uso no equivale a una auditoría independiente del proveedor o de aislamiento con dos cuentas reales.
 **Fase actual:** Fase 4A — **cerrada funcionalmente por confirmación del usuario** (PR #5, CI y Supabase verificados; Gemini configurado y probado por el usuario en Vercel). **Siguiente: Fase 4B** — herramientas de escritura validadas, confirmadas y auditadas; no implementada.
@@ -170,3 +170,11 @@ PR #2 integrado: https://github.com/d4vdxh1/personal-ia/pull/2. CI y despliegue 
 - PR #6 integra nuevas pantallas de autenticación con las páginas públicas de presentación y legales.
 - Para el primer lanzamiento, Google permite crear cuentas y las cuentas existentes siguen usando contraseña. Registro y recuperación por email quedan bloqueados por defecto con banderas de servidor hasta SMTP.
 - El bloqueo en la app **no bloquea la API pública de registro de Supabase**. Revisar CAPTCHA, límites y consumo de Gemini antes de promocionar el acceso.
+
+
+## 2026-11-07 — Google OAuth publicado; SMTP pospuesto
+
+- PR #6 fusionado (`4636ba9`), CI y Vercel aprobados; el usuario confirmó visualmente el nuevo login de producción. Google OAuth y aislamiento de dos cuentas comprobados localmente por el usuario.
+- **Aplazado sin bloquear el proyecto:** SMTP externo para altas con email, edición de plantillas y confirmación/recuperación por correo público. No hay dominio propio; sin acceso a configuración de AgendaV. El correo anterior de Supabase solo acredita envío en ese otro proyecto, no envío libre a usuarios externos en Día a Día.
+- Conservar `EMAIL_SIGNUP_ENABLED=false` y `EMAIL_RECOVERY_ENABLED=false`; no desactivar confirmación de correo. Pendientes CAPTCHA/Turnstile, límites Auth, protección de contraseñas filtradas, advertencias sobre EXECUTE de `rls_auto_enable()` y cuota global de Gemini.
+- **Siguiente fase:** 4B.1: propuestas de marcado de hábitos mediante IA, con confirmación explícita y permisos RLS. Plan: `docs/FASE_4B_PLAN.md`. No se han habilitado escrituras del asistente.

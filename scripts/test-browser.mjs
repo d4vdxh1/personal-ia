@@ -21,7 +21,7 @@ for(const file of ['package-lock.json','next.config.ts','tsconfig.json','postcss
 const fingerprint=hash.digest('hex'); let previousBuild; try { previousBuild=JSON.parse(await readFile(join(workspace,'test-build.json'),'utf8'));await access(join(workspace,'.next/BUILD_ID')); } catch {previousBuild=null;}
 const db = await createTestDatabase();
 await db.exec("create role service_role nologin; create schema vault; create table vault.decrypted_secrets(name text,decrypted_secret text);");
-for (const file of ["20261106152923_ai_usage.sql", "20261108023553_ai_habit_actions.sql", "20261108025732_ai_checkin_actions.sql", "20261108033000_ai_study_actions.sql", "20261108035009_reminders.sql","20261108043426_push_notifications.sql","20261108184507_reminder_recurrences.sql","20261108185959_google_calendar_connections.sql","20261108191759_ai_reminder_actions.sql"]) {
+for (const file of ["20261106152923_ai_usage.sql", "20261108023553_ai_habit_actions.sql", "20261108025732_ai_checkin_actions.sql", "20261108033000_ai_study_actions.sql", "20261108035009_reminders.sql","20261108043426_push_notifications.sql","20261108184507_reminder_recurrences.sql","20261108185959_google_calendar_connections.sql","20261108191759_ai_reminder_actions.sql","20261108220510_finance_transactions.sql"]) {
   await db.exec(await readFile(join(root, "supabase/migrations", file), "utf8"));
 }
 await db.query("insert into auth.users(id) values($1)", [alice]);
@@ -30,7 +30,7 @@ const encode = v => Buffer.from(JSON.stringify(v)).toString("base64url");
 const token = `${encode({alg:'HS256',typ:'JWT'})}.${encode({sub:alice,aud:'authenticated',role:'authenticated',exp:Math.floor(Date.now()/1000)+3600})}.test`;
 let revoked = false, failRead = false, failWrite = false, queue = Promise.resolve();
 const ident = value => { assert.match(value, /^[a-z_][a-z_0-9]*$/); return `"${value}"`; };
-const numericFields = new Set(['weight_kg','waist_cm','arm_cm','max_weight','total_volume','volume']);
+const numericFields = new Set(['weight_kg','waist_cm','arm_cm','max_weight','total_volume','volume','amount_pyg']);
 const normalize = row => Object.fromEntries(Object.entries(row).map(([key, value]) => [key, value instanceof Date && /date$/.test(key) ? value.toISOString().slice(0,10) : value !== null && numericFields.has(key) ? Number(value) : value]));
 const server = createServer((req, res) => {
   res.setHeader("Content-Type", "application/json");
@@ -51,7 +51,7 @@ const server = createServer((req, res) => {
         const sql=table ? `select * from public.${ident(name)}(${args.map((_,i)=>'$'+(i+1)).join(',')})` : `select public.${ident(name)}(${args.map((_,i)=>'$'+(i+1)).join(',')}) as value`;
         const rows=(await db.query(sql,args)).rows; return table ? rows.map(normalize) : rows[0].value;
       }
-      assert.ok(['profiles','habits','habit_entries','daily_checkins','journal_entries','goals','training_exercises','training_plans','training_plan_items','training_schedule','training_sessions','training_sets','training_metrics','training_symptoms','study_subjects','study_assignments','study_exams','study_sessions','reminders','reminder_series','google_calendar_connections'].includes(name));
+      assert.ok(['profiles','habits','habit_entries','daily_checkins','journal_entries','goals','training_exercises','training_plans','training_plan_items','training_schedule','training_sessions','training_sets','training_metrics','training_symptoms','study_subjects','study_assignments','study_exams','study_sessions','reminders','reminder_series','google_calendar_connections','finance_transactions'].includes(name));
       const args=[], where=[];
       for (const [field, value] of url.searchParams) {
         if (['select','order','limit','offset','on_conflict'].includes(field)) continue;
@@ -150,6 +150,23 @@ try {
   await page.getByLabel('Correo electrónico').fill(user.email); await page.getByLabel('Contraseña',{exact:true}).fill('test-password'); await page.getByRole('button',{name:'Ingresar',exact:true}).click(); await page.waitForURL(base+'/');
   const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Argentina/Buenos_Aires',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
   console.log('Browser: login correcto');
+  // 8A: isolate all finance E2E checks in the embedded test database.
+  await page.goto(base+'/finance');
+  await page.getByRole('heading',{name:'Mis finanzas'}).waitFor();
+  await page.getByLabel('Monto (guaraníes, sin decimales)').fill('45000');
+  await page.getByLabel('Descripción opcional').fill('Almuerzo de prueba');
+  await page.getByRole('button',{name:'Guardar movimiento'}).click();
+  await page.getByText('Movimiento registrado.').waitFor();
+  await page.goto(base+'/finance');
+  await page.getByText('Almuerzo de prueba').waitFor();
+  await page.getByText('45.000 ₲').first().waitFor();
+  await page.getByText('Eliminar movimiento').click();
+  await page.getByLabel('Confirmo que deseo eliminar este movimiento.').check();
+  await page.getByRole('button',{name:'Eliminar definitivamente'}).click();
+  await page.getByText('Movimiento eliminado.').waitFor();
+  await page.goto(base+'/finance');
+  await page.getByText('No hay movimientos para este mes.').waitFor();
+
   await page.goto(base+'/calendar');
   await page.getByRole('heading',{name:'Google Calendar'}).waitFor();
   await page.getByText('La conexión todavía requiere configurar un cliente OAuth').waitFor();
@@ -242,7 +259,7 @@ try {
     setFailWrite: value => { failWrite = value; },
   });
   await testReminderBrowser({page,base:assistantBase,db});
-  const paths=['/','/analytics','/reminders','/calendar','/assistant','/menu','/study','/study?view=subjects','/study?view=assignments','/study?view=exams','/study?view=sessions','/habits','/check-in','/journal','/goals','/profile','/training','/training?view=exercises','/training?view=plans','/training?view=history','/training?view=health',sessionUrl.replace(base,''),exerciseUrl.replace(base,'')];
+  const paths=['/','/finance','/analytics','/reminders','/calendar','/assistant','/menu','/study','/study?view=subjects','/study?view=assignments','/study?view=exams','/study?view=sessions','/habits','/check-in','/journal','/goals','/profile','/training','/training?view=exercises','/training?view=plans','/training?view=history','/training?view=health',sessionUrl.replace(base,''),exerciseUrl.replace(base,'')];
   for(const width of [360,390,768,800,930,1280]){
     await page.setViewportSize({width,height:900});
     for(const path of paths){ await page.goto(base+path); await page.locator('h1').waitFor(); assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`overflow ${width} ${path}`); const nav=page.getByRole('navigation',{name:'Navegación principal',exact:true}); assert.equal(await nav.isVisible(),true); const box=await nav.boundingBox(); if(width<=800)assert.ok(box.y>500,`menú móvil ${width}`); else assert.ok(box.x<250,`menú escritorio ${width}`);

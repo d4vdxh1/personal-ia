@@ -45,6 +45,8 @@ try {
  const monthly=await q("select occurrence_date from public.reminders where title='Mensual'");
  assert.ok(monthly.every(x=>Number(String(x.occurrence_date).slice(8,10))===31));
  const count=(await q("select count(*)::int n from public.reminders where series_id=$1",[series]))[0].n;
- assert.ok(count<=15,"no duplicates");
+ assert.ok(count<=32,"no duplicate occurrences across expanded 31-day horizon");
+ const unique=(await q("select count(distinct occurrence_date)::int n from public.reminders where series_id=$1",[series]))[0].n;
+ assert.equal(count,unique,"one row per local occurrence date");
  console.log("PASS: RLS, service-only materialization, unique occurrences, pause/resume, manual cancellation, monthly skip.");
 }finally{await db.close();}

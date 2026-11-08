@@ -613,3 +613,9 @@ La migración `20261108023553_ai_habit_actions` está aplicada. El código está
 - Tras la instrucción «aplica la migración», se aplicó en el Supabase compartido como `20261108025732_ai_checkin_actions`. Archivo SQL y referencias alineados con esa versión.
 - Test remoto transaccional con dos usuarios desechables aprobado para crear/cancelar propuestas, aislamiento por dueño, creación confirmada, aceptación explícita de actualización, preservación de notas/valores omitidos y auditoría mínima. Todas las filas y usuarios de prueba se revirtieron.
 - No hubo hallazgos nuevos de asesores sobre esta migración. Se conserva el alcance de las comprobaciones previas. Pendiente aceptación funcional del usuario con Gemini desde localhost antes de integrar PR #9.
+
+## 2026-11-08 — Aceptación y publicación autorizada de 4B.2
+
+El usuario confirmó «está super» después de las instrucciones para probar desde localhost y pidió actualizar GitHub y desplegar en Vercel. Se registra como aceptación funcional por reporte del usuario y autorización para integrar PR #9. La migración `20261108025732_ai_checkin_actions` está aplicada y verificada. El alcance de las pruebas remotas con dos identidades se conserva, y continúa pendiente una comprobación independiente del agente con dos sesiones reales.
+
+Los controles del código funcional aprobaron en GitHub Actions #93, incluidos SQL y Playwright. La entrega siguiente es 4B.3, registrar sesiones de estudio con resolución de materia del propietario, duración válida, vista previa, confirmación y auditoría. SMTP sigue pendiente de forma independiente.

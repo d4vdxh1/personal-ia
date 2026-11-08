@@ -1,9 +1,9 @@
 # PROJECT_STATUS — Día a Día
 
-**Última actualización:** 2026-11-07
+**Última actualización:** 2026-11-08
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
 **Estado general:** Fases 0–3 implementadas y aceptadas funcionalmente; **Fase 4A activada y aceptada por el usuario el 2026-11-06** tras configurar Gemini en Vercel y probar el chat. La confirmación de uso no equivale a una auditoría independiente del proveedor o de aislamiento con dos cuentas reales.
-**Fase actual:** 4B.1 de hábitos publicada mediante PR #8 (`286e387`), con migración aplicada y aceptación funcional del usuario desde localhost. 4B.2 de check-in implementada en la rama `feat/fase-4b2-checkin-confirmado`, con migración aplicada en la base compartida y prueba funcional del usuario pendiente.
+**Fase actual:** 4B.1 de hábitos publicada mediante PR #8 (`286e387`), con migración aplicada y aceptación funcional del usuario desde localhost. 4B.2 de check-in implementada en la rama `feat/fase-4b2-checkin-confirmado`, con migración aplicada, aceptación funcional del usuario y publicación autorizada mediante PR #9. Siguiente entrega del roadmap, 4B.3 de sesiones de estudio.
 
 ## Entrega y continuidad del 2026-11-06
 
@@ -211,3 +211,9 @@ La migración `20261108023553_ai_habit_actions` está aplicada. El código está
 El usuario autorizó expresamente aplicar la migración 4B.2 en `personal-ia`. Supabase la registró como `20261108025732_ai_checkin_actions`, y se alineó el archivo SQL con el historial remoto. La prueba remota con dos identidades desechables y rollback aprobó propuesta, cancelación, creación, aislamiento, actualización explícita, preservación de notas, auditoría y repetición. RLS activo y acceso anónimo a la RPC denegado. Los asesores no agregaron hallazgos de esta migración.
 
 El PR #9 continúa en borrador. Próximo paso, probar desde localhost con la rama `feat/fase-4b2-checkin-confirmado` y Gemini. La migración ya está aplicada y no debe repetirse.
+
+## 2026-11-08 — Aceptación y publicación autorizada de 4B.2
+
+El usuario confirmó «está super» después de las instrucciones para probar desde localhost y pidió actualizar GitHub y desplegar en Vercel. Se registra como aceptación funcional por reporte del usuario y autorización para integrar PR #9. La migración `20261108025732_ai_checkin_actions` está aplicada y verificada. El alcance de las pruebas remotas con dos identidades se conserva, y continúa pendiente una comprobación independiente del agente con dos sesiones reales.
+
+Los controles del código funcional aprobaron en GitHub Actions #93, incluidos SQL y Playwright. La entrega siguiente es 4B.3, registrar sesiones de estudio con resolución de materia del propietario, duración válida, vista previa, confirmación y auditoría. SMTP sigue pendiente de forma independiente.

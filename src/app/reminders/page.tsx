@@ -14,17 +14,18 @@ export default async function RemindersPage() {
   const client = await createClient();
   const { reminders,error } = await loadReminders(client,user.id);
   const { date } = getBuenosAiresToday();
+  const pushEnabled = process.env.PUSH_DELIVERY_ENABLED === "true";
   const pending = reminders.filter(r=>r.status==="pending");
   const history = reminders.filter(r=>r.status!=="pending");
   const when = (iso:string) => reminderLocalInput(iso).replace("T"," ");
   return <TrackingShell title="Recordatorios" active="reminders" dateLabel={date.split("-").reverse().join("/")}
       displayName={profile?.display_name.trim() || user.email || "?"}
-      copy="Organizá los avisos que querés recibir. Por ahora se guardan en tu lista.">
+      copy={pushEnabled ? "Administrá tus recordatorios y notificaciones en tus dispositivos." : "Organizá los avisos que querés recibir. Por ahora se guardan en tu lista."}>
     <section className="card reminder-notice" role="note">
-      <strong>Los avisos automáticos todavía no están activos.</strong>
-      <p>En esta primera versión podés guardar y administrar tus recordatorios. La entrega de notificaciones llegará con el scheduler y la integración de Google Calendar.</p>
+      <strong>{pushEnabled ? "Los avisos push están disponibles." : "Los avisos automáticos todavía no están activos."}</strong>
+      <p>{pushEnabled ? "Activá las notificaciones en este dispositivo para recibir recordatorios. La entrega depende del navegador, conexión y permisos; puede demorarse." : "En esta primera versión podés guardar y administrar tus recordatorios. La entrega de notificaciones llegará cuando se habilite el programador."}</p>
     </section>
-    <PushPermission />
+    <PushPermission deliveryEnabled={pushEnabled} />
     {error ? <section className="card"><p className="form-error" role="alert">
       No pudimos cargar los recordatorios. Verificá la conexión y que la migración de Fase 5 esté aplicada.
     </p></section> : <div className="journal-layout">

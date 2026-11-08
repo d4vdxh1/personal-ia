@@ -17,7 +17,7 @@ async function sendSubscription(method:"POST"|"DELETE", body:unknown) {
   const data = await response.json();
   if(!response.ok) throw new Error(data.error ?? "No pudimos guardar el cambio.");
 }
-export function PushPermission() {
+export function PushPermission({ deliveryEnabled }: { deliveryEnabled: boolean }) {
   const [state,setState]=useState<State>("checking");
   const [message,setMessage]=useState("");
   const [publicKey,setPublicKey]=useState<string|null>(null);
@@ -54,7 +54,7 @@ export function PushPermission() {
       const serialized=subscription.toJSON();
       await sendSubscription("POST",{endpoint:serialized.endpoint,
         keys:{p256dh:serialized.keys?.p256dh,auth:serialized.keys?.auth}});
-      setState("subscribed");setMessage("Dispositivo registrado. Los avisos se activarán cuando el programador esté configurado.");
+      setState("subscribed");setMessage(deliveryEnabled ? "Dispositivo registrado. Podés recibir tus próximos recordatorios." : "Dispositivo registrado. Los avisos se activarán cuando el programador esté configurado.");
     }catch(e){setState("ready");setMessage(e instanceof Error?e.message:"No se pudo activar el dispositivo.");}
   }
   async function disable(){
@@ -71,7 +71,7 @@ export function PushPermission() {
   }
   return <section className="card reminder-notice" aria-label="Notificaciones push">
     <h2>Notificaciones en este dispositivo</h2>
-    <p>Activá los avisos solo si querés recibir recordatorios en este dispositivo. El envío automático todavía no está habilitado.</p>
+    <p>Activá los avisos solo si querés recibir recordatorios en este dispositivo. {deliveryEnabled ? "El sistema enviará avisos de tus recordatorios programados. La entrega depende del navegador y la conexión." : "El envío automático todavía no está habilitado."}</p>
     {state==="unsupported" && <p role="status">Web Push no está disponible aquí o faltan las claves del servidor. En iPhone necesitás agregar la web a la pantalla de inicio.</p>}
     {state==="denied" && <p role="status">El navegador bloquea las notificaciones. Podés habilitarlas desde los permisos del sitio.</p>}
     {state==="subscribed" && <button className="secondary-button" disabled={false} onClick={disable}>Desactivar avisos en este dispositivo</button>}

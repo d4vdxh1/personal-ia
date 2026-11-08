@@ -1,6 +1,7 @@
 -- Fase 5A.2 — ACTIVACIÓN MANUAL, NO es una migración automática.
 -- Ejecutar sólo tras desplegar y verificar la Edge Function, configurar Vault y aprobar producción.
--- 1. Habilitar desde Supabase Extensions: pg_cron y pg_net.
+-- 1. Habilitar pg_cron y pg_net en Supabase tras la migración principal.
+-- 1a. Verificar que `select extname from pg_extension where extname in ('pg_cron','pg_net');` devuelva dos filas.
 -- 2. Guardar estos cinco valores en Supabase Vault, preferentemente desde el Dashboard:
 --    push_project_url = https://<project-ref>.supabase.co
 --    push_cron_secret = token aleatorio de 32 bytes o más

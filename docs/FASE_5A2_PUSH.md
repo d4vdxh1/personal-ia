@@ -25,3 +25,7 @@
 ## Limitaciones deliberadas
 
 No integra todavía Gemini ni Google Calendar, no introduce notificaciones por correo ni recurrencias. No garantiza el minuto exacto: hay latencia de scheduler y del servicio push. No envía recordatorios vencidos más de 24 horas. Si cambia la hora de un recordatorio, la nueva fecha crea una clave de entrega nueva; la antigua se invalida mientras la fila anterior siga en estado pending antes de enviarla. Las notificaciones push son un canal de mejor esfuerzo.
+
+## Estado en producción
+
+La pantalla utiliza `PUSH_DELIVERY_ENABLED=false` por defecto y muestra claramente que los avisos no se envían hasta activar el backend. Tras validar el worker, Vault y cron, establecer `PUSH_DELIVERY_ENABLED=true` (solo servidor) en Vercel antes del despliegue aprobado. La clave VAPID pública por sí sola no prueba que se estén enviando avisos.

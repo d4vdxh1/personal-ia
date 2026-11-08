@@ -180,3 +180,7 @@ Registro de sesiones de estudio desde Gemini preparado en la rama `feat/fase-4b3
 ### En desarrollo — Fase 5A.1
 
 Se inició la gestión manual de recordatorios en rama, con validación y permisos por propietario. Guardar un recordatorio en la lista **todavía no genera una notificación**. La migración y el módulo requieren revisión y autorización antes de publicarse.
+
+### Fase 5A.2 en revisión — Web Push
+
+Código de notificaciones push en rama separada. La gestión de recordatorios manuales sigue operativa, pero **los avisos automáticos no se envían aún**. La infraestructura Web Push requiere migración, configuración VAPID y cron bajo autorización. Ver `docs/FASE_5A2_PUSH.md`.

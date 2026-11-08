@@ -19,7 +19,7 @@ export function RecurrenceForm({series}:{series?:ReminderSeries}) {
       <div className="study-field"><label htmlFor={"series-notes-"+(series?.id??"new")}>Notas (opcional)</label>
         <textarea id={"series-notes-"+(series?.id??"new")} name="notes" rows={2} maxLength={1000} defaultValue={series?.notes}/></div>
       <div className="study-field"><label htmlFor={"series-frequency-"+(series?.id??"new")}>Repetición</label>
-        <select id={"series-frequency-"+(series?.id??"new")} name="frequency" value={frequency} onChange={event=>setFrequency(event.target.value)}>
+        <select id={"series-frequency-"+(series?.id??"new")} name="frequency" value={frequency} onChange={event=>{const value=event.target.value; if(value==="daily"||value==="weekly"||value==="monthly")setFrequency(value);}}>
           <option value="daily">Todos los días</option><option value="weekly">Días seleccionados</option>
           <option value="monthly">Cada mes (día de inicio)</option>
         </select></div>

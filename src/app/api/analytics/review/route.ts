@@ -16,6 +16,12 @@ export async function POST(request:NextRequest){
   return send({error:"Indicá período válido y autorizá explícitamente el envío de agregados a Gemini."},400);
  const key=process.env.GEMINI_API_KEY;
  if(!key)return send({error:"Gemini no está configurado en este entorno."},503);
+ // Reserve before database aggregation to prevent unlimited expensive reads.
+ const reservation=await client.rpc("reserve_ai_request");
+ if(reservation.error||!reservation.data||typeof reservation.data!=="object")
+  return send({error:"No pudimos comprobar el límite diario."},503);
+ const quota=reservation.data as {allowed?:boolean;remaining?:number};
+ if(!quota.allowed)return send({error:"Alcanzaste tu límite diario de Gemini o solicitaste otra revisión muy pronto."},429);
  const days=periodDays(resolvePeriod(body.period));
  const dates=lastNDates(paraguayDate(),days*2);
  const loaded=await loadAnalytics(client,userId,dates);
@@ -24,11 +30,6 @@ export async function POST(request:NextRequest){
  const current=buildAnalytics(dates.slice(days),loaded.data);
  const payload=reviewPayload(current,previous,resolvePeriod(body.period));
  if(!isUsefulReview(payload))return send({error:"Todavía no hay suficientes registros en este período para una revisión útil."},422);
- const reservation=await client.rpc("reserve_ai_request");
- if(reservation.error||!reservation.data||typeof reservation.data!=="object")
-  return send({error:"No pudimos comprobar el límite diario."},503);
- const quota=reservation.data as {allowed?:boolean;remaining?:number};
- if(!quota.allowed)return send({error:"Alcanzaste tu límite diario de Gemini o solicitaste otra revisión muy pronto."},429);
  try{
   const response=await new GeminiProvider(key).generate([{role:"user",parts:[{text:reviewPrompt(payload)}]}],false);
   const answer=response.text.trim();

@@ -1,37 +1,37 @@
-# Fase 5 — Recordatorios y Google Calendar
+# Fase 5 — Recordatorios, Web Push y Google Calendar
 
-**Inicio:** 2026-11-08 · **Rama inicial:** `feat/fase-5a-recordatorios`. Este documento distingue agenda persistente de avisos realmente entregados.
+**Estado al 2026-11-08:** 5A.1 y 5A.2 publicadas; **siguiente incremento 5A.3**. Las evidencias cronológicas están en [DEVLOG](../DEVLOG.md).
 
-## Alcance 5A.1: recordatorios manuales (en revisión)
+## Fase 5A.1 — Recordatorios manuales (publicada)
 
-- Tabla `public.reminders`: propietario, título, notas, instante programado, estado y auditoría temporal básica.
-- RLS CRUD por `auth.uid()`, sin acceso anónimo; listado acotado y validación del servidor.
-- Vista `/reminders`: agregar, editar, completar y cancelar recordatorios; integrada al menú de escritorio/móvil.
-- Fechas interpretadas en `America/Argentina/Buenos_Aires`, zona horaria vigente del proyecto, y almacenadas como `timestamptz`.
-- No se promete envío automático: sin scheduler, la lista es informativa.
-- Migración `20261108035009_reminders.sql` **NO aplicada a Supabase producción**. No habilitar preview en el Supabase principal antes de revisar la migración y la política de previews.
+Pantalla `/reminders` para crear, editar, completar y cancelar recordatorios, con RLS por `auth.uid()`, fecha en `timestamptz` y validación de sesión/propiedad. Migración **ya aplicada** `20261108035009_reminders`. No repetir.
 
-## Próximas entregas
+## Fase 5A.2 — Notificaciones Web Push (publicada)
 
-**5A.2 — Ejecución programada y alertas:** diseñar worker cron/Edge Function, claim atómico por vencimiento, idempotencia y reintentos con límite, registro de entregas y estado observable; configurar proveedor de notificaciones con consentimiento y prueba de recepción real. Nunca delegar el reloj a Gemini.
+PR [#13](https://github.com/d4vdxh1/personal-ia/pull/13), `main@d402a7b`, CI aprobado, Vercel Ready. Service worker, permisos independientes por navegador, RLS, suscripciones, cola privada, RPC restringidas, VAPID Vault y Edge Function `push-dispatch`. Cron `dia-a-dia-push-dispatch` activo cada minuto.
 
-**5A.3 — Recurrencias:** reglas explícitas, manejo de cambios de horario/zona, suspensión y excepciones.
+Migraciones **aplicadas**, no repetir: `20261108043426_push_notifications` y `20261108043654_push_scheduler_extensions`.
 
-**5B — Google Calendar:** OAuth con scopes mínimos, almacenamiento cifrado de credenciales, alta/actualización/desvinculación, sincronización selectiva y deduplicación por IDs; no usar credenciales del login Google como si fueran credenciales de Calendar. Probar revocación, errores 401/429 y eventos duplicados.
+**Prueba funcional:** el usuario confirmó recepción en celular y en Google Chrome/Windows. Brave también quedó funcionando según el usuario tras corregir su configuración de mensajes push. Estos reportes no sustituyen un E2E de seguridad con dos cuentas ni garantizan entregas puntuales en todo navegador.
 
-**5C — Gemini:** proponer recordatorios estructurados con confirmación humana y auditoría, solo tras existir backend/scheduler verificables.
+## Fase 5A.3 — Recurrencias (próxima)
 
-## Criterios de cierre de 5A.1
+- Elegir frecuencia diaria, semanal o mensual, días elegidos y opciones de pausa/cancelación.
+- Definir serie y ocurrencias para que un aviso ya procesado no se envíe otra vez.
+- Interpretar zona horaria en el perfil; manejar cambio de mes, fechas sin día equivalente y cambios de horario.
+- Validar propietario con RLS y evitar duplicados en Cron bajo concurrencia.
+- Pruebas SQL, unitarias, Playwright y un recordatorio recurrente real; migraciones en PR antes de publicar.
 
-1. Pruebas de validación de fecha/título/notas y no permitir programar instantes pasados.
-2. Tests SQL de RLS, usuario ajeno y acceso anónimo; navegación móvil/escritorio.
-3. CI verde, migración aislada probada, revisión y autorización antes de tocar Supabase de producción.
-4. No afirmar que un recordatorio será notificado sin un canal habilitado y verificado.
+**Pendientes de decisión de producto:** cómo representar el fin de una serie, qué hacer con ocurrencias omitidas y si una edición modifica solo una aparición o toda la serie.
 
-## Fase 5A.2 (rama PR pendiente)
+## Fase 5B — Google Calendar
 
-Se prepararon service worker, consentimiento, suscripciones por usuario con RLS, cola privada, reclamación con bloqueo, worker de Supabase Edge Functions y runbook manual de Cron+Vault. **Nada de 5A.2 está activado en producción**; falta aprobar migración, generar secretos VAPID, desplegar Edge Function y habilitar cron. Ver `docs/FASE_5A2_PUSH.md`.
+La conexión Calendar requiere OAuth y scopes **adicionales al login con Google**. MVP propuesto: conectar/desconectar, leer próximos eventos de un calendario elegido y visualizarlos sin duplicar recordatorios. Después, proponer creación y sincronización bidireccional solo con consentimiento explícito. Tokens cifrados, refresh, revocación, manejo 401/429 e IDs externos estables.
 
-## 2026-11-08 — Actualización 5A.2
+## Fase 5C — Crear recordatorios con Gemini
 
-Web Push implementado, Vault y worker desplegados, cron activo. La prueba básica del worker devolvió HTTP 200 sin suscriptores; pendiente validar la entrega final en un móvil con permisos concedidos. La aplicación debe mantener una comunicación honesta entre programado, enviado y recibido.
+Permitir que Gemini **proponga** título, fecha, hora y recurrencia. Confirmación obligatoria; la API valida usuario, hora, permisos, duplicados y auditoría. El envío lo ejecuta Cron; Gemini no es el scheduler.
+
+## Limitaciones y pendientes transversales
+
+La entrega Web Push depende del permiso y del servicio de cada navegador, de la red y del sistema operativo. Puede retrasarse y sigue un modelo de mejor esfuerzo. Zona horaria actual del código: `America/Argentina/Buenos_Aires`; pasar a preferencia de usuario antes de consolidar recurrencias. Completar pruebas independientes de aislamiento con dos sesiones reales y observabilidad de fallos.

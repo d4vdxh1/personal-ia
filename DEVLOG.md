@@ -661,3 +661,11 @@ Se comprobó que el historial remoto de Supabase llega hasta `20261108025732_ai_
 - Supabase Vault almacena URLs, autenticación cron y VAPID; Edge Function `push-dispatch` desplegada y testeada con HTTP 200, sin suscripciones.
 - Cron job `dia-a-dia-push-dispatch` creado, cada minuto. Vercel recibió clave pública y bandera de disponibilidad.
 - CI, merge, deploy y prueba de dispositivo quedan sujetos a verificación; un HTTP 200 vacío no significa recepción real.
+
+## 2026-11-08 — Cierre funcional y despliegue Web Push 5A.2
+
+- PR #13 fusionado en `main@d402a7b`; CI de GitHub Actions aprobado y Vercel Ready. La migración de recordatorios `20261108035009` y las dos de Web Push `20261108043426` y `20261108043654` están aplicadas.
+- Edge Function `push-dispatch` y Supabase Cron (`dia-a-dia-push-dispatch`, cada minuto) activados. VAPID y token del cron protegidos en Vault; RLS por propietario y cola privada.
+- **Pruebas reales reportadas por el usuario:** recepción de recordatorio en celular y en Chrome/Windows. Brave mostró inicialmente `Registration failed - push service error`, anterior al POST de suscripción; después de ajustar la configuración del servicio push, el usuario indicó que quedó solucionado. No se atribuye captura independiente de recepción en Brave.
+- Se considera **5A.2 aceptada funcionalmente**. Persisten las limitaciones Web Push de mejor esfuerzo y pruebas E2E con dos usuarios autenticados distintos; no prometer puntualidad exacta.
+- Próximos incrementos: 5A.3 recurrencias, 5B Google Calendar OAuth y sincronización selectiva, 5C Gemini con confirmación de recordatorios.

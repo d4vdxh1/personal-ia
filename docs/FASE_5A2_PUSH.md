@@ -1,6 +1,6 @@
 # Fase 5A.2 — Web Push seguro
 
-**Estado:** implementación en rama `feat/fase-5a2-push-notifications`; **NO desplegada**, **NO migrada**, **NO programada**. Se requiere autorización separada para la activación de cada recurso.
+**Estado: PUBLICADA Y VALIDADA FUNCIONALMENTE (2026-11-08).** PR [#13](https://github.com/d4vdxh1/personal-ia/pull/13), `main@d402a7b`, Vercel Ready. El usuario confirmó recepción en celular y Chrome/Windows; Brave quedó funcionando tras ajustes según su reporte. No repetir las migraciones `20261108043426` y `20261108043654`.
 
 ## Componentes
 
@@ -11,7 +11,7 @@
 5. El archivo `supabase/operations/enable_push_dispatch.sql` contiene un **runbook manual**, no se aplica con la migración. Cron cada minuto con `pg_cron`, `pg_net`, Vault y token de servicio; no crear el trabajo hasta tener Edge Function probada.
 6. Configuración: la clave privada VAPID y `CRON_SECRET` **nunca** se almacenan en Git, tablas públicas, clientes o logs. Configurar `WEB_PUSH_VAPID_PUBLIC_KEY` en Vercel; el worker consulta Vault mediante `get_push_dispatch_config()` (ejecutable solo por `service_role`), donde residen `push_vapid_public`, `push_vapid_private`, `push_vapid_subject`, `push_cron_secret` y `push_project_url`. Generar una única pareja VAPID estable y un secreto aleatorio fuerte; no regenerarlos en cada despliegue.
 
-## Despliegue: secuencia segura (pendiente de aprobación)
+## Secuencia de despliegue realizada (registro histórico)
 
 - Revisar CI, lint, tipos y pruebas SQL en PostgreSQL aislado; pruebas reales de permisos con dos usuarios.
 - Validar migración incremental con `supabase db diff`, políticas RLS, grants, y que RPC no están disponibles para anon/authenticated.
@@ -28,7 +28,7 @@ No integra todavía Gemini ni Google Calendar, no introduce notificaciones por c
 
 ## Estado en producción
 
-La pantalla utiliza `PUSH_DELIVERY_ENABLED=false` por defecto y muestra claramente que los avisos no se envían hasta activar el backend. Tras validar el worker, Vault y cron, establecer `PUSH_DELIVERY_ENABLED=true` (solo servidor) en Vercel antes del despliegue aprobado. La clave VAPID pública por sí sola no prueba que se estén enviando avisos.
+En producción `PUSH_DELIVERY_ENABLED=true` y la clave pública VAPID están en Vercel. El servicio consulta secretos privados de Supabase Vault, y Cron lo ejecuta cada minuto. La clave VAPID pública por sí sola no demuestra una entrega.
 
 ## Publicación autorizada — 2026-11-08
 
@@ -38,4 +38,8 @@ La pantalla utiliza `PUSH_DELIVERY_ENABLED=false` por defecto y muestra claramen
 - Edge Function `push-dispatch` versión 1 ACTIVE, invocación autorizada de prueba HTTP 200 (0 destinatarios).
 - Cron `dia-a-dia-push-dispatch` creado y activo cada minuto, referencia secretos mediante Vault.
 - `PUSH_DELIVERY_ENABLED=true` configurado en producción Vercel; requiere deploy de `main` actualizado.
-- **Pendiente**: verificar el despliegue final y la recepción Web Push con un dispositivo real suscrito. No afirmar entrega real antes de esa prueba.
+- **Validado posteriormente:** despliegue final Vercel Ready; recepción reportada por el usuario en celular y Chrome/Windows; Brave también funcional según su mensaje. No confundir aceptación funcional con garantía universal de entrega ni con E2E independiente usando dos sesiones.
+
+## Diagnóstico de navegadores (2026-11-08)
+
+La suscripción es independiente en cada navegador/dispositivo. La excepción `Registration failed - push service error` en Brave se produjo durante `PushManager.subscribe()`, antes de que la app registrara el endpoint en Supabase. Se resolvió mediante configuración de su servicio push, según el usuario. No alterar credenciales ni migraciones si Chrome recibe correctamente y Brave falla antes de guardar la suscripción; revisar primero opciones de privacidad, permisos y conectividad locales.

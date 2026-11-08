@@ -25,7 +25,7 @@ try {
   const s1=(await sub(1))[0].id;
   assert.equal((await asUser(db,bob,()=>q("select * from public.push_subscriptions"))).length,0);
   assert.equal((await asUser(db,bob,()=>q("delete from public.push_subscriptions where id=$1 returning id",[s1]))).length,0);
-  await assert.rejects(sub("https://127.0.0.1"));
+  await assert.rejects(asUser(db,alice,()=>q("insert into public.push_subscriptions(endpoint,p256dh,auth_key) values($1,$2,$3)",["https://127.0.0.1/private",keys,authKey])));
   await sub(2);await sub(3);await sub(4);await sub(5);
   await assert.rejects(sub(6),/maximum 5 active subscriptions/);
   const reminder=(await asUser(db,alice,()=>q(

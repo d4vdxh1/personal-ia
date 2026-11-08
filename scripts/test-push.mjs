@@ -29,7 +29,7 @@ assert.equal(parsePushEndpoint({...valid}),null);
 const sw=readFileSync("public/sw.js","utf8");
 assert.match(sw,/notificationclick/);
 assert.match(sw,/showNotification/);
-assert.match(sw,/^\/reminders/m);
+assert.match(sw,/\/reminders/);
 const worker=readFileSync("supabase/functions/push-dispatch/index.ts","utf8");
 assert.match(worker,/sameSecret/);
 assert.match(worker,/claim_push_deliveries/);

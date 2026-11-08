@@ -17,9 +17,9 @@ self.addEventListener("notificationclick", (event) => {
   event.notification.close();
   const target = event.notification.data?.url || "/reminders";
   event.waitUntil((async () => {
-    const windows = await clients.matchAll({type:"window",includeUncontrolled:true});
+    const windows = await self.clients.matchAll({type:"window",includeUncontrolled:true});
     const existing = windows.find(w => new URL(w.url).origin === self.location.origin);
     if (existing) { await existing.focus(); if (existing.navigate) await existing.navigate(target); }
-    else await clients.openWindow(target);
+    else await self.clients.openWindow(target);
   })());
 });

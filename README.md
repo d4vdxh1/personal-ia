@@ -41,7 +41,7 @@ El enfoque es simple: **menos fricción para planificar y más claridad para ava
 | **Universidad y Estudio** | Administrar materias, tareas, exámenes y sesiones de estudio. |
 | **Asistente IA** | Consultar datos y confirmar desde Gemini hábitos, check-in y sesiones de estudio. |
 | **Recordatorios y notificaciones** | Guardar recordatorios y recibir Web Push en dispositivos autorizados. |
-| **Estadísticas** | 6A publicado: datos reales y gráfico de líneas de estudio. 6B/6C en revisión: comparación 7/30 días y análisis opcional con Gemini. |
+| **Estadísticas** | Gráficos reales, tendencias y comparación de 7/30 días; revisión opcional con Gemini previo consentimiento, usando totales y promedios. |
 
 ### Asistente personal con Gemini
 
@@ -186,4 +186,4 @@ Las notificaciones son de **mejor esfuerzo**, necesitan permisos individuales po
 </div>
 
 
-**Continuidad Fase 6:** [6A estadísticas](docs/FASE_6A_ANALYTICS.md) · [6B comparaciones y 6C revisión inteligente](docs/FASE_6B_6C_ANALYTICS.md). Google Calendar permanece desactivado a la espera de OAuth propio; la UI se rediseñará después del MVP.
+**Fase 6 publicada:** [6A estadísticas](docs/FASE_6A_ANALYTICS.md) · [6B comparaciones y 6C revisión inteligente](docs/FASE_6B_6C_ANALYTICS.md). Google Calendar permanece desactivado a la espera de OAuth propio; la UI se rediseñará después del MVP.

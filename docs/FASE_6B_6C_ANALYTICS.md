@@ -1,6 +1,6 @@
 # Fase 6B y 6C — Analítica comparativa y revisión opcional
 
-**Estado:** implementación candidata en rama de revisión `feat/fase-6b-6c-analytics`, todavía no publicada.
+**Estado:** PR #20 fusionada en `main@0578f63`, CI #42523136400 aprobado, Vercel preview READY. Despliegue producción iniciado. Falta prueba manual con cuenta real (incluida respuesta Gemini). La rama histórica de desarrollo fue `feat/fase-6b-6c-main`.
 
 ## 6B — Comparaciones con datos reales
 - `/analytics?period=week`: últimos **7 días móviles** comparados con los 7 anteriores.
@@ -25,3 +25,9 @@
 - `month` representa 30 días, no calendarios civil/mensual; puede ampliarse en un diseño posterior.
 - La revisión Gemini requiere `GEMINI_API_KEY` configurada y cuota libre; no se prueba contra API real en CI.
 - Google Calendar 5B continúa aplazado. Rediseño general UX/UI continúa **provisional para el MVP**.
+
+## Publicación y aceptación real
+- Código fusionado en PR #20; GitHub Actions: `npm test`, `npm run test:db`, lint, TypeScript, build y Playwright aprobados.
+- La API de revisión se probó con un proveedor simulado. **No se efectuó llamada real a Gemini con la cuenta del usuario**: comprobar consentimiento, cuota de producción, respuesta y ausencia de escrituras.
+- La variable `GEMINI_API_KEY` se mantiene asignada únicamente a producción. No compartir la clave ni habilitarla indiscriminadamente para todas las ramas preview.
+- Los 30 días son móviles; el rediseño UX/UI total es una tarea posterior al MVP.

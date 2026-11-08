@@ -1,8 +1,8 @@
 # PROJECT_STATUS — Día a Día
 
-**Última actualización:** 2026-11-08 (Fase 6A publicada; Fases 6B y 6C en rama de revisión)
+**Última actualización:** 2026-11-08 (Fase 6A/6B/6C fusionadas; 6C requiere prueba manual en producción)
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
-**Estado general (2026-11-08):** Fases 0–4B, 5A.1–5A.3, 5C y **6A** publicadas; `main@2c9e664`, CI exitoso y Vercel producción READY. UX de recurrencias compacta (opción A), estadísticas de 7 días y gráfico de líneas de estudio disponibles. 5B Google Calendar continúa diferida por OAuth Google Cloud no configurado. **6B y 6C** están desarrollándose en `feat/fase-6b-6c-main`, no fusionadas ni publicadas. La UX/UI actual es provisional para MVP.
+**Estado general (2026-11-08):** Fases 0–4B, 5A.1–5A.3, 5C y **6A, 6B y 6C** fusionadas en `main@0578f63` (PR #19 y #20). 6B: gráficos y comparación de 7/30 días; 6C: generación manual y consentida de revisión Gemini con cuota compartida y solo agregados. PR #20 aprobó CI completo y preview READY; verificar producción READY y realizar prueba real de Gemini con cuenta del usuario antes de considerar aceptación E2E. **5B Google Calendar sigue pendiente de OAuth**. La UX/UI sigue provisional para el MVP.
 **Aceptación funcional 5A.2:** usuario confirmó recepción de Web Push en celular y en Chrome/Windows; indicó que Brave quedó funcionando tras corregir el servicio push. No implica garantía universal de entrega ni una prueba E2E independiente entre dos JWT reales.
 **Estado avanzado (8/11):** 5A.3 PR #15 integrado; 5B.1 PR #16 código publicado pero sin cliente Google OAuth configurado; 5C PR #17 integrado, SQL y CI aprobados. 5B.2 se prepara como PR #18: exportación selectiva con autorización adicional y flag desactivado hasta validar Google. **Siguiente paso:** activar y probar Google OAuth real, aceptar un recordatorio desde Gemini, luego comenzar Fase 6.
 **Migraciones vigentes, no repetir:** `20261108035009_reminders`, `20261108043426_push_notifications`, `20261108043654_push_scheduler_extensions`. Cron `dia-a-dia-push-dispatch` cada minuto, Edge Function activa, VAPID privada en Vault y CI aprobado.
@@ -275,3 +275,13 @@ Supabase migraciones `20261108043426` y `20261108043654` aplicadas. Vault config
 - **6C en rama:** POST `/api/analytics/review`, sesión y origen válidos, consentimiento explícito, agregados numéricos y límite global de Gemini; no hay acciones automáticas ni escrituras en base.
 - Pendientes para publicar 6B/6C: CI unitario, SQL, build, typecheck, browser, prueba real opcional de Gemini con cuenta autorizada, fusión aprobada.
 - Ver [documentación](docs/FASE_6B_6C_ANALYTICS.md). Google Calendar permanece pendiente, al igual que el endurecimiento transversal de seguridad y el rediseño visual posterior al MVP.
+
+## Actualización 2026-11-08 — Publicación de Fase 6B/6C
+
+- PR #20 fusionada con `main` mediante squash; commit `0578f63`. CI GitHub Actions #42523136400: lint, tests, tests SQL, build, TypeScript y navegador **SUCCESS**; Vercel Preview READY.
+- El despliegue a Vercel Production se inicia automáticamente por `main`; verificar estado `READY` del mismo commit y acceso a `/analytics`.
+- Fase 6B: vista de 7 y 30 días móviles, comparaciones con los respectivos períodos anteriores, gráfico de líneas y estados de ausencia de datos.
+- Fase 6C: respuesta con Gemini únicamente por solicitud y consentimiento; se transmiten totales/proporciones, no notas ni títulos. Usa misma cuota que asistente. Gemini key existente solo en producción.
+- **Aceptación real pendiente:** confirmar que Gemini genera una revisión con cuenta autenticada, validar indicadores con registros reales, y revisar factura/cuota si el proveedor limita el servicio.
+- **Otros pendientes:** Google Calendar 5B, fase 7 voz, fase 8 finanzas, fase 9 estabilidad/seguridad, E2E con dos usuarios, Web Analytics, backups/monitoreo, rediseño global de UX/UI posterior al MVP.
+- Esta actualización prevalece sobre secciones históricas del mismo documento que describen Fase 6 como rama o pendientes.

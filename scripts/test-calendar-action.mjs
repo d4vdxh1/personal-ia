@@ -12,7 +12,7 @@ function load(path,deps={}){
  }).outputText;
  const exports={};
  runInNewContext(outputText,{exports,Date,Buffer,URLSearchParams,FormData,Response,AbortSignal,console,
-  process:{env:{GOOGLE_CALENDAR_WRITE_ENABLED:"true"}},
+  process:{env:{GOOGLE_CALENDAR_WRITE_ENABLED:"true"}},fetch:(...args)=>globalThis.fetch(...args),
   require(name){assert.ok(name in deps,"Unknown "+name);return deps[name];}});
  return exports;
 }

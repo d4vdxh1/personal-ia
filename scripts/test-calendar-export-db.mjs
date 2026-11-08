@@ -6,7 +6,7 @@ const q=async(s,p=[]) => (await db.query(s,p)).rows;
 try{
  for(const file of ["20261108035009_reminders.sql",
   "20261108185959_google_calendar_connections.sql",
-  "20261108193700_calendar_event_export.sql"])
+  "20261108194807_calendar_event_export.sql"])
    await db.exec(await readFile("supabase/migrations/"+file,"utf8"));
  await q("insert into auth.users(id) values ($1),($2)",[alice,bob]);
  assert.equal((await q("select relrowsecurity from pg_class where oid='public.google_calendar_event_links'::regclass"))[0].relrowsecurity,true);

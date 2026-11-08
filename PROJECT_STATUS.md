@@ -4,7 +4,7 @@
 **Identidad:** Día a Día · Un paso más. Identificador técnico: personal-ia. Se conservan repositorio, carpeta, proyecto Supabase y URL de Vercel.
 **Estado general (2026-11-08):** Fases 0–4B y 5A.1–5A.2 publicadas. PR #13 fusionado en `main@d402a7b`, Vercel Ready. Gemini propone escrituras confirmadas de hábitos, check-in y estudio; los recordatorios se entregan mediante Web Push por dispositivo suscrito.
 **Aceptación funcional 5A.2:** usuario confirmó recepción de Web Push en celular y en Chrome/Windows; indicó que Brave quedó funcionando tras corregir el servicio push. No implica garantía universal de entrega ni una prueba E2E independiente entre dos JWT reales.
-**Siguiente etapa recomendada:** 5A.3 recurrencias; después 5B integración Google Calendar y 5C creación de recordatorios desde Gemini.
+**Estado avanzado (8/11):** 5A.3 PR #15 integrado; 5B.1 PR #16 código publicado pero sin cliente Google OAuth configurado; 5C PR #17 integrado, SQL y CI aprobados. 5B.2 se prepara como PR #18: exportación selectiva con autorización adicional y flag desactivado hasta validar Google. **Siguiente paso:** activar y probar Google OAuth real, aceptar un recordatorio desde Gemini, luego comenzar Fase 6.
 **Migraciones vigentes, no repetir:** `20261108035009_reminders`, `20261108043426_push_notifications`, `20261108043654_push_scheduler_extensions`. Cron `dia-a-dia-push-dispatch` cada minuto, Edge Function activa, VAPID privada en Vault y CI aprobado.
 
 > Las anotaciones de desarrollo fechadas más abajo son **históricas** y pueden indicar que una fase estaba pendiente cuando se redactaron. El resumen superior prevalece.
@@ -251,3 +251,10 @@ Supabase migraciones `20261108043426` y `20261108043654` aplicadas. Vault config
 - 5A.3 recurrencias integrada PR #15 (`a43e83c`), migración `20261108184507_reminder_recurrences` aplicada y CI aprobado.
 - Fase 5B.1 en rama `feat/fase-5b-google-calendar`: Google Calendar OAuth separado, pantalla de lectura y tokens cifrados en BD. Falta cliente OAuth Google Calendar; aún no se validó con una cuenta Google real.
 - No habilitar credenciales Google Calendar ficticias ni solicitar acceso de escritura antes de revisar el MVP de solo lectura.
+
+## 2026-11-08 — Estado 5A.3 / 5B / 5C
+
+- Recurrencias 5A.3 publicadas (PR #15, migración `20261108184507`), SQL de aislamiento remoto adicional aprobado. Pendiente experiencia real de recurrencia diaria/semanal/mensual validada por usuario.
+- Google Calendar 5B.1 en producción (PR #16) como código de solo lectura; no funciona sin OAuth Google Cloud. 5B.2 PR #18 implementa exportación manual segura, migración `20261108194807` aplicada, **flag de escritura apagado**. No afirmar sincronización completa ni real.
+- Recordatorios desde Gemini 5C publicados (PR #17, migración `20261108191759`), CI completo y prueba remota con cuentas desechables bajo rollback. Pendiente test real de Gemini con confirmación en app.
+- El roadmap posterior comprende Fase 6 analítica inteligente, 7 voz, 8 finanzas y 9 endurecimiento de producción. Ver `docs/ROADMAP_ESTADO_2026-11-08.md`.

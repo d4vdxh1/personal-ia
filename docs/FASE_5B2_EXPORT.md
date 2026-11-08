@@ -21,3 +21,9 @@ La activación requiere el OAuth ya definido en 5B.1 y credenciales propias de G
 - Pruebas de IDs estables, 409/GET con propiedades privadas correctas e incorrectas, campos inválidos, aislamiento RLS y permisos anon.
 - Prueba real aún pendiente: configurar Google Cloud, autorizar una cuenta con scopes correctos, exportar un recordatorio, repetir y comprobar que no se duplica; revocar.
 - **No activar el flag ni declarar sincronización completa sin credenciales y aceptación real de Google.**
+
+## Aplicación de la migración y estado de integración (2026-11-08)
+
+- Migración aditiva aplicada en Supabase como `20261108194807_calendar_event_export`; verificados RLS y control de propietario con dos identidades y rollback. No repetir.
+- Pruebas automatizadas de IDs y exportación con respuestas simuladas Google 201/409, scopes insuficientes, reintentos y vínculo local; CI completo.
+- Google Calendar real sigue **sin activar**: todavía no existen en Vercel las cuatro credenciales OAuth del cliente Google Cloud; el flag `GOOGLE_CALENDAR_WRITE_ENABLED` permanece desactivado. No se realizaron escrituras en calendarios externos.

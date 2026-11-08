@@ -217,3 +217,7 @@ El PR #9 continúa en borrador. Próximo paso, probar desde localhost con la ram
 El usuario confirmó «está super» después de las instrucciones para probar desde localhost y pidió actualizar GitHub y desplegar en Vercel. Se registra como aceptación funcional por reporte del usuario y autorización para integrar PR #9. La migración `20261108025732_ai_checkin_actions` está aplicada y verificada. El alcance de las pruebas remotas con dos identidades se conserva, y continúa pendiente una comprobación independiente del agente con dos sesiones reales.
 
 Los controles del código funcional aprobaron en GitHub Actions #93, incluidos SQL y Playwright. La entrega siguiente es 4B.3, registrar sesiones de estudio con resolución de materia del propietario, duración válida, vista previa, confirmación y auditoría. SMTP sigue pendiente de forma independiente.
+
+## 2026-11-08 — Fase 4B.3 en revisión
+
+Nueva rama `feat/fase-4b3-estudio-confirmado` desde `main@a4ae184`. Se prepararon la integración Gemini, vista previa y confirmación de sesiones de estudio, auditoría mínima, migración incremental y pruebas de lógica/SQL/navegador. La migración `20261108033000_ai_study_actions.sql` **no está aplicada al Supabase de producción**. No se fusionó la rama. Ver `docs/FASE_4B_PLAN.md`. La publicación requiere pruebas aprobadas, revisión y autorización explícita del usuario.

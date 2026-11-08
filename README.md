@@ -172,3 +172,7 @@ Las pruebas de base de datos usan PostgreSQL de prueba y las pruebas de navegado
 [Aplicación](https://personal-ia-two.vercel.app/) · [Repositorio](https://github.com/d4vdxh1/personal-ia) · [Portafolio del desarrollador](https://d4vdxh1.github.io/david-espinola-portfolio/)
 
 </div>
+
+### Desarrollo en revisión — Fase 4B.3
+
+Registro de sesiones de estudio desde Gemini preparado en la rama `feat/fase-4b3-estudio-confirmado`, con propuesta, confirmación y auditoría. No está publicado en `main` ni habilitado en producción; requiere aplicar una migración nueva solo tras autorización. Ver `docs/FASE_4B_PLAN.md`.

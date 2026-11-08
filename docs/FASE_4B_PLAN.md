@@ -78,3 +78,13 @@ Para probar, actualizar y ejecutar la rama `feat/fase-4b2-checkin-confirmado` co
 El usuario confirmó «está super» después de las instrucciones para probar desde localhost y pidió actualizar GitHub y desplegar en Vercel. Se registra como aceptación funcional por reporte del usuario y autorización para integrar PR #9. La migración `20261108025732_ai_checkin_actions` está aplicada y verificada. El alcance de las pruebas remotas con dos identidades se conserva, y continúa pendiente una comprobación independiente del agente con dos sesiones reales.
 
 Los controles del código funcional aprobaron en GitHub Actions #93, incluidos SQL y Playwright. La entrega siguiente es 4B.3, registrar sesiones de estudio con resolución de materia del propietario, duración válida, vista previa, confirmación y auditoría. SMTP sigue pendiente de forma independiente.
+
+## 2026-11-08 — Fase 4B.3: propuesta en rama de revisión (no publicada)
+
+La rama `feat/fase-4b3-estudio-confirmado` parte de `main@a4ae184`. Implementa `propose_study_session` y `decide_study_proposal`: Gemini solo propone una sesión **realizada hoy**, indicando nombre de materia, tema y minutos (1–720). Si falta cualquiera de esos datos se solicita que el usuario lo indique; no se admiten notas, IDs ni fechas elegidas por el modelo.
+
+Ejemplo: «Hoy estudié Ingeniería del Software durante 45 minutos, tema Arquitectura de software». La tarjeta previa contiene materia, fecha, tema y duración, y ofrece Confirmar o Cancelar. Ninguna propuesta graba sesiones antes de confirmar.
+
+La migración incremental `20261108033000_ai_study_actions.sql` queda **solo en GitHub** hasta que el usuario autorice por separado su aplicación a Supabase. Contiene un registro interno con RLS y acceso limitado por columnas; RPC `SECURITY INVOKER`, resolución del nombre contra materias activas del usuario, rechazo de nombres duplicados, límite de 20 propuestas por día, plazo de diez minutos, bloqueo de la propuesta, ejecución transaccional y auditoría mínima. Al decidir, se eliminan del registro interno los campos académicos propuestos, conservando IDs, resultado y tiempos; no se guardan prompts ni notas privadas.
+
+Para dar por completada la fase: revisar resultados de CI (lint, unitarias, SQL/PGlite, build, tipos y Playwright en seis anchos), probar cancelación/confirmación, doble envío, expiración, sesión vencida, materia ajena, cambios concurrentes y error de escritura en entorno aislado. Después, **solo con autorización**, aplicar la migración al Supabase correspondiente, verificarla con usuarios de prueba y autorizar por separado la fusión a main y despliegue en Vercel. No asumir que el preview equivale a producción.

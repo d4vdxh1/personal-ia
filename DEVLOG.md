@@ -619,3 +619,11 @@ La migración `20261108023553_ai_habit_actions` está aplicada. El código está
 El usuario confirmó «está super» después de las instrucciones para probar desde localhost y pidió actualizar GitHub y desplegar en Vercel. Se registra como aceptación funcional por reporte del usuario y autorización para integrar PR #9. La migración `20261108025732_ai_checkin_actions` está aplicada y verificada. El alcance de las pruebas remotas con dos identidades se conserva, y continúa pendiente una comprobación independiente del agente con dos sesiones reales.
 
 Los controles del código funcional aprobaron en GitHub Actions #93, incluidos SQL y Playwright. La entrega siguiente es 4B.3, registrar sesiones de estudio con resolución de materia del propietario, duración válida, vista previa, confirmación y auditoría. SMTP sigue pendiente de forma independiente.
+
+## 2026-11-08 — Desarrollo 4B.3: estudio desde Gemini
+
+- Rama aislada `feat/fase-4b3-estudio-confirmado`, basada en `main@a4ae184`.
+- Gemini puede proponer `subject_name`, `topic` y `duration_minutes`; se rechazan fechas, IDs, notas y argumentos no declarados. Sin confirmación no se inserta una sesión.
+- La RPC de propuesta resuelve la materia activa exclusivamente para `auth.uid()`, comprueba ambigüedad y duración y limita el número de propuestas. Decisión separada con bloqueo, verificación de propietario/RLS, caducidad, reintentos y auditoría sin texto académico después del procesamiento.
+- Agregadas suites de validación de modelo, RLS/PostgreSQL embebido y recorrido de navegador con seis anchuras; **verificar resultados de CI antes de considerar estas pruebas aprobadas**.
+- No se ejecutaron migraciones remotas ni se fusionó el PR. Pendiente: revisión técnica, CI, pruebas autenticadas y autorización del usuario.

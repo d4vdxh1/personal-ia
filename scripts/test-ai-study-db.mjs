@@ -29,7 +29,7 @@ try {
   assert.equal((await propose("Materia desconocida")).status, "not_found");
   await query("insert into public.study_subjects(user_id,name) values($1,'Matemática')", [alice]);
   assert.equal((await propose()).status, "ambiguous");
-  await query("delete from public.study_subjects where user_id=$1 and id=(select max(id) from public.study_subjects where user_id=$1)",[alice]);
+  await query("delete from public.study_subjects where user_id=$1 and id=(select id from public.study_subjects where user_id=$1 order by created_at,id limit 1 offset 1)",[alice]);
   const first = await propose();
   assert.equal(first.status, "pending");
   assert.equal(first.kind, "study");

@@ -3,6 +3,7 @@ import "./globals.css";
 import "./design-v2.css";
 import "./navigation-v2.css";
 import "./study.css";
+import "./reminders.css";
 import "./assistant.css";
 import "./public-pages.css";
 import "./auth-v2.css";

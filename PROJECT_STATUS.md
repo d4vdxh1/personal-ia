@@ -225,3 +225,7 @@ Nueva rama `feat/fase-4b3-estudio-confirmado` desde `main@a4ae184`. Se prepararo
 ## 2026-11-08 — Integración de 4B.3 con activación diferida
 
 El usuario autorizó integrar el PR #10. Antes de fusionarlo se añadió `AI_STUDY_WRITES_ENABLED=false` (servidor) como protección: la herramienta de sesiones de estudio no aparece en Gemini ni la decisión se ejecuta hasta activar la bandera, después de migrar y verificar la base. La migración remota sigue sin ejecutar. Continuar con Fase 5 en rama separada.
+
+## 2026-11-08 — Fase 5A.1 iniciada en rama
+
+Rama `feat/fase-5a-recordatorios` desde `main@9b0bcd9`: gestión manual de recordatorios futuros, con RLS por propietario, validación del servidor y navegación móvil/escritorio. **No hay notificaciones automáticas ni scheduler**; la migración `20261108050000_reminders.sql` está versionada pero NO aplicada remotamente. Requiere CI, revisión, autorización y pruebas antes de publicar. Ver `docs/FASE_5_RECORDATORIOS.md`.

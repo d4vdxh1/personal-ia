@@ -631,3 +631,11 @@ Los controles del código funcional aprobaron en GitHub Actions #93, incluidos S
 ## 2026-11-08 — Protección antes de integrar 4B.3
 
 Se comprobó que el historial remoto de Supabase llega hasta `20261108025732_ai_checkin_actions`; falta `20261108033000_ai_study_actions`. Se agregó bandera segura por defecto `AI_STUDY_WRITES_ENABLED=false` y test que impide ofrecer la tool a Gemini sin habilitación. La integración del PR no debe activar la función antes de aplicar y comprobar la nueva migración con consentimiento específico.
+
+## 2026-11-08 — Primer incremento de recordatorios (Fase 5A.1)
+
+- Nueva rama desde main con tabla de recordatorios y permisos RLS por usuario.
+- Vista de gestión manual: crear, editar, completar, cancelar, historial.
+- Fechas locales convertidas a `timestamptz`; toda escritura exige sesión y propietario.
+- Sin cron, entrega de notificaciones, Calendar OAuth ni tool Gemini. La interfaz explica claramente esa limitación.
+- Migración preparada, no aplicada a Supabase. Pruebas y despliegue pendientes.

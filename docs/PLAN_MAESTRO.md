@@ -1618,3 +1618,7 @@ Los controles del código funcional aprobaron en GitHub Actions #93, incluidos S
 ## Seguimiento 2026-11-08 — Fase 4B.3
 
 En desarrollo en `feat/fase-4b3-estudio-confirmado`: propuestas confirmadas de sesiones de estudio realizadas hoy, con materia activa propia, tema, minutos y auditoría. Migración `20261108033000_ai_study_actions.sql` propuesta, no aplicada en producción. Requiere aprobación de pruebas, autorización de migración y posterior fusión; al terminar seguirá la Fase 5.
+
+## 2026-11-08 — Fase 5 iniciada
+
+Fase 5A.1 en rama `feat/fase-5a-recordatorios`: recordatorios manuales con base de datos, RLS y UI. Sin entrega de notificaciones hasta implementar scheduler/canales. Ver `docs/FASE_5_RECORDATORIOS.md`. Migration no aplicada en Supabase.

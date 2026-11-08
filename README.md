@@ -176,3 +176,7 @@ Las pruebas de base de datos usan PostgreSQL de prueba y las pruebas de navegado
 ### Desarrollo en revisión — Fase 4B.3
 
 Registro de sesiones de estudio desde Gemini preparado en la rama `feat/fase-4b3-estudio-confirmado`, con propuesta, confirmación y auditoría. No está publicado en `main` ni habilitado en producción; requiere aplicar una migración nueva solo tras autorización. Ver `docs/FASE_4B_PLAN.md`.
+
+### En desarrollo — Fase 5A.1
+
+Se inició la gestión manual de recordatorios en rama, con validación y permisos por propietario. Guardar un recordatorio en la lista **todavía no genera una notificación**. La migración y el módulo requieren revisión y autorización antes de publicarse.

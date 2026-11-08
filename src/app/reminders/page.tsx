@@ -1,5 +1,6 @@
 import { TrackingShell } from "@/components/tracking-shell";
 import { ReminderForm } from "@/components/reminders/reminder-form";
+import { PushPermission } from "@/components/reminders/push-permission";
 import { closeReminder } from "./actions";
 import { getAccount } from "@/lib/auth/account";
 import { createClient } from "@/lib/supabase/server";
@@ -23,6 +24,7 @@ export default async function RemindersPage() {
       <strong>Los avisos automáticos todavía no están activos.</strong>
       <p>En esta primera versión podés guardar y administrar tus recordatorios. La entrega de notificaciones llegará con el scheduler y la integración de Google Calendar.</p>
     </section>
+    <PushPermission />
     {error ? <section className="card"><p className="form-error" role="alert">
       No pudimos cargar los recordatorios. Verificá la conexión y que la migración de Fase 5 esté aplicada.
     </p></section> : <div className="journal-layout">

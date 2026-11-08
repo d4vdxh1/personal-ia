@@ -5,7 +5,7 @@ begin;
 create table public.push_subscriptions (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
-  endpoint text not null unique check (char_length(endpoint) between 20 and 2048 and endpoint like 'https://%'),
+  endpoint text not null unique check (char_length(endpoint) between 20 and 2048 and endpoint ~ '^https://(fcm\\.googleapis\\.com|updates\\.push\\.services\\.mozilla\\.com|web\\.push\\.apple\\.com|webpush\\.push\\.apple\\.com)/.+'),
   p256dh text not null check (char_length(p256dh) between 60 and 200),
   auth_key text not null check (char_length(auth_key) between 16 and 100),
   device_label text not null default 'Dispositivo' check (char_length(btrim(device_label)) between 1 and 80),

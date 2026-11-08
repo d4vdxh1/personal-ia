@@ -115,13 +115,12 @@ try {
    assert.equal((await page.request.get(base+'/auth/callback',{maxRedirects:0})).status(),307);
    await page.goto(base+'/signup');
    await page.getByRole('heading',{name:'Creá tu espacio personal.'}).waitFor();
-   await page.getByLabel('Correo electrónico').fill('new@example.com');
-   await page.getByLabel('Contraseña',{exact:true}).fill('some-safe-password');
-   await page.getByLabel('Confirmar contraseña').fill('different-password');
-   await page.getByRole('button',{name:'Crear cuenta',exact:true}).click();
-   await page.getByRole('alert').filter({hasText:'Las contraseñas no coinciden.'}).waitFor();
    await page.getByRole('button',{name:'Continuar con Google'}).waitFor();
-   await page.goto(base+'/forgot-password'); await page.getByRole('heading',{name:'Recuperá tu contraseña.'}).waitFor();
+   await page.getByText('las cuentas nuevas se crean con Google',{exact:false}).waitFor();
+   assert.equal(await page.getByRole('button',{name:'Crear cuenta',exact:true}).count(),0,'email signup UI must be gated until SMTP setup');
+   await page.goto(base+'/forgot-password');
+   await page.getByRole('heading',{name:'Recuperá tu contraseña.'}).waitFor();
+   await page.getByText('La recuperación por correo estará disponible',{exact:false}).waitFor();
    await page.goto(base+'/login'); await page.getByRole('link',{name:'Crear cuenta gratis'}).waitFor();
    await page.goto(base); await page.waitForURL(/login/);
   await page.getByLabel('Correo electrónico').fill(user.email); await page.getByLabel('Contraseña',{exact:true}).fill('test-password'); await page.getByRole('button',{name:'Ingresar',exact:true}).click(); await page.waitForURL(base+'/');

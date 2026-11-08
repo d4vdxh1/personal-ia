@@ -17,3 +17,11 @@
 .analytics-facts dd { margin:0; font-weight:700; text-align:right; font-variant-numeric:tabular-nums; }
 @media(max-width:1100px){.analytics-metrics{grid-template-columns:repeat(2,minmax(0,1fr));}.analytics-layout{grid-template-columns:1fr;}}
 @media(max-width:520px){.analytics-metrics{gap:9px}.analytics-stat{padding:14px}.analytics-daily-row{grid-template-columns:62px minmax(0,1fr) 58px;gap:8px}.analytics-stat strong{font-size:27px}}
+
+/* Simple, responsive SVG line chart: temporary MVP styling. */
+.analytics-trend{margin:16px 0 8px;max-width:100%}
+.analytics-line-graph{display:block;width:100%;height:auto;overflow:visible}
+.analytics-grid-line{stroke:#e1e9e3;stroke-width:1}
+.analytics-axis-label{fill:#677b6c;font-size:11px}
+.analytics-trend-path{fill:none;stroke:#16804d;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.analytics-trend-dot{fill:#16804d;stroke:white;stroke-width:2}

@@ -1,0 +1,27 @@
+/* Fase 6A: estilos mínimos y provisionales, alineados al MVP existente. */
+.analytics-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin:18px 0 20px; }
+.analytics-stat { display:flex; flex-direction:column; gap:10px; padding:20px; }
+.analytics-stat span { font-size:12px; color:var(--muted); }
+.analytics-stat strong { color:var(--green); font-size:clamp(26px,2.5vw,36px); line-height:1.1; letter-spacing:-1px; }
+.analytics-stat small { color:var(--muted); font-size:11px; line-height:1.4; }
+.analytics-layout { display:grid; grid-template-columns:1.2fr 1fr; gap:18px; margin-bottom:18px; }
+.analytics-detail { min-width:0; margin-bottom:18px; }
+.analytics-detail h2 { margin-bottom:8px; }
+.analytics-daily { display:grid; gap:15px; margin:20px 0; }
+.analytics-daily-row { display:grid; grid-template-columns:85px minmax(0,1fr) 72px; align-items:center; gap:12px; font-size:12px; }
+.analytics-daily-row strong { text-align:right; font-size:12px; font-variant-numeric:tabular-nums; }
+.analytics-daily-row progress { height:9px; }
+.analytics-facts { display:grid; gap:0; margin:16px 0 12px; }
+.analytics-facts>div { display:flex; justify-content:space-between; gap:15px; align-items:center; border-bottom:1px solid var(--border); padding:13px 0; font-size:13px; }
+.analytics-facts dt { color:var(--muted); }
+.analytics-facts dd { margin:0; font-weight:700; text-align:right; font-variant-numeric:tabular-nums; }
+@media(max-width:1100px){.analytics-metrics{grid-template-columns:repeat(2,minmax(0,1fr));}.analytics-layout{grid-template-columns:1fr;}}
+@media(max-width:520px){.analytics-metrics{gap:9px}.analytics-stat{padding:14px}.analytics-daily-row{grid-template-columns:62px minmax(0,1fr) 58px;gap:8px}.analytics-stat strong{font-size:27px}}
+
+/* Simple, responsive SVG line chart: temporary MVP styling. */
+.analytics-trend{margin:16px 0 8px;max-width:100%}
+.analytics-line-graph{display:block;width:100%;height:auto;overflow:visible}
+.analytics-grid-line{stroke:#e1e9e3;stroke-width:1}
+.analytics-axis-label{fill:#677b6c;font-size:11px}
+.analytics-trend-path{fill:none;stroke:#16804d;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.analytics-trend-dot{fill:#16804d;stroke:white;stroke-width:2}

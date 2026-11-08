@@ -10,3 +10,12 @@
 .recurrence-weekdays legend{font-size:13px;margin-bottom:8px}
 .recurrence-weekdays label{display:inline-flex;gap:5px;align-items:center;font-size:13px;min-height:40px}
 .recurrence-weekdays input{width:16px;height:16px}
+
+/* More occurrences stay collapsed unless the user opens this optional list. */
+.recurrence-upcoming{margin:12px 0;font-size:12px;color:#4a6655}
+.recurrence-upcoming summary{cursor:pointer;min-height:44px;display:list-item;padding:11px 0;font-weight:650;color:var(--green)}
+.recurrence-upcoming ul{list-style:none;padding:0;margin:8px 0 14px}
+.recurrence-upcoming li{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding:10px 0}
+.recurrence-upcoming time{font-variant-numeric:tabular-nums}
+.recurrence-extra-actions{display:flex;gap:6px;flex-wrap:wrap}
+.recurrence-extra-actions button{min-height:44px;font-size:12px}

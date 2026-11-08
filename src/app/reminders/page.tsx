@@ -12,6 +12,7 @@ import { createClient } from "@/lib/supabase/server";
 import { loadReminders, loadReminderSeries } from "@/lib/reminders/data";
 import { getBuenosAiresToday } from "@/lib/habits/data";
 import { reminderLocalInput } from "@/lib/reminders/validation";
+import { collapseRecurringReminders } from "@/lib/reminders/presentation";
 
 export const dynamic = "force-dynamic";
 export default async function RemindersPage({ searchParams }: { searchParams:Promise<{calendar?:string}> }) {
@@ -30,6 +31,7 @@ export default async function RemindersPage({ searchParams }: { searchParams:Pro
   const calendarCanWrite=Boolean(calendarConnection?.data?.can_write);
   const linkedReminders=new Set((calendarLinks?.data??[]).map(link=>link.reminder_id));
   const pending = reminders.filter(r=>r.status==="pending");
+  const { visible: visiblePending, extras: additionalOccurrences } = collapseRecurringReminders(pending);
   const history = reminders.filter(r=>r.status!=="pending");
   const when = (iso:string) => reminderLocalInput(iso).replace("T"," ");
   return <TrackingShell title="Recordatorios" active="reminders" dateLabel={date.split("-").reverse().join("/")}
@@ -58,6 +60,19 @@ export default async function RemindersPage({ searchParams }: { searchParams:Pro
           <div className="study-record-head"><h3>{item.title}</h3><span className="study-chip">{item.active?"Activa":"Pausada"}</span></div>
           <p className="goal-meta">{recurrenceLabel(item.frequency,item.weekdays,item.month_day)} · {item.local_time.slice(0,5)} ({item.timezone})</p>
           {item.notes && <p>{item.notes}</p>}
+          {visiblePending.find(r=>r.series_id===item.id) && <p className="goal-meta">Próximo aviso: {when(visiblePending.find(r=>r.series_id===item.id)!.scheduled_at)}</p>}
+          {(additionalOccurrences.get(item.id)?.length??0)>0 && <details className="recurrence-upcoming">
+            <summary>Ver otras ocurrencias ({additionalOccurrences.get(item.id)?.length})</summary>
+            <ul>{additionalOccurrences.get(item.id)!.map(occurrence=><li key={occurrence.id}>
+              <time dateTime={occurrence.scheduled_at}>{when(occurrence.scheduled_at)}</time>
+              <div className="recurrence-extra-actions">
+                <form action={closeReminder}><input type="hidden" name="id" value={occurrence.id}/>
+                  <button className="secondary-button" name="status" value="completed">Marcar realizado</button></form>
+                <form action={closeReminder}><input type="hidden" name="id" value={occurrence.id}/>
+                  <button className="secondary-button" name="status" value="cancelled">Cancelar</button></form>
+              </div>
+            </li>)}</ul>
+          </details>}
           <form action={toggleReminderSeries} className="reminder-actions"><input type="hidden" name="id" value={item.id}/>
             <button className="secondary-button" name="active" value={item.active?"false":"true"}>{item.active?"Pausar serie":"Reactivar serie"}</button>
           </form>
@@ -71,8 +86,9 @@ export default async function RemindersPage({ searchParams }: { searchParams:Pro
       <section className="card study-card"><ReminderForm/></section>
       <section className="card study-card" aria-label="Lista de recordatorios">
         <h2>Próximos recordatorios</h2>
-        {pending.length===0 && <p className="habit-empty">Todavía no tenés recordatorios pendientes.</p>}
-        {pending.map(reminder=><article className="study-record" key={reminder.id}>
+        {pending.length>visiblePending.length && <p className="goal-meta">Cada serie recurrente aparece solo con su próximo aviso. Las demás fechas están agrupadas arriba.</p>}
+        {visiblePending.length===0 && <p className="habit-empty">Todavía no tenés recordatorios pendientes.</p>}
+        {visiblePending.map(reminder=><article className="study-record" key={reminder.id}>
           <div className="study-record-head"><h3>{reminder.title}</h3><span className="study-chip">Pendiente</span></div>
           <p className="goal-meta">Programado para <time dateTime={reminder.scheduled_at}>{when(reminder.scheduled_at)}</time></p>
           {reminder.notes && <p>{reminder.notes}</p>}

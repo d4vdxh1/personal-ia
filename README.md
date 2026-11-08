@@ -41,6 +41,7 @@ El enfoque es simple: **menos fricción para planificar y más claridad para ava
 | **Universidad y Estudio** | Administrar materias, tareas, exámenes y sesiones de estudio. |
 | **Asistente IA** | Consultar datos y confirmar desde Gemini hábitos, check-in y sesiones de estudio. |
 | **Recordatorios y notificaciones** | Guardar recordatorios y recibir Web Push en dispositivos autorizados. |
+| **Estadísticas (Fase 6A en rama)** | Resumen real de hábitos, estudio, entrenamiento, check-in y objetivos, últimos siete días. |
 
 ### Asistente personal con Gemini
 
@@ -60,6 +61,8 @@ Gemini puede consultar registros y proponer marcar hábitos, actualizar el check
 - **Móvil:** navegación inferior y directorio de secciones.
 - **Diseño:** fondos claros, verde como color principal, contraste y estados de interacción.
 - **Datos:** estados vacíos y mensajes de error cuando todavía no existen registros o una consulta falla.
+
+**Diseño provisional:** el estilo UX/UI actual es suficiente para el MVP, pero se rediseñará integralmente en una etapa posterior. No considerar estas pantallas como diseño final.
 
 **Capturas de pantalla:** el repositorio todavía no incluye capturas públicas preparadas para esta sección. Se incorporarán imágenes reales de la interfaz, revisadas para no revelar datos personales ni sesiones privadas.
 
@@ -156,7 +159,8 @@ Las pruebas de base de datos usan PostgreSQL de prueba y las pruebas de navegado
 | **5A.3 — Recurrencias** | Publicada: diario, semanal y mensual |
 | **5B — Google Calendar** | 5B.1 consulta en producción sin configurar OAuth; 5B.2 exportación manual implementada, activación pendiente de Google Cloud |
 | **5C — Crear recordatorios con Gemini** | Publicada, con confirmación, auditoría y CI; prueba real del usuario pendiente |
-| Analítica avanzada, voz y finanzas | Fases posteriores |
+| **6A — Estadísticas básicas** | En rama: dashboard real de siete días, CI y aceptación aún pendientes |
+| Analítica inteligente 6B/6C, voz y finanzas | Fases posteriores |
 
 Las notificaciones son de **mejor esfuerzo**, necesitan permisos individuales por dispositivo y no garantizan entrega exactamente al minuto. El éxito en dispositivos reales no sustituye las pruebas de seguridad con dos sesiones independientes.
 

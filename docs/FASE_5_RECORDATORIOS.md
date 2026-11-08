@@ -39,3 +39,7 @@ La entrega Web Push depende del permiso y del servicio de cada navegador, de la 
 ## Implementación técnica de Fase 5A.3 (rama)
 
 Véase [FASE_5A3_RECURRENCIAS.md](FASE_5A3_RECURRENCIAS.md): series, materialización por el Cron existente y pruebas. La migración nueva se aplica solo tras completar CI y revisión. No modifica funciones 5B/5C.
+
+## Fase 5B.1 — Primera entrega en revisión
+
+Se preparó OAuth server-to-server independiente de Supabase login, Google Calendar **solo lectura**, tokens refresh cifrados, revocación y pruebas. La pantalla muestra configuración pendiente si faltan las credenciales del cliente OAuth. No confundir la existencia del código con una conexión real habilitada. Ver `docs/FASE_5B_CALENDAR.md`.

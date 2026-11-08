@@ -66,3 +66,12 @@ Configurar `NEXT_PUBLIC_SITE_URL=https://personal-ia-two.vercel.app` en Producti
 - Las banderas de servidor impiden iniciar registro y recuperación por correo desde la app, pero **no desactivan los endpoints públicos de Supabase Auth**. Revisar CAPTCHA, rate limits y protección contra contraseñas filtradas en Supabase.
 - El SMTP y las plantillas compatibles con SSR se requieren antes de habilitar altas por email y recuperación. No desactivar `Confirm email` para evitar la configuración.
 - Las 20 consultas diarias de Gemini son **por cuenta**, no un tope global; revisar cuotas y alertas del proveedor de IA.
+
+
+## Decisión de continuidad — 2026-11-07
+
+- **Google OAuth ya publicado** (PR #6, Vercel) y probado por el usuario. Cuentas preexistentes pueden continuar con email/contraseña.
+- Registro nuevo por email y recuperación quedan **pospuestos**, no descartados. Los formularios y acciones de la aplicación permanecen inhabilitados por defecto con `EMAIL_SIGNUP_ENABLED` y `EMAIL_RECOVERY_ENABLED`.
+- Supabase proporciona un servidor SMTP de prueba, pero según su documentación oficial limita destinatarios a miembros preautorizados del equipo y tiene cuotas reducidas. El email que el usuario recibió de AgendaV no demuestra envío público desde este proyecto. Referencia: https://supabase.com/docs/guides/auth/auth-smtp
+- Para retomar: seleccionar servicio SMTP; configurar remitente y credenciales exclusivamente en Supabase; personalizar plantillas de confirmación y recuperación compatibles con SSR; probar un destinatario externo; instalar CAPTCHA en el frontend **antes** de habilitarlo en Supabase; revisar rate limits y protección de contraseñas filtradas. Solo entonces activar las banderas y redesplegar.
+- Los endpoints de Auth de Supabase son públicos aunque las banderas bloqueen formularios de la aplicación; mantener monitoreo antiabuso. No se necesita comprar un dominio para avanzar con Fase 4B.

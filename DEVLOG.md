@@ -700,3 +700,11 @@ El PR #15 de 5A.3 se fusionó con CI aprobado y la migración `20261108184507_re
 - Fase 6C en la misma rama: botón de revisión con consentimiento, endpoint protegido, agregados numéricos enviados a Gemini sin datos libres, cuota `reserve_ai_request`, respuesta no persistente y sin herramientas de escritura.
 - No se fusionó 6B/6C ni se aplicaron migraciones; CI y aceptación funcional son pendientes. Google Calendar 5B se mantiene sin activar. UI/UX global es provisional por decisión del usuario.
 
+
+## 2026-11-08 — Publicación autorizada de Fase 6B y 6C
+
+- PR #20 fusionada en `main` con commit `0578f63` tras CI #42523136400 íntegramente exitosa y preview READY.
+- 6B: selector 7/30 días, deltas de períodos iguales, gráfico de líneas y manejo de ausencias de datos.
+- 6C: botón consentido, API autenticada con filtro de mismo origen, agregados sin identificadores ni notas, respuesta solo a solicitud, sin acciones de escritura y bajo la cuota Gemini ya existente.
+- Gemini real todavía no fue invocado con sesión real desde CI; verificar aceptación en producción. OAuth Calendar 5B sigue pendiente. No migraciones, secretos ni cambios RLS en esta fase.
+- Para próximos incrementos: 7 voz, 8 finanzas personales y 9 hardening/observabilidad, además del rediseño UX/UI posterior al MVP.
